@@ -1,0 +1,8 @@
+// export { AS3AuthLogin, AS3AuthRegister } from './as3-auth'
+export { AS3Routes } from './as3-routes.component'
+export { AS3Navbar } from './as3-navbar/as3-navbar.component'
+export { AS3Picks } from './as3-picks/as3-picks.component'
+export { AS3Button } from './as3-button/as3-button.component'
+export { AS3Spacer } from './as3-spacer.component'
+export { AS3Input } from './as3-input/as3-input.component'
+export { AS3Link } from './as3-link/as3-link.component'

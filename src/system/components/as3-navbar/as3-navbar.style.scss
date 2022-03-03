@@ -1,0 +1,33 @@
+@import '/src/system/assets/styles/mixins';
+@import '/src/system/assets/styles/variables';
+
+.as3-navbar {
+  background-color: $white;
+
+  &-search {
+    flex-grow: 1;
+    margin: 0px auto;
+    max-width: 690px;
+  }
+
+  .as3-input {
+    background-color: $light;
+    border-radius: $input-border-radius;
+
+    .form-control {
+      @include no-focus-border;
+      background-color: transparent;
+      border: none;
+    }
+
+    .input-group-text {
+      background-color: transparent;
+      border: none;
+    }
+
+    &:focus-within {
+      background-color: $white;
+      border: $input-border-width solid $input-border-color;
+    }
+  }
+}

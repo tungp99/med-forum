@@ -1,0 +1,14 @@
+@import './mixins';
+@import './variables';
+
+@import '~bootstrap/scss/bootstrap';
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background-color: rgb(219, 222, 226);
+}
+
+.form-control,
+.btn {
+  @include no-focus-shadow;
+}

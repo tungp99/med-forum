@@ -1,0 +1,20 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-button {
+  $width: 120px;
+  $diff: 60px;
+
+  min-width: $width;
+
+  &.btn-sm {
+    min-width: calc($width - $diff);
+  }
+
+  &.btn-lg {
+    min-width: calc($width + $diff);
+  }
+
+  &.text {
+    min-width: unset;
+  }
+}

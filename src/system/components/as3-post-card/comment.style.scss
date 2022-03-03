@@ -1,0 +1,37 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-post-card-extension {
+  .markdown-content {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding-top: map-get($spacers, 2);
+    padding-bottom: map-get($spacers, 2);
+    padding-left: map-get($spacers, 4);
+    margin-bottom: 0;
+
+    &-line {
+      position: absolute;
+      left: map-get($spacers, 2);
+      width: 1px;
+      height: 118%;
+      background-color: $gray-600;
+    }
+  }
+
+  .actions {
+    padding-left: map-get($spacers, 4);
+    padding-right: map-get($spacers, 4);
+
+    .as3-link {
+      color: $body-color;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-sm;
+    }
+  }
+
+  .replies {
+    padding-top: map-get($spacers, 3);
+    padding-left: map-get($spacers, 4);
+  }
+}

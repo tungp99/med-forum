@@ -1,0 +1,11 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-input {
+  .form-label {
+    margin-bottom: map-get($spacers, 1);
+  }
+
+  .form-floating {
+    width: 100%;
+  }
+}

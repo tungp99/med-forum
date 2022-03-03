@@ -1,0 +1,17 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-chip {
+  $width: 80px;
+  $diff: 20px;
+
+  border-radius: $border-radius-pill;
+  min-width: $width;
+
+  &.btn-sm {
+    min-width: calc($width - $diff);
+  }
+
+  &.btn-lg {
+    min-width: calc($width + $diff);
+  }
+}
