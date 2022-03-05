@@ -12,7 +12,8 @@ export function AS3Avatar(props: AS3AvatarProps) {
         width={props.width ?? 32}
         height={props.height ?? 32}
         className="rounded-circle mb-0"
-        src="https://via.placeholder.com/32.jpg" />
+        src="https://via.placeholder.com/128.jpg"
+      />
     </Figure>
   )
 }

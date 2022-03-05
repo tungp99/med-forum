@@ -1,5 +1,5 @@
 import { Col, Modal, Row } from 'react-bootstrap'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { mdiClose } from '@mdi/js'
 
 import { useDispatch, useSelector } from 'system/store'
 import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
@@ -20,7 +20,7 @@ export function AS3AuthLogin() {
         <AS3Button
           text
           size="lg"
-          icon={faXmark}
+          icon={mdiClose}
           iconSize="lg"
           onClick={() => dispatch({ type: 'CLOSE_LOGIN_POPUP' })}
         ></AS3Button>

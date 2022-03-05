@@ -1,10 +1,8 @@
 import { Card, ListGroup, Stack } from 'react-bootstrap'
+import Icon from '@mdi/react'
+import { mdiChevronUp } from '@mdi/js'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleUp } from '@fortawesome/free-solid-svg-icons'
-
-import { AS3Button } from '../as3-button/as3-button.component'
-import { AS3Chip } from '../as3-chip/as3-chip.component'
+import { AS3Button, AS3Chip } from 'system/components'
 
 import './writers-card.style.scss'
 
@@ -22,9 +20,10 @@ export function WritersCardComponent() {
           className="as3-picks-writers-list-item"
           as="button">
           <span className="text">1</span>
-          <FontAwesomeIcon
-            icon={faAngleUp}
-            className="text-success mx-3" />
+          <Icon
+            className="text-success mx-3"
+            path={mdiChevronUp}
+            size={1.5} />
           <span className="text">drjohnsmith</span>
         </ListGroup.Item>
       </ListGroup>

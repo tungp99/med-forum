@@ -1,6 +1,5 @@
 import { Button, ButtonProps } from 'react-bootstrap'
-import { IconDefinition, SizeProp } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Icon from '@mdi/react'
 
 import './as3-chip.style.scss'
 
@@ -24,8 +23,8 @@ type AS3ChipProps = ButtonProps & {
     | 'outline-light'
     | 'outline-dark'
 
-  icon?: IconDefinition
-  iconSize?: SizeProp
+  icon?: string
+  iconSize?: string | number
 }
 
 export function AS3Chip(props: AS3ChipProps) {
@@ -40,10 +39,10 @@ export function AS3Chip(props: AS3ChipProps) {
       onClick={props.onClick}
     >
       {props.icon && (
-        <FontAwesomeIcon
+        <Icon
           className={props.children ? 'me-2' : ''}
-          icon={props.icon}
-          size={props.iconSize}
+          path={props.icon}
+          size={props.iconSize ?? 1}
         />
       )}
 

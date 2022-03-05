@@ -9,10 +9,10 @@
   }
 
   &-prefix {
+    max-width: 2.5rem;
     padding: map-get($spacers, 2);
     background-color: $light;
     display: flex;
-    flex: 0 1 auto !important;
     flex-direction: column;
     align-items: center;
 
@@ -36,8 +36,8 @@
     }
 
     .card-footer {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: map-get($spacers, 2);
+      padding-right: map-get($spacers, 2);
       display: flex;
       background-color: unset;
       border: none;

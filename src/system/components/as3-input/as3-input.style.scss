@@ -1,6 +1,8 @@
 @import '/src/system/assets/styles/variables';
 
 .as3-input {
+  margin-bottom: map-get($spacers, 3);
+
   .form-label {
     margin-bottom: map-get($spacers, 1);
   }

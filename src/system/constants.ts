@@ -10,3 +10,8 @@ export const auth0 = {
     DELETE: 'delete:current_user_metadata',
   },
 }
+
+export const PAGE_ROUTE = {
+  HOME: '/',
+  PROFILE: '/profile',
+}

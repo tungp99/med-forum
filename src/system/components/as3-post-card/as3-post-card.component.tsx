@@ -1,17 +1,16 @@
 import { Card, CardProps } from 'react-bootstrap'
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import {
-  faFlag,
-  faMessage,
-  faBookmark,
-} from '@fortawesome/free-regular-svg-icons'
+  mdiArrowDownBoldOutline,
+  mdiArrowUpBoldOutline,
+  mdiBookmarkOutline,
+  mdiFlagOutline,
+  mdiMessageOutline,
+} from '@mdi/js'
 
-import { AS3Button } from '../as3-button/as3-button.component'
-import { AS3Spacer } from '../as3-spacer.component'
+import { AS3Button, AS3Spacer, AS3Link } from 'system/components'
+import { CommentsComponent } from './comments.component'
 
 import './as3-post-card.style.scss'
-import { AS3Link } from '../as3-link/as3-link.component'
-import { CommentsComponent } from './comments.component'
 
 type AS3PostCardProps = CardProps
 
@@ -26,12 +25,12 @@ export function AS3PostCard(props: AS3PostCardProps) {
         <Card.Body className="as3-post-card-prefix">
           <AS3Button
             className="px-1"
-            icon={faAngleUp}
+            icon={mdiArrowUpBoldOutline}
             text />
           <span className="card-subtitle">34k</span>
           <AS3Button
             className="px-1"
-            icon={faAngleDown}
+            icon={mdiArrowDownBoldOutline}
             text />
         </Card.Body>
 
@@ -43,11 +42,7 @@ export function AS3PostCard(props: AS3PostCardProps) {
 
             <AS3Spacer />
 
-            <AS3Link
-              iconSize="sm"
-              icon={faFlag}>
-              Report
-            </AS3Link>
+            <AS3Link icon={mdiFlagOutline}>Report</AS3Link>
           </Card.Subtitle>
 
           <Card.Title>
@@ -64,16 +59,14 @@ export function AS3PostCard(props: AS3PostCardProps) {
             <AS3Button
               text
               size="sm"
-              icon={faMessage}
-              iconSize="sm">
+              icon={mdiMessageOutline}>
               7k Comments
             </AS3Button>
 
             <AS3Button
               text
               size="sm"
-              icon={faBookmark}
-              iconSize="sm">
+              icon={mdiBookmarkOutline}>
               Save
             </AS3Button>
           </Card.Footer>

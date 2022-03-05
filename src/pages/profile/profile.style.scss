@@ -1,0 +1,63 @@
+@import '/src/system/assets/styles/variables';
+
+.profile {
+  .card:not(:last-child) {
+    margin-bottom: map-get($spacers, 3);
+  }
+
+  .as3-button.btn-edit {
+    color: $gray-600;
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+  }
+
+  .introduction {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+    .card-subtitle {
+      font-weight: $font-weight-normal;
+
+      &.location {
+        color: $gray-600;
+      }
+    }
+
+    .as3-avatar {
+      position: absolute;
+      top: -#{$spacer * 4};
+    }
+
+    .card-body {
+      padding-top: $spacer * 4.5;
+    }
+
+    .work {
+      position: relative;
+      padding-top: $spacer * 4.5;
+      padding-bottom: map-get($spacers, 3);
+      width: 10rem;
+    }
+
+    .as3-button.btn-edit {
+      position: absolute;
+      top: map-get($spacers, 3);
+      right: map-get($spacers, 3);
+    }
+  }
+
+  .about {
+    position: relative;
+  }
+
+  .experience {
+    .list-group-item {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}

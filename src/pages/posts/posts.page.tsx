@@ -1,4 +1,4 @@
-export default function Index() {
+export default function PostsPage() {
   const data = [
     {
       id: 1,

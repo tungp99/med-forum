@@ -1,8 +1,7 @@
 import { Button, ButtonProps } from 'react-bootstrap'
-import { IconDefinition, SizeProp } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './as3-button.style.scss'
+import Icon from '@mdi/react'
 
 type AS3ButtonProps = ButtonProps & {
   variant?:
@@ -24,8 +23,8 @@ type AS3ButtonProps = ButtonProps & {
     | 'outline-light'
     | 'outline-dark'
 
-  icon?: IconDefinition
-  iconSize?: SizeProp
+  icon?: string
+  iconSize?: string | number
 
   text?: boolean
 
@@ -49,10 +48,10 @@ export function AS3Button(props: AS3ButtonProps) {
       onClick={props.onClick}
     >
       {props.icon && (
-        <FontAwesomeIcon
-          icon={props.icon}
-          size={props.iconSize}
+        <Icon
           className={props.text && props.children ? 'me-2' : ''}
+          path={props.icon}
+          size={props.iconSize ?? 1}
         />
       )}
 

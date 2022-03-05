@@ -1,8 +1,11 @@
 @import '/src/system/assets/styles/variables';
 
 .as3-post-card-extension {
-  .markdown-content {
+  .card-text {
     position: relative;
+  }
+
+  .markdown-content {
     display: flex;
     flex-direction: row;
     padding-top: map-get($spacers, 2);
@@ -11,11 +14,13 @@
     margin-bottom: 0;
 
     &-line {
+      $topspace: 36px;
       position: absolute;
+      top: $topspace;
       left: map-get($spacers, 2);
       width: 1px;
-      height: 118%;
-      background-color: $gray-600;
+      height: calc(100% - $topspace);
+      background-color: $gray-500;
     }
   }
 

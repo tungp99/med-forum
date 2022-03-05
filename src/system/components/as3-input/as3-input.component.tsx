@@ -4,8 +4,7 @@ import {
   FormControlProps,
   InputGroup,
 } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import Icon from '@mdi/react'
 
 import './as3-input.style.scss'
 
@@ -13,7 +12,6 @@ type AS3InputProps = FormControlProps & {
   type?:
     | 'text'
     | 'password'
-    | 'datetime'
     | 'datetime'
     | 'date'
     | 'month'
@@ -30,8 +28,8 @@ type AS3InputProps = FormControlProps & {
 
   label?: string
 
-  prefixIcon?: IconDefinition
-  suffixIcon?: IconDefinition
+  prefixIcon?: string
+  suffixIcon?: string
 
   errors?: string[]
 }
@@ -47,9 +45,9 @@ export function AS3Input(props: AS3InputProps) {
       <InputGroup size={props.size}>
         {props.prefixIcon && (
           <InputGroup.Text className="pe-0">
-            <FontAwesomeIcon
-              icon={props.prefixIcon}
-              size="lg" />
+            <Icon
+              path={props.prefixIcon}
+              size={1} />
           </InputGroup.Text>
         )}
 
@@ -71,9 +69,9 @@ export function AS3Input(props: AS3InputProps) {
 
         {props.suffixIcon && (
           <InputGroup.Text className="ps-0">
-            <FontAwesomeIcon
-              icon={props.suffixIcon}
-              size="lg" />
+            <Icon
+              path={props.suffixIcon}
+              size={1} />
           </InputGroup.Text>
         )}
       </InputGroup>

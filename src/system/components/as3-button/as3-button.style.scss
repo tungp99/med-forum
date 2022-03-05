@@ -16,5 +16,6 @@
 
   &.text {
     min-width: unset;
+    padding: map-get($spacers, 1);
   }
 }
