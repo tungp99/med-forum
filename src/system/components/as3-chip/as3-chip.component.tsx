@@ -29,7 +29,7 @@ type AS3ChipProps = ButtonProps & {
 
 export function AS3Chip(props: AS3ChipProps) {
   const classList = ['as3-chip']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
 
   return (
     <Button

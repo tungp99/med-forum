@@ -1,9 +1,13 @@
 import { ComponentPropsWithoutRef } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
-export function AS3Layout(props: ComponentPropsWithoutRef<'div'>) {
+type AS3LayoutProps = ComponentPropsWithoutRef<'div'> & {
+  children: React.ReactNode
+}
+
+export function AS3Layout(props: AS3LayoutProps) {
   const classList = ['pt-4']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
 
   return (
     <Container

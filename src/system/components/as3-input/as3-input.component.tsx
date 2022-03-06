@@ -36,7 +36,7 @@ type AS3InputProps = FormControlProps & {
 
 export function AS3Input(props: AS3InputProps) {
   const classList = ['as3-input']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
 
   return (
     <Form.Group
@@ -57,6 +57,7 @@ export function AS3Input(props: AS3InputProps) {
               type={props.type ?? 'text'}
               placeholder={props.placeholder ?? ''}
               value={props.value}
+              onChange={props.onChange}
             />
           </FloatingLabel>
         ) : (
@@ -64,6 +65,7 @@ export function AS3Input(props: AS3InputProps) {
             type={props.type ?? 'text'}
             placeholder={props.placeholder ?? ''}
             value={props.value}
+            onChange={props.onChange}
           />
         )}
 

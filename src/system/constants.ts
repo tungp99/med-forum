@@ -14,4 +14,8 @@ export const auth0 = {
 export const PAGE_ROUTE = {
   HOME: '/',
   PROFILE: '/profile',
+  POSTS: {
+    MINE: '/posts/mine',
+    CREATE: '/posts/write',
+  },
 }

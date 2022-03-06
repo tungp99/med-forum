@@ -4,7 +4,7 @@ type AS3AvatarProps = ImageProps
 
 export function AS3Avatar(props: AS3AvatarProps) {
   const classList = ['as3-avatar', 'mb-0']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
 
   return (
     <Figure className={classList.join(' ')}>

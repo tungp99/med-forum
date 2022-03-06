@@ -53,7 +53,7 @@ export function AS3Navbar() {
                 },
               ]}
             >
-              Welcome, {user?.sub}
+              Welcome, {user?.nickname}
             </AS3Dropdown>
           ) : (
             <>

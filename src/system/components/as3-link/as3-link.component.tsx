@@ -9,7 +9,7 @@ type AS3LinkProps = React.ComponentPropsWithoutRef<'a'> & {
 
 export function AS3Link(props: AS3LinkProps) {
   const classList = ['as3-link']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
 
   return (
     <a

@@ -39,7 +39,7 @@ $spacers: (
   5: $spacer * 3,
 ) !default;
 
-$btn-padding-y: map-get($spacers, 1);
+// $btn-padding-y: map-get($spacers, 2);
 // $card-spacer-x: map-get($spacers, 2);
 // $card-spacer-y: map-get($spacers, 1);
 $navbar-padding-y: map-get($spacers, 0);

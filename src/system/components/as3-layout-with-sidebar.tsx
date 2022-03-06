@@ -4,7 +4,7 @@ import { AS3Picks } from '.'
 
 export function AS3LayoutWithSidebar(props: ComponentPropsWithoutRef<'div'>) {
   const classList = ['pt-4']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
 
   return (
     <Container

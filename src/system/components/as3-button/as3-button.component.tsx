@@ -34,7 +34,7 @@ type AS3ButtonProps = ButtonProps & {
 
 export function AS3Button(props: AS3ButtonProps) {
   const classList = ['as3-button']
-  props.className && classList.push(...props.className.split(' '))
+  props.className && classList.push(props.className)
   props.text && classList.push('text')
 
   return (
