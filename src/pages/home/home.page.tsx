@@ -1,12 +1,76 @@
-import { AS3LayoutWithSidebar, AS3PostNavigator } from 'system/components'
-import { AS3PostCard } from 'system/components/as3-post-card/as3-post-card.component'
+import { gql, useQuery } from '@apollo/react-hooks'
+import { mdiSync } from '@mdi/js'
+
+import { useDispatch, useSelector } from 'system/store'
+import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
+import { GetHomePageContent } from 'system/generated/gql.types'
+
+import { FilterComponent } from './components/filter.component'
 
 export default function HomePage() {
+  const dispatch = useDispatch()
+  const { posts, pagination } = useSelector(store => store.homePage)
+
+  const { fetchMore, refetch } = useQuery<GetHomePageContent>(
+    gql`
+      query GetHomePageContent($skip: Int!, $take: Int!) {
+        posts(skip: $skip, take: $take, order: { createdAt: DESC }) {
+          items {
+            id
+            title
+            markdownContent
+            createdAt
+            updatedAt
+            published
+            commentsCount
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        skip: pagination.page * pagination.itemsPerPage,
+        take: pagination.itemsPerPage,
+      },
+      onError: err =>
+        dispatch({
+          type: 'TOAST_ERROR',
+          payload: { title: err.name, content: err.message },
+        }),
+      onCompleted: data => {
+        if (data.posts?.items) {
+          dispatch({
+            type: 'SET_HOMEPAGE_POSTS',
+            payload: [...data.posts.items],
+          })
+          dispatch({
+            type: 'SET_HOMEPAGE_POSTS_PAGE',
+            payload: { page: 0 },
+          })
+        }
+      },
+      notifyOnNetworkStatusChange: true,
+    }
+  )
+
   return (
     <AS3LayoutWithSidebar>
-      <AS3PostNavigator />
+      <FilterComponent />
 
-      <AS3PostCard />
+      {posts.length ? (
+        posts.map(post => <AS3PostCard
+          key={post.id}
+          data={{ ...post }} />)
+      ) : (
+        <AS3Button
+          text
+          icon={mdiSync}
+          onClick={() => refetch()}></AS3Button>
+      )}
     </AS3LayoutWithSidebar>
   )
 }

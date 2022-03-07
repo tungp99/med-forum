@@ -17,7 +17,7 @@ export function AS3Link(props: AS3LinkProps) {
       onClick={props.onClick}>
       {props.icon && (
         <Icon
-          className={props.children ? 'me-2' : ''}
+          className={props.children ? 'me-1' : ''}
           path={props.icon}
           size={props.iconSize ?? 1}
         />

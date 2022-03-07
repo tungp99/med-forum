@@ -6,6 +6,9 @@
 
   border-radius: $border-radius-pill;
   min-width: $width;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &.btn-sm {
     min-width: calc($width - $diff);

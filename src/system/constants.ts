@@ -15,7 +15,6 @@ export const PAGE_ROUTE = {
   HOME: '/',
   PROFILE: '/profile',
   POSTS: {
-    MINE: '/posts/mine',
     CREATE: '/posts/write',
   },
 }

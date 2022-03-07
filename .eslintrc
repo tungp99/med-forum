@@ -10,7 +10,11 @@
     "es6": true,
     "serviceworker": true
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks"
+  ],
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
@@ -20,9 +24,21 @@
   ],
   "parser": "@typescript-eslint/parser",
   "rules": {
-    "react/jsx-max-props-per-line": [1, { "maximum": 1, "when": "always" }],
-    "react/jsx-first-prop-new-line": [1, "multiline-multiprop"],
-    "react/jsx-indent-props": [1, 2],
+    "react/jsx-max-props-per-line": [
+      1,
+      {
+        "maximum": 1,
+        "when": "always"
+      }
+    ],
+    "react/jsx-first-prop-new-line": [
+      1,
+      "multiline-multiprop"
+    ],
+    "react/jsx-indent-props": [
+      1,
+      2
+    ],
     // "react/jsx-closing-bracket-location": [1, "after-props"],
     "react/jsx-tag-spacing": [
       1,
@@ -33,6 +49,10 @@
         "beforeClosing": "allow"
       }
     ],
-    "semi": [1, "never"]
+    "semi": [
+      1,
+      "never"
+    ],
+    "react-hooks/exhaustive-deps": "off"
   }
 }

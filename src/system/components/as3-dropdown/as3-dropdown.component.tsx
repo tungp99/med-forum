@@ -1,6 +1,8 @@
-import Icon from '@mdi/react'
-import { MouseEventHandler } from 'react'
+import { Fragment, MouseEventHandler } from 'react'
 import { Dropdown, DropdownProps } from 'react-bootstrap'
+import Icon from '@mdi/react'
+
+import './as3-dropdown.style.scss'
 
 type AS3DropdownProps = DropdownProps & {
   prefixIcon?: string
@@ -21,11 +23,11 @@ export function AS3Dropdown(props: AS3DropdownProps) {
         variant="default"
         className="px-0">
         {props.prefixIcon && <Icon
-          className="me-2"
+          className="me-1"
           path={props.prefixIcon} />}
         {props.children}
         {props.suffixIcon && <Icon
-          className="ms-2"
+          className="ms-1"
           path={props.suffixIcon} />}
       </Dropdown.Toggle>
 
@@ -49,10 +51,10 @@ export function AS3Dropdown(props: AS3DropdownProps) {
           )
 
           return itemProps.separate ? (
-            <>
+            <Fragment key={`${i}_separator`}>
               <Dropdown.Divider className="my-0" />
               {$element}
-            </>
+            </Fragment>
           ) : (
             $element
           )

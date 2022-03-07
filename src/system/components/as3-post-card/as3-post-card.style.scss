@@ -22,7 +22,9 @@
   }
 
   &-main {
-    padding: 0;
+    &.card-body {
+      padding: 0;
+    }
 
     .card-title,
     .card-subtitle {

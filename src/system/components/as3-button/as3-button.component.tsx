@@ -49,7 +49,7 @@ export function AS3Button(props: AS3ButtonProps) {
     >
       {props.icon && (
         <Icon
-          className={props.text && props.children ? 'me-2' : ''}
+          className={props.text && props.children ? 'me-1' : ''}
           path={props.icon}
           size={props.iconSize ?? 1}
         />

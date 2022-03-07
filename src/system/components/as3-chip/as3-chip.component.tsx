@@ -40,7 +40,7 @@ export function AS3Chip(props: AS3ChipProps) {
     >
       {props.icon && (
         <Icon
-          className={props.children ? 'me-2' : ''}
+          className={props.children ? 'me-1' : ''}
           path={props.icon}
           size={props.iconSize ?? 1}
         />

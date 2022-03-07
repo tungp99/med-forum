@@ -1,0 +1,15 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-editor {
+  &.as3-editor-preview {
+    border: none;
+
+    .editor-container > .section > .section-container {
+      padding: 0 map-get($spacers, 2);
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

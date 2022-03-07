@@ -1,8 +1,8 @@
 @import './mixins';
 @import './variables';
 
-@import '~bootstrap/scss/bootstrap';
 @import 'react-markdown-editor-lite/lib/index.css';
+@import '~bootstrap/scss/bootstrap';
 
 body {
   font-family: 'IBM Plex Sans', sans-serif;

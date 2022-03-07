@@ -5,11 +5,13 @@ import {
   useSelector as reduxSelector,
 } from 'react-redux'
 
-import { authReducer } from 'system/components/as3-auth'
+import { notificationsStore } from './notification.store'
+import { homePageStore } from 'pages'
 
 export const store = createStore(
   combineReducers({
-    auth: authReducer,
+    notifications: notificationsStore,
+    homePage: homePageStore,
   })
 )
 
@@ -19,7 +21,7 @@ export const useSelector: TypedUseSelectorHook<
   ReturnType<typeof store.getState>
 > = reduxSelector
 
-export type PayloadAction<ActionType, PayloadType> = {
+export type StoreAction<ActionType, PayloadType> = {
   type: ActionType
   payload?: PayloadType
 }

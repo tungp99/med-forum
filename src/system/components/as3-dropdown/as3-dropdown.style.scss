@@ -2,4 +2,10 @@
   .dropdown-menu {
     min-width: 12rem;
   }
+
+  .dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

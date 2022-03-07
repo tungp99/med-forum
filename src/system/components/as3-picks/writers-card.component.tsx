@@ -10,15 +10,11 @@ export function WritersCardComponent() {
   return (
     <Card className="as3-picks-writers">
       <Card.Body>
-        <Card.Title>Most Qualified Members</Card.Title>
+        <Card.Title className="mb-0">Most Qualified Members</Card.Title>
       </Card.Body>
 
-      <ListGroup
-        className="as3-picks-writers-list"
-        variant="flush">
-        <ListGroup.Item
-          className="as3-picks-writers-list-item"
-          as="button">
+      <ListGroup variant="flush">
+        <ListGroup.Item as="button">
           <span className="text">1</span>
           <Icon
             className="text-success mx-3"

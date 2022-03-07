@@ -1,13 +1,11 @@
 .as3-picks-writers {
-  &-list {
-    .text {
-      font-weight: 500;
-    }
+  .text {
+    font-weight: 500;
+  }
 
-    &-item {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
+  .list-group-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 }

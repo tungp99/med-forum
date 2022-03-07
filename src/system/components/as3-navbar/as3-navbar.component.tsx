@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { mdiAccountCircle, mdiLogout, mdiMagnify } from '@mdi/js'
 
 import { PAGE_ROUTE } from 'system/constants'
-import { AS3Button, AS3Input } from 'system/components'
-import { AS3Dropdown } from '../as3-dropdown/as3-dropdown.component'
+import { AS3Button, AS3Input, AS3Dropdown } from 'system/components'
 import './as3-navbar.style.scss'
 
 export function AS3Navbar() {
