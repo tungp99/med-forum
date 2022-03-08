@@ -1,9 +1,9 @@
-import { gql, useQuery } from '@apollo/react-hooks'
+import { gql, useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
+import { GetHomePageContent } from 'system/generated/gql.types'
 import { useDispatch, useSelector } from 'system/store'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
-import { GetHomePageContent } from 'system/generated/gql.types'
 
 import { FilterComponent } from './components/filter.component'
 

@@ -10,11 +10,7 @@
     "es6": true,
     "serviceworker": true
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "react-hooks"
-  ],
+  "plugins": ["@typescript-eslint", "react", "react-hooks"],
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
@@ -31,28 +27,10 @@
         "when": "always"
       }
     ],
-    "react/jsx-first-prop-new-line": [
-      1,
-      "multiline-multiprop"
-    ],
-    "react/jsx-indent-props": [
-      1,
-      2
-    ],
-    // "react/jsx-closing-bracket-location": [1, "after-props"],
-    "react/jsx-tag-spacing": [
-      1,
-      {
-        "closingSlash": "never",
-        "beforeSelfClosing": "always",
-        "afterOpening": "never",
-        "beforeClosing": "allow"
-      }
-    ],
-    "semi": [
-      1,
-      "never"
-    ],
+    "react/jsx-first-prop-new-line": [1, "multiline-multiprop"],
+    "react/jsx-indent-props": [1, 2],
+    "react/prop-types": "off",
+    "react/display-name": "off",
     "react-hooks/exhaustive-deps": "off"
   }
 }

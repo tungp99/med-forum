@@ -1,27 +1,25 @@
-import { PayloadAction } from 'system/store'
+import { StoreAction } from 'system/store'
 
-type ActionType =
+type Action =
   | 'OPEN_LOGIN_POPUP'
   | 'CLOSE_LOGIN_POPUP'
-  | 'TOGGLE_LOGIN_POPUP'
   | 'OPEN_REGISTER_POPUP'
   | 'CLOSE_REGISTER_POPUP'
-  | 'TOGGLE_REGISTER_POPUP'
 
-export type AuthStore = {
+type Store = {
   isLoginPopupActive: boolean
   isRegisterPopupActive: boolean
 }
 
-const initialState: AuthStore = {
+const initialState: Store = {
   isLoginPopupActive: false,
   isRegisterPopupActive: false,
 }
 
-export const authReducer = (
+export const authStore = (
   state = initialState,
-  action: PayloadAction<ActionType, string | boolean>
-): AuthStore => {
+  action: StoreAction<Action, undefined>
+): Store => {
   switch (action.type) {
     case 'OPEN_LOGIN_POPUP':
       return {
@@ -33,11 +31,6 @@ export const authReducer = (
         ...state,
         isLoginPopupActive: false,
       }
-    case 'TOGGLE_LOGIN_POPUP':
-      return {
-        ...state,
-        isLoginPopupActive: !state.isLoginPopupActive,
-      }
     case 'OPEN_REGISTER_POPUP':
       return {
         ...state,
@@ -47,11 +40,6 @@ export const authReducer = (
       return {
         ...state,
         isRegisterPopupActive: false,
-      }
-    case 'TOGGLE_REGISTER_POPUP':
-      return {
-        ...state,
-        isRegisterPopupActive: !state.isRegisterPopupActive,
       }
     default:
       return state

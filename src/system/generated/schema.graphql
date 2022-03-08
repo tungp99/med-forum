@@ -77,14 +77,18 @@ directive @connection(
 ) on FIELD
 
 type Query {
+  me: Account
+  accounts(skip: Int, take: Int, where: AccountFilterInput, order: [AccountSortInput!]): AccountCollectionSegment
   posts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
   comments(skip: Int, take: Int, postId: String!, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
 }
 
 type Mutation {
+  register(input: RegisterInput!): LoginPayload!
+  login(input: LoginInput!): LoginPayload!
+  refreshAccessToken(input: RefreshTokenInput!): RefreshTokenPayload!
   createPost(input: CreatePostInput!): Post!
   updatePost(input: UpdatePostInput!): UpdateEntityPayload!
-  updatePostContent(input: UpdatePostInput!): UpdateEntityPayload!
   deletePost(id: String!): DeleteEntityPayload!
   createComment(input: CreateCommentInput!): Comment!
   updateComment(input: UpdateCommentInput!): UpdateEntityPayload!
@@ -94,6 +98,41 @@ type Mutation {
 enum ApplyPolicy {
   BEFORE_RESOLVER
   AFTER_RESOLVER
+}
+
+input AccountFilterInput {
+  and: [AccountFilterInput!]
+  or: [AccountFilterInput!]
+  email: StringOperationFilterInput
+  username: StringOperationFilterInput
+  passwordHash: StringOperationFilterInput
+  refreshToken: StringOperationFilterInput
+  refreshTokenExpiration: ComparableDateTimeOperationFilterInput
+  profile: ProfileFilterInput
+  god: BooleanOperationFilterInput
+  id: StringOperationFilterInput
+  createdAt: ComparableDateTimeOperationFilterInput
+  updatedAt: ComparableDateTimeOperationFilterInput
+}
+
+input AccountSortInput {
+  email: SortEnumType
+  username: SortEnumType
+  passwordHash: SortEnumType
+  refreshToken: SortEnumType
+  refreshTokenExpiration: SortEnumType
+  profile: ProfileSortInput
+  god: SortEnumType
+  id: SortEnumType
+  createdAt: SortEnumType
+  updatedAt: SortEnumType
+}
+
+type AccountCollectionSegment {
+  items: [Account!]
+
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
 }
 
 input PostFilterInput {
@@ -161,11 +200,6 @@ input StringOperationFilterInput {
   nendsWith: String
 }
 
-input BooleanOperationFilterInput {
-  eq: Boolean
-  neq: Boolean
-}
-
 input ComparableDateTimeOperationFilterInput {
   eq: DateTime
   neq: DateTime
@@ -181,17 +215,40 @@ input ComparableDateTimeOperationFilterInput {
   nlte: DateTime
 }
 
+input ProfileFilterInput {
+  and: [ProfileFilterInput!]
+  or: [ProfileFilterInput!]
+  public: BooleanOperationFilterInput
+  firstName: StringOperationFilterInput
+  lastName: StringOperationFilterInput
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
 enum SortEnumType {
   ASC
   DESC
 }
 
-type Post {
-  comments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
-  commentsCount: Long!
-  title: String!
-  markdownContent: String!
-  published: Boolean!
+input ProfileSortInput {
+  public: SortEnumType
+  firstName: SortEnumType
+  lastName: SortEnumType
+}
+
+type Account {
+  publishedPosts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
+  writtenComments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  email: String!
+  username: String
+  passwordHash: String!
+  refreshToken: String!
+  refreshTokenExpiration: DateTime!
+  profile: Profile!
+  god: Boolean!
   id: ID
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -210,6 +267,17 @@ type CollectionSegmentInfo {
   hasPreviousPage: Boolean!
 }
 
+type Post {
+  comments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  commentsCount: Long!
+  title: String!
+  markdownContent: String!
+  published: Boolean!
+  id: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Comment {
   post: Post!
   replies: [Comment!]!
@@ -220,11 +288,50 @@ type Comment {
   updatedAt: DateTime!
 }
 
-input UpdatePostInput {
-  id: String!
+"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+scalar DateTime
+
+input RefreshTokenInput {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RefreshTokenPayload {
+  success: Boolean!
+  accessToken: String!
+  refreshToken: String!
+}
+
+input LoginInput {
+  email: String
+  username: String
+  password: String!
+}
+
+input RegisterInput {
+  email: String!
+  username: String
+  password: String!
+  confirmationPassword: String!
+  profile: ProfileInput!
+}
+
+type LoginPayload {
+  account: Account!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Profile {
+  public: Boolean!
+  firstName: String!
+  lastName: String!
+}
+
+input CreatePostInput {
   title: String!
   markdownContent: String!
-  published: Boolean
+  published: Boolean!
 }
 
 type UpdateEntityPayload {
@@ -232,24 +339,17 @@ type UpdateEntityPayload {
   affectedRecords: Long!
 }
 
-input CreatePostInput {
+input UpdatePostInput {
+  id: String!
   title: String!
   markdownContent: String!
-  published: Boolean
+  published: Boolean!
 }
-
-"""
-The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
-"""
-scalar Long
 
 type DeleteEntityPayload {
   success: Boolean!
   affectedRecords: Long!
 }
-
-"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
-scalar DateTime
 
 input CreateCommentInput {
   markdownContent: String!
@@ -260,4 +360,15 @@ input CreateCommentInput {
 input UpdateCommentInput {
   id: String!
   markdownContent: String!
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+input ProfileInput {
+  public: Boolean
+  firstName: String!
+  lastName: String!
 }

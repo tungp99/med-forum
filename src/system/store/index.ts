@@ -5,11 +5,13 @@ import {
   useSelector as reduxSelector,
 } from 'react-redux'
 
+import { authStore } from './auth.store'
 import { notificationsStore } from './notification.store'
 import { homePageStore } from 'pages'
 
 export const store = createStore(
   combineReducers({
+    auth: authStore,
     notifications: notificationsStore,
     homePage: homePageStore,
   })

@@ -1,12 +1,18 @@
+import { useForm } from 'react-hook-form'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
 import { useDispatch, useSelector } from 'system/store'
+import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
 
 export function AS3AuthLogin() {
-  const state = useSelector(s => s.auth)
+  const state = useSelector(store => store.auth)
   const dispatch = useDispatch()
+  const { loading, login } = useAuth()
+  const { handleSubmit, register } = useForm({
+    defaultValues: { email: '', password: '' },
+  })
 
   return (
     <Modal
@@ -35,17 +41,22 @@ export function AS3AuthLogin() {
             <h4 className="title">Sign In</h4>
 
             <AS3Input
-              label="Email or Username"
+              {...register('email')}
+              label="Email"
               size="lg" />
 
             <AS3Input
+              {...register('password')}
               type="password"
               label="Password"
-              size="lg" />
+              size="lg"
+            />
 
             <AS3Button
               variant="primary"
-              size="lg">
+              size="lg"
+              onClick={e => handleSubmit(data => login({ ...data }))(e)}
+            >
               Submit
             </AS3Button>
 

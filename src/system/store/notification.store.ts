@@ -1,32 +1,28 @@
 import { StoreAction } from 'system/store'
 
-type ActionType =
-  | 'TOAST_SUCCESS'
-  | 'TOAST_ERROR'
-  | 'TOAST_INFO'
-  | 'TOAST_WARNING'
+type Action = 'TOAST_SUCCESS' | 'TOAST_ERROR' | 'TOAST_INFO' | 'TOAST_WARNING'
 
-type PayloadType = {
+type Payload = {
   title: string
   content: string
 }
 
-export type AS3Notification = {
+type Store = {
   id: number
   variant?: 'success' | 'danger' | 'info' | 'warning'
   title?: string
   content?: string
 }
 
-const initialState: AS3Notification[] = []
+const initialState: Store[] = []
 
 export const notificationsStore = (
   state = initialState,
-  action: StoreAction<ActionType, PayloadType>
-): AS3Notification[] => {
+  action: StoreAction<Action, Payload>
+): Store[] => {
   if (!action.payload) return state
 
-  const notification: AS3Notification = {
+  const notification: Store = {
     ...action.payload,
     id: new Date().getTime(),
   }

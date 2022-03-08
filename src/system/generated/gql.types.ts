@@ -103,9 +103,101 @@ export interface GetHomePageContentVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: Register
+// ====================================================
+
+export interface Register_register_account_profile {
+  readonly __typename: "Profile";
+  readonly firstName: string;
+  readonly lastName: string;
+}
+
+export interface Register_register_account {
+  readonly __typename: "Account";
+  readonly id: string | null;
+  readonly profile: Register_register_account_profile;
+}
+
+export interface Register_register {
+  readonly __typename: "LoginPayload";
+  readonly account: Register_register_account;
+  readonly accessToken: string;
+  readonly refreshToken: string;
+}
+
+export interface Register {
+  readonly register: Register_register;
+}
+
+export interface RegisterVariables {
+  readonly input: RegisterInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: Login
+// ====================================================
+
+export interface Login_login_account_profile {
+  readonly __typename: "Profile";
+  readonly firstName: string;
+  readonly lastName: string;
+}
+
+export interface Login_login_account {
+  readonly __typename: "Account";
+  readonly id: string | null;
+  readonly profile: Login_login_account_profile;
+}
+
+export interface Login_login {
+  readonly __typename: "LoginPayload";
+  readonly account: Login_login_account;
+  readonly accessToken: string;
+  readonly refreshToken: string;
+}
+
+export interface Login {
+  readonly login: Login_login;
+}
+
+export interface LoginVariables {
+  readonly input: LoginInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export interface LoginInput {
+  readonly email?: string | null;
+  readonly username?: string | null;
+  readonly password: string;
+}
+
+export interface ProfileInput {
+  readonly public?: boolean | null;
+  readonly firstName: string;
+  readonly lastName: string;
+}
+
+export interface RegisterInput {
+  readonly email: string;
+  readonly username?: string | null;
+  readonly password: string;
+  readonly confirmationPassword: string;
+  readonly profile: ProfileInput;
+}
 
 //==============================================================
 // END Enums and Input Objects

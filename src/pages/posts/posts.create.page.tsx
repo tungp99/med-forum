@@ -1,5 +1,5 @@
 import { Stack } from 'react-bootstrap'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 import {
   AS3Button,
@@ -8,29 +8,20 @@ import {
   AS3Layout,
   AS3Spacer,
 } from 'system/components'
-import { Post } from 'system/types'
 
 export default function PostsCreatePage() {
-  const { handleSubmit, control, setValue } = useForm<Partial<Post>>({
+  const { handleSubmit, register, setValue, control } = useForm({
     defaultValues: { title: '', markdownContent: '', published: false },
   })
 
-  const submit = (data: Partial<Post>) => console.log(data)
+  const submit = () => handleSubmit(data => console.log(data))()
 
   return (
     <AS3Layout>
-      <Controller
-        control={control}
-        name="title"
-        render={({ field: { onChange, value } }) => (
-          <AS3Input
-            label="Title"
-            className="mb-3"
-            value={value}
-            onChange={onChange}
-          />
-        )}
-      />
+      <AS3Input
+        {...register('title')}
+        label="Title"
+        className="mb-3" />
 
       <Controller
         control={control}
@@ -51,9 +42,9 @@ export default function PostsCreatePage() {
 
         <AS3Button
           variant="secondary"
-          onClick={e => {
+          onClick={() => {
             setValue('published', false)
-            handleSubmit(submit)(e)
+            submit()
           }}
         >
           Save as Draft
@@ -61,9 +52,9 @@ export default function PostsCreatePage() {
 
         <AS3Button
           variant="primary"
-          onClick={e => {
+          onClick={() => {
             setValue('published', true)
-            handleSubmit(submit)(e)
+            submit()
           }}
         >
           Publish

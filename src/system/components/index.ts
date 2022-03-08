@@ -1,5 +1,6 @@
 export { AS3Layout } from './as3-layout'
 export { AS3LayoutWithSidebar } from './as3-layout-with-sidebar'
+export { AS3AuthLogin, AS3AuthRegister } from './as3-auth'
 //
 export { AS3Routes } from './as3-routes.component'
 export { AS3Spacer } from './as3-spacer.component'

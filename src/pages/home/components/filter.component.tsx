@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
-import { gql, useLazyQuery } from '@apollo/react-hooks'
+import { gql, useLazyQuery } from '@apollo/client'
 
 import { Card, Stack } from 'react-bootstrap'
 import {
@@ -11,10 +11,10 @@ import {
   mdiWhiteBalanceSunny,
 } from '@mdi/js'
 
-import { useDispatch, useSelector } from 'system/store'
-import { PAGE_ROUTE } from 'system/constants'
-import { AS3Chip, AS3Spacer } from 'system/components'
 import { GetCurrentUserPosts } from 'system/generated/gql.types'
+import { PAGE_ROUTE } from 'system/constants'
+import { useDispatch, useSelector } from 'system/store'
+import { AS3Chip, AS3Spacer } from 'system/components'
 
 export function FilterComponent() {
   const navigate = useNavigate()
