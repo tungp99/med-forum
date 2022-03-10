@@ -5,15 +5,6 @@
     padding-bottom: map-get($spacers, 4);
   }
 
-  &-header,
-  &-body {
-    border-bottom: none;
-  }
-
-  &-header {
-    padding: 0;
-  }
-
   &-body {
     .as3-input,
     .title {

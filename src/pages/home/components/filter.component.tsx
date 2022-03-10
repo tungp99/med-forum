@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth0 } from '@auth0/auth0-react'
 import { gql, useLazyQuery } from '@apollo/client'
 
 import { Card, Stack } from 'react-bootstrap'
@@ -11,16 +10,17 @@ import {
   mdiWhiteBalanceSunny,
 } from '@mdi/js'
 
+import { useAuth } from 'system/auth'
 import { GetCurrentUserPosts } from 'system/generated/gql.types'
 import { PAGE_ROUTE } from 'system/constants'
-import { useDispatch, useSelector } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { AS3Chip, AS3Spacer } from 'system/components'
 
 export function FilterComponent() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { pagination } = useSelector(store => store.homePage)
-  const { user, isAuthenticated } = useAuth0()
+  const { account, authenticated } = useAuth()
 
   const [fetchCurrentUserPosts, { fetchMore }] =
     useLazyQuery<GetCurrentUserPosts>(
@@ -52,13 +52,9 @@ export function FilterComponent() {
         variables: {
           skip: pagination.page * pagination.itemsPerPage,
           take: pagination.itemsPerPage,
-          userId: user?.sub,
+          userId: account?.id,
         },
-        onError: err =>
-          dispatch({
-            type: 'TOAST_ERROR',
-            payload: { title: err.name, content: err.message },
-          }),
+        onError: err => Toast.error({ title: err.name, content: err.message }),
         onCompleted: data => {
           if (data.posts?.items) {
             dispatch({
@@ -71,7 +67,6 @@ export function FilterComponent() {
             })
           }
         },
-        notifyOnNetworkStatusChange: true,
       }
     )
 
@@ -89,7 +84,7 @@ export function FilterComponent() {
 
             <AS3Spacer />
 
-            {isAuthenticated && (
+            {authenticated && (
               <>
                 <AS3Chip
                   icon={mdiFormatListCheckbox}

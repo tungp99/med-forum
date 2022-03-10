@@ -111,12 +111,17 @@ export interface Register_register_account_profile {
   readonly __typename: "Profile";
   readonly firstName: string;
   readonly lastName: string;
+  readonly public: boolean;
 }
 
 export interface Register_register_account {
   readonly __typename: "Account";
   readonly id: string | null;
+  readonly email: string;
+  readonly username: string | null;
   readonly profile: Register_register_account_profile;
+  readonly createdAt: any;
+  readonly updatedAt: any;
 }
 
 export interface Register_register {
@@ -147,12 +152,17 @@ export interface Login_login_account_profile {
   readonly __typename: "Profile";
   readonly firstName: string;
   readonly lastName: string;
+  readonly public: boolean;
 }
 
 export interface Login_login_account {
   readonly __typename: "Account";
   readonly id: string | null;
+  readonly email: string;
+  readonly username: string | null;
   readonly profile: Login_login_account_profile;
+  readonly createdAt: any;
+  readonly updatedAt: any;
 }
 
 export interface Login_login {

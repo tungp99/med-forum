@@ -2,10 +2,13 @@ import { Card, ListGroup, Ratio } from 'react-bootstrap'
 import Icon from '@mdi/react'
 import { mdiHospitalBuilding } from '@mdi/js'
 
-import { AS3Avatar } from 'system/components/as3-avatar.component'
+import { useAuth } from 'system/auth'
+import { AS3Avatar } from 'system/components'
 import { EditButtonComponent } from './edit-button.component'
 
 export function OverviewCardComponent() {
+  const { account } = useAuth()
+
   return (
     <Card className="overview">
       <Ratio aspectRatio={20}>
@@ -20,7 +23,9 @@ export function OverviewCardComponent() {
             width={128}
             height={128} />
 
-          <Card.Title className="mt-2">John Smith</Card.Title>
+          <Card.Title className="mt-2">
+            {account?.profile?.firstName} {account?.profile?.lastName}
+          </Card.Title>
           <Card.Subtitle className="mb-2">Doctor</Card.Subtitle>
           <Card.Subtitle className="location">Hanoi, Vietnam</Card.Subtitle>
         </Card.Body>

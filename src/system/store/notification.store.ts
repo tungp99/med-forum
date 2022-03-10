@@ -1,14 +1,21 @@
+import { DateTime } from 'luxon'
 import { StoreAction } from 'system/store'
 
-type Action = 'TOAST_SUCCESS' | 'TOAST_ERROR' | 'TOAST_INFO' | 'TOAST_WARNING'
+type Action =
+  | 'TOAST_SUCCESS'
+  | 'TOAST_ERROR'
+  | 'TOAST_INFO'
+  | 'TOAST_WARNING'
+  | 'UNTOAST'
 
 type Payload = {
-  title: string
-  content: string
+  id: DateTime
+  title?: string
+  content?: string
 }
 
 type Store = {
-  id: number
+  id: DateTime
   variant?: 'success' | 'danger' | 'info' | 'warning'
   title?: string
   content?: string
@@ -22,12 +29,7 @@ export const notificationsStore = (
 ): Store[] => {
   if (!action.payload) return state
 
-  const notification: Store = {
-    ...action.payload,
-    id: new Date().getTime(),
-  }
-
-  setTimeout(() => (state = state.filter(s => s.id !== notification.id)), 3000)
+  const notification = action.payload
 
   switch (action.type) {
     case 'TOAST_SUCCESS':
@@ -36,16 +38,21 @@ export const notificationsStore = (
         ? notification.content
         : 'Action completed'
       return [{ ...notification, variant: 'success' }, ...state]
+
     case 'TOAST_ERROR':
       notification.title = notification.title ? notification.title : 'Error'
       notification.content = notification.content
         ? notification.content
         : 'Unexpected error'
       return [{ ...notification, variant: 'danger' }, ...state]
-    case 'TOAST_INFO':
-      return [{ ...notification, variant: 'info' }, ...state]
-    case 'TOAST_WARNING':
-      return [{ ...notification, variant: 'warning' }, ...state]
+
+    // case 'TOAST_INFO':
+    //   return [{ ...notification, variant: 'info' }, ...state]
+    // case 'TOAST_WARNING':
+    //   return [{ ...notification, variant: 'warning' }, ...state]
+    case 'UNTOAST':
+      return state.filter(s => !s.id.equals(notification.id))
+
     default:
       return state
   }

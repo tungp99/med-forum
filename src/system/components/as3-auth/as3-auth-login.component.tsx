@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
@@ -9,8 +9,8 @@ import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
 export function AS3AuthLogin() {
   const state = useSelector(store => store.auth)
   const dispatch = useDispatch()
-  const { loading, login } = useAuth()
-  const { handleSubmit, register } = useForm({
+  const { login } = useAuth()
+  const { handleSubmit, control } = useForm({
     defaultValues: { email: '', password: '' },
   })
 
@@ -21,18 +21,18 @@ export function AS3AuthLogin() {
       size="lg"
       show={state.isLoginPopupActive}
     >
-      <Modal.Header className="as3-auth-popup-header">
+      <Modal.Header className="border-bottom-0 p-0">
         <AS3Spacer />
         <AS3Button
           text
           size="lg"
           icon={mdiClose}
-          iconSize="lg"
+          iconSize={1.5}
           onClick={() => dispatch({ type: 'CLOSE_LOGIN_POPUP' })}
         ></AS3Button>
       </Modal.Header>
 
-      <Modal.Body className="as3-auth-popup-body">
+      <Modal.Body className="as3-auth-popup-body border-bottom-0">
         <Row className="justify-content-center py-5">
           <Col
             lg={6}
@@ -40,16 +40,31 @@ export function AS3AuthLogin() {
             sm={12}>
             <h4 className="title">Sign In</h4>
 
-            <AS3Input
-              {...register('email')}
-              label="Email"
-              size="lg" />
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="Email"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
 
-            <AS3Input
-              {...register('password')}
-              type="password"
-              label="Password"
-              size="lg"
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  type="password"
+                  label="Password"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
             />
 
             <AS3Button

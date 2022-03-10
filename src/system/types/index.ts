@@ -20,6 +20,6 @@ export type Profile = {
 
 export type Account = Entity & {
   email: string
-  username: string
+  username: string | null
   profile: Profile
 }

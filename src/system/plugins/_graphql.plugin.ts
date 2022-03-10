@@ -1,8 +1,9 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
-console.log(process.env.REACT_APP_GRAPHQL_SERVICE)
-
 export const apollo = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_SERVICE,
+  uri: process.env.REACT_APP_SERVICE_HOST,
   cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: { notifyOnNetworkStatusChange: true },
+  },
 })

@@ -9,7 +9,7 @@ import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
 export function AS3AuthRegister() {
   const state = useSelector(store => store.auth)
   const dispatch = useDispatch()
-  const { loading, register: sendRegister } = useAuth()
+  const { register: sendRegister } = useAuth()
   const { handleSubmit, register } = useForm({
     defaultValues: {
       email: '',

@@ -15,14 +15,18 @@ import {
   RegisterInput,
 } from 'system/generated/gql.types'
 import { Account } from 'system/types'
-import { useDispatch } from 'system/store'
+import { Toast, useDispatch } from 'system/store'
 import { LOGIN_MUTATION, REGISTRATION_MUTATION } from './gql.mutations'
 
 type AuthContextType = {
   authenticated: boolean
   setAuthStatus: Dispatch<React.SetStateAction<boolean>>
-  account?: Partial<Account>
-  setAccount: Dispatch<React.SetStateAction<Partial<Account> | undefined>>
+  account?: Account
+  setAccount: Dispatch<React.SetStateAction<Account | undefined>>
+  accessToken: string
+  setAccessToken: Dispatch<React.SetStateAction<string>>
+  refreshToken: string
+  setRefreshToken: Dispatch<React.SetStateAction<string>>
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -30,11 +34,17 @@ const AuthContext = createContext<AuthContextType>({
   setAuthStatus: () => {},
   account: undefined,
   setAccount: () => {},
+  accessToken: '',
+  setAccessToken: () => {},
+  refreshToken: '',
+  setRefreshToken: () => {},
 })
 
 export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
   const [authenticated, setAuthStatus] = useState(false)
-  const [account, setAccount] = useState<Partial<Account> | undefined>()
+  const [account, setAccount] = useState<Account | undefined>()
+  const [accessToken, setAccessToken] = useState('')
+  const [refreshToken, setRefreshToken] = useState('')
 
   return (
     <AuthContext.Provider
@@ -43,6 +53,10 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
         setAuthStatus,
         account,
         setAccount,
+        accessToken,
+        setAccessToken,
+        refreshToken,
+        setRefreshToken,
       }}
     >
       {props.children}
@@ -51,26 +65,30 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
 }
 
 export function useAuth() {
-  const { authenticated, setAuthStatus, account, setAccount } =
-    useContext(AuthContext)
+  const {
+    authenticated,
+    setAuthStatus,
+    account,
+    setAccount,
+    accessToken,
+    setAccessToken,
+    refreshToken,
+    setRefreshToken,
+  } = useContext(AuthContext)
   const dispatch = useDispatch()
 
   const [sendRegister, { loading: regLoading }] = useMutation<Register>(
     REGISTRATION_MUTATION,
     {
       onCompleted: data => {
-        console.log(data)
+        const { register: response } = data
         setAuthStatus(true)
-        setAccount({ ...data.register.account })
+        setAccount({ ...response.account })
+        setAccessToken(response.accessToken)
+        setRefreshToken(response.refreshToken)
         dispatch({ type: 'CLOSE_REGISTER_POPUP' })
       },
-      onError: err => {
-        console.error(err)
-        dispatch({
-          type: 'TOAST_ERROR',
-          payload: { title: err.name, content: err.message },
-        })
-      },
+      onError: err => Toast.error({ title: err.name, content: err.message }),
     }
   )
 
@@ -78,18 +96,14 @@ export function useAuth() {
     LOGIN_MUTATION,
     {
       onCompleted: data => {
-        console.log(data)
+        const { login: response } = data
         setAuthStatus(true)
-        setAccount({ ...data.login.account })
+        setAccount({ ...response.account })
+        setAccessToken(response.accessToken)
+        setRefreshToken(response.refreshToken)
         dispatch({ type: 'CLOSE_LOGIN_POPUP' })
       },
-      onError: err => {
-        console.error(err)
-        dispatch({
-          type: 'TOAST_ERROR',
-          payload: { title: err.name, content: err.message },
-        })
-      },
+      onError: err => Toast.error({ title: err.name, content: err.message }),
     }
   )
 
@@ -97,6 +111,8 @@ export function useAuth() {
     loading: regLoading || loginLoading,
     authenticated,
     account,
+    accessToken,
+    refreshToken,
     register: (input: RegisterInput) => sendRegister({ variables: { input } }),
     openRegisterPopup: () => dispatch({ type: 'OPEN_REGISTER_POPUP' }),
     login: (input: LoginInput) => sendLogin({ variables: { input } }),
@@ -104,6 +120,8 @@ export function useAuth() {
     logout() {
       setAuthStatus(false)
       setAccount(undefined)
+      setAccessToken('')
+      setRefreshToken('')
     },
   }
 }

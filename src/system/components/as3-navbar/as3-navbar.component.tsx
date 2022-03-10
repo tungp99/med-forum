@@ -1,15 +1,16 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import { Container, Image, Navbar, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { mdiAccountCircle, mdiLogout, mdiMagnify } from '@mdi/js'
 
+import { useAuth } from 'system/auth'
 import { PAGE_ROUTE } from 'system/constants'
 import { AS3Button, AS3Input, AS3Dropdown } from 'system/components'
+
 import './as3-navbar.style.scss'
 
 export function AS3Navbar() {
-  const { user, isAuthenticated, isLoading, loginWithPopup, logout } =
-    useAuth0()
+  const { account, authenticated, openLoginPopup, openRegisterPopup, logout } =
+    useAuth()
   const navigate = useNavigate()
 
   return (
@@ -34,9 +35,7 @@ export function AS3Navbar() {
           className="ms-5"
           direction="horizontal"
           gap={3}>
-          {isLoading && 'loading...'}
-
-          {isAuthenticated ? (
+          {authenticated ? (
             <AS3Dropdown
               items={[
                 {
@@ -52,21 +51,21 @@ export function AS3Navbar() {
                 },
               ]}
             >
-              Welcome, {user?.nickname}
+              Welcome, {account?.profile?.firstName}{' '}
+              {account?.profile?.lastName}
             </AS3Dropdown>
           ) : (
             <>
               <AS3Button
                 variant="outline-primary"
-                onClick={() => loginWithPopup()}
+                onClick={() => openLoginPopup()}
               >
                 Login
               </AS3Button>
 
               <AS3Button
                 variant="primary"
-                onClick={() => loginWithPopup({ screen_hint: 'signup' })}
-              >
+                onClick={() => openRegisterPopup()}>
                 Register
               </AS3Button>
             </>

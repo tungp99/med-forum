@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
 import { GetHomePageContent } from 'system/generated/gql.types'
-import { useDispatch, useSelector } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 
 import { FilterComponent } from './components/filter.component'
@@ -36,11 +36,7 @@ export default function HomePage() {
         skip: pagination.page * pagination.itemsPerPage,
         take: pagination.itemsPerPage,
       },
-      onError: err =>
-        dispatch({
-          type: 'TOAST_ERROR',
-          payload: { title: err.name, content: err.message },
-        }),
+      onError: err => Toast.error({ title: err.name, content: err.message }),
       onCompleted: data => {
         if (data.posts?.items) {
           dispatch({
@@ -53,7 +49,6 @@ export default function HomePage() {
           })
         }
       },
-      notifyOnNetworkStatusChange: true,
     }
   )
 

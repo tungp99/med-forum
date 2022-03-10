@@ -11,6 +11,7 @@ import {
   AS3AuthRegister,
   AS3Navbar,
   AS3Routes,
+  AS3Toastr,
 } from 'system/components'
 
 export default function App() {
@@ -24,6 +25,8 @@ export default function App() {
           <AS3AuthLogin />
           <AS3AuthRegister />
         </AuthProvider>
+
+        <AS3Toastr />
       </Provider>
     </ApolloProvider>
   )
