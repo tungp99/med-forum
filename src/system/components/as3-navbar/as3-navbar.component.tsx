@@ -51,8 +51,7 @@ export function AS3Navbar() {
                 },
               ]}
             >
-              Welcome, {account?.profile?.firstName}{' '}
-              {account?.profile?.lastName}
+              Welcome, {account.profile?.firstName} {account.profile?.lastName}
             </AS3Dropdown>
           ) : (
             <>

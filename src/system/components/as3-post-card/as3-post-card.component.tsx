@@ -49,7 +49,7 @@ export function AS3PostCard({ hasExtension, onClick, data }: AS3PostCardProps) {
             <span className="separator mx-1">•</span>
             <span className="publish">
               posted by drjohnsmith &nbsp;
-              {DateTime.fromJSDate(data.createdAt).toLocaleString(
+              {DateTime.fromISO(data.createdAt).toLocaleString(
                 DateTime.DATETIME_SHORT
               )}
             </span>

@@ -87,6 +87,8 @@ type Mutation {
   register(input: RegisterInput!): LoginPayload!
   login(input: LoginInput!): LoginPayload!
   refreshAccessToken(input: RefreshTokenInput!): RefreshTokenPayload!
+  updateAccount(input: UpdateAccountInput!): UpdateEntityPayload!
+  deleteAccount(id: String!): DeleteEntityPayload!
   createPost(input: CreatePostInput!): Post!
   updatePost(input: UpdatePostInput!): UpdateEntityPayload!
   deletePost(id: String!): DeleteEntityPayload!
@@ -100,16 +102,19 @@ enum ApplyPolicy {
   AFTER_RESOLVER
 }
 
+type AuthenticationError {
+  message: String!
+}
+
 input AccountFilterInput {
   and: [AccountFilterInput!]
   or: [AccountFilterInput!]
   email: StringOperationFilterInput
   username: StringOperationFilterInput
-  passwordHash: StringOperationFilterInput
   refreshToken: StringOperationFilterInput
   refreshTokenExpiration: ComparableDateTimeOperationFilterInput
   profile: ProfileFilterInput
-  god: BooleanOperationFilterInput
+  isGod: BooleanOperationFilterInput
   id: StringOperationFilterInput
   createdAt: ComparableDateTimeOperationFilterInput
   updatedAt: ComparableDateTimeOperationFilterInput
@@ -118,11 +123,10 @@ input AccountFilterInput {
 input AccountSortInput {
   email: SortEnumType
   username: SortEnumType
-  passwordHash: SortEnumType
   refreshToken: SortEnumType
   refreshTokenExpiration: SortEnumType
   profile: ProfileSortInput
-  god: SortEnumType
+  isGod: SortEnumType
   id: SortEnumType
   createdAt: SortEnumType
   updatedAt: SortEnumType
@@ -140,7 +144,7 @@ input PostFilterInput {
   or: [PostFilterInput!]
   title: StringOperationFilterInput
   markdownContent: StringOperationFilterInput
-  published: BooleanOperationFilterInput
+  isPublished: BooleanOperationFilterInput
   id: StringOperationFilterInput
   createdAt: ComparableDateTimeOperationFilterInput
   updatedAt: ComparableDateTimeOperationFilterInput
@@ -149,7 +153,7 @@ input PostFilterInput {
 input PostSortInput {
   title: SortEnumType
   markdownContent: SortEnumType
-  published: SortEnumType
+  isPublished: SortEnumType
   id: SortEnumType
   createdAt: SortEnumType
   updatedAt: SortEnumType
@@ -218,9 +222,13 @@ input ComparableDateTimeOperationFilterInput {
 input ProfileFilterInput {
   and: [ProfileFilterInput!]
   or: [ProfileFilterInput!]
-  public: BooleanOperationFilterInput
+  isPublic: BooleanOperationFilterInput
   firstName: StringOperationFilterInput
   lastName: StringOperationFilterInput
+  phoneNumber: StringOperationFilterInput
+  birthDate: ComparableNullableOfDateTimeOperationFilterInput
+  professions: ListFilterInputTypeOfProfessionFilterInput
+  educations: ListFilterInputTypeOfProfessionFilterInput
 }
 
 input BooleanOperationFilterInput {
@@ -234,9 +242,11 @@ enum SortEnumType {
 }
 
 input ProfileSortInput {
-  public: SortEnumType
+  isPublic: SortEnumType
   firstName: SortEnumType
   lastName: SortEnumType
+  phoneNumber: SortEnumType
+  birthDate: SortEnumType
 }
 
 type Account {
@@ -244,12 +254,11 @@ type Account {
   writtenComments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
   email: String!
   username: String
-  passwordHash: String!
   refreshToken: String!
   refreshTokenExpiration: DateTime!
   profile: Profile!
-  god: Boolean!
-  id: ID
+  isGod: Boolean!
+  id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -272,8 +281,8 @@ type Post {
   commentsCount: Long!
   title: String!
   markdownContent: String!
-  published: Boolean!
-  id: ID
+  isPublished: Boolean!
+  id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -283,13 +292,55 @@ type Comment {
   replies: [Comment!]!
   repliesCount: Long!
   markdownContent: String!
-  id: ID
+  id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
-scalar DateTime
+input ComparableNullableOfDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ListFilterInputTypeOfProfessionFilterInput {
+  all: ProfessionFilterInput
+  none: ProfessionFilterInput
+  some: ProfessionFilterInput
+  any: Boolean
+}
+
+input ProfessionFilterInput {
+  and: [ProfessionFilterInput!]
+  or: [ProfessionFilterInput!]
+  organization: StringOperationFilterInput
+  start: ComparableNullableOfDateTimeOperationFilterInput
+  end: ComparableNullableOfDateTimeOperationFilterInput
+  position: StringOperationFilterInput
+  isWorking: BooleanOperationFilterInput
+}
+
+input UpdateAccountInput {
+  id: String!
+  username: String!
+  password: String
+  confirmationPassword: String
+  profile: ProfileInput!
+}
+
+type UpdateEntityPayload {
+  isSuccess: Boolean!
+  affectedRecords: Long!
+}
 
 input RefreshTokenInput {
   accessToken: String!
@@ -297,7 +348,7 @@ input RefreshTokenInput {
 }
 
 type RefreshTokenPayload {
-  success: Boolean!
+  isSuccess: Boolean!
   accessToken: String!
   refreshToken: String!
 }
@@ -317,38 +368,39 @@ input RegisterInput {
 }
 
 type LoginPayload {
-  account: Account!
   accessToken: String!
   refreshToken: String!
 }
 
 type Profile {
-  public: Boolean!
+  isPublic: Boolean!
   firstName: String!
   lastName: String!
+  phoneNumber: String!
+  birthDate: DateTime
+  professions: [Profession!]!
+  educations: [Profession!]!
 }
+
+type DeleteEntityPayload {
+  isSuccess: Boolean!
+  affectedRecords: Long!
+}
+
+"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+scalar DateTime
 
 input CreatePostInput {
   title: String!
   markdownContent: String!
-  published: Boolean!
-}
-
-type UpdateEntityPayload {
-  success: Boolean!
-  affectedRecords: Long!
+  isPublished: Boolean!
 }
 
 input UpdatePostInput {
   id: String!
   title: String!
   markdownContent: String!
-  published: Boolean!
-}
-
-type DeleteEntityPayload {
-  success: Boolean!
-  affectedRecords: Long!
+  isPublished: Boolean!
 }
 
 input CreateCommentInput {
@@ -367,8 +419,28 @@ The `Long` scalar type represents non-fractional signed whole 64-bit numeric val
 """
 scalar Long
 
+type Profession {
+  organization: String!
+  start: DateTime
+  end: DateTime
+  position: String!
+  isWorking: Boolean!
+}
+
 input ProfileInput {
-  public: Boolean
+  isPublic: Boolean!
   firstName: String!
   lastName: String!
+  phoneNumber: String!
+  birthDate: DateTime
+  professions: [ProfessionInput!]!
+  educations: [ProfessionInput!]!
+}
+
+input ProfessionInput {
+  organization: String!
+  start: DateTime
+  end: DateTime
+  position: String!
+  isWorking: Boolean!
 }

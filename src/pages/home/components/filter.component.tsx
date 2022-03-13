@@ -27,7 +27,7 @@ export function FilterComponent() {
       gql`
         query GetCurrentUserPosts($skip: Int!, $take: Int!) {
           posts(
-            where: { published: { eq: true } }
+            where: { isPublished: { eq: true } }
             skip: $skip
             take: $take
             order: { createdAt: DESC }
@@ -38,7 +38,7 @@ export function FilterComponent() {
               markdownContent
               createdAt
               updatedAt
-              published
+              isPublished
               commentsCount
             }
             pageInfo {
@@ -52,7 +52,7 @@ export function FilterComponent() {
         variables: {
           skip: pagination.page * pagination.itemsPerPage,
           take: pagination.itemsPerPage,
-          userId: account?.id,
+          userId: account.id,
         },
         onError: err => Toast.error({ title: err.name, content: err.message }),
         onCompleted: data => {

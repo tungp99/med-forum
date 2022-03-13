@@ -1,0 +1,12 @@
+.form-switch {
+  &.form-check-inline {
+    display: inline-flex;
+    align-content: center;
+    margin-right: unset;
+  }
+
+  .form-check-input {
+    margin-left: unset;
+    margin-top: unset;
+  }
+}

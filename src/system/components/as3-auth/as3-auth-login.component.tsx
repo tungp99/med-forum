@@ -70,7 +70,7 @@ export function AS3AuthLogin() {
             <AS3Button
               variant="primary"
               size="lg"
-              onClick={e => handleSubmit(data => login({ ...data }))(e)}
+              onClick={handleSubmit(data => login({ ...data }))}
             >
               Submit
             </AS3Button>

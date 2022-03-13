@@ -8,44 +8,44 @@
 // ====================================================
 
 export interface GetCurrentUserPosts_posts_items {
-  readonly __typename: "Post";
-  readonly id: string | null;
-  readonly title: string;
-  readonly markdownContent: string;
-  readonly createdAt: any;
-  readonly updatedAt: any;
-  readonly published: boolean;
-  readonly commentsCount: any;
+  __typename: "Post";
+  id: string;
+  title: string;
+  markdownContent: string;
+  createdAt: any;
+  updatedAt: any;
+  isPublished: boolean;
+  commentsCount: any;
 }
 
 export interface GetCurrentUserPosts_posts_pageInfo {
-  readonly __typename: "CollectionSegmentInfo";
+  __typename: "CollectionSegmentInfo";
   /**
    * Indicates whether more items exist following the set defined by the clients arguments.
    */
-  readonly hasNextPage: boolean;
+  hasNextPage: boolean;
   /**
    * Indicates whether more items exist prior the set defined by the clients arguments.
    */
-  readonly hasPreviousPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface GetCurrentUserPosts_posts {
-  readonly __typename: "PostCollectionSegment";
-  readonly items: ReadonlyArray<GetCurrentUserPosts_posts_items> | null;
+  __typename: "PostCollectionSegment";
+  items: GetCurrentUserPosts_posts_items[] | null;
   /**
    * Information to aid in pagination.
    */
-  readonly pageInfo: GetCurrentUserPosts_posts_pageInfo;
+  pageInfo: GetCurrentUserPosts_posts_pageInfo;
 }
 
 export interface GetCurrentUserPosts {
-  readonly posts: GetCurrentUserPosts_posts | null;
+  posts: GetCurrentUserPosts_posts | null;
 }
 
 export interface GetCurrentUserPostsVariables {
-  readonly skip: number;
-  readonly take: number;
+  skip: number;
+  take: number;
 }
 
 /* tslint:disable */
@@ -58,44 +58,118 @@ export interface GetCurrentUserPostsVariables {
 // ====================================================
 
 export interface GetHomePageContent_posts_items {
-  readonly __typename: "Post";
-  readonly id: string | null;
-  readonly title: string;
-  readonly markdownContent: string;
-  readonly createdAt: any;
-  readonly updatedAt: any;
-  readonly published: boolean;
-  readonly commentsCount: any;
+  __typename: "Post";
+  id: string;
+  title: string;
+  markdownContent: string;
+  createdAt: any;
+  updatedAt: any;
+  isPublished: boolean;
+  commentsCount: any;
 }
 
 export interface GetHomePageContent_posts_pageInfo {
-  readonly __typename: "CollectionSegmentInfo";
+  __typename: "CollectionSegmentInfo";
   /**
    * Indicates whether more items exist following the set defined by the clients arguments.
    */
-  readonly hasNextPage: boolean;
+  hasNextPage: boolean;
   /**
    * Indicates whether more items exist prior the set defined by the clients arguments.
    */
-  readonly hasPreviousPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface GetHomePageContent_posts {
-  readonly __typename: "PostCollectionSegment";
-  readonly items: ReadonlyArray<GetHomePageContent_posts_items> | null;
+  __typename: "PostCollectionSegment";
+  items: GetHomePageContent_posts_items[] | null;
   /**
    * Information to aid in pagination.
    */
-  readonly pageInfo: GetHomePageContent_posts_pageInfo;
+  pageInfo: GetHomePageContent_posts_pageInfo;
 }
 
 export interface GetHomePageContent {
-  readonly posts: GetHomePageContent_posts | null;
+  posts: GetHomePageContent_posts | null;
 }
 
 export interface GetHomePageContentVariables {
-  readonly skip: number;
-  readonly take: number;
+  skip: number;
+  take: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: CreatePost
+// ====================================================
+
+export interface CreatePost_createPost {
+  __typename: "Post";
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface CreatePost {
+  createPost: CreatePost_createPost;
+}
+
+export interface CreatePostVariables {
+  input: CreatePostInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateProfileContact
+// ====================================================
+
+export interface UpdateProfileContact_updateAccount {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: any;
+}
+
+export interface UpdateProfileContact {
+  updateAccount: UpdateProfileContact_updateAccount;
+}
+
+export interface UpdateProfileContactVariables {
+  input: UpdateAccountInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RefreshToken
+// ====================================================
+
+export interface RefreshToken_refreshAccessToken {
+  __typename: "RefreshTokenPayload";
+  isSuccess: boolean;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface RefreshToken {
+  refreshAccessToken: RefreshToken_refreshAccessToken;
+}
+
+export interface RefreshTokenVariables {
+  input: RefreshTokenInput;
 }
 
 /* tslint:disable */
@@ -107,36 +181,18 @@ export interface GetHomePageContentVariables {
 // GraphQL mutation operation: Register
 // ====================================================
 
-export interface Register_register_account_profile {
-  readonly __typename: "Profile";
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly public: boolean;
-}
-
-export interface Register_register_account {
-  readonly __typename: "Account";
-  readonly id: string | null;
-  readonly email: string;
-  readonly username: string | null;
-  readonly profile: Register_register_account_profile;
-  readonly createdAt: any;
-  readonly updatedAt: any;
-}
-
 export interface Register_register {
-  readonly __typename: "LoginPayload";
-  readonly account: Register_register_account;
-  readonly accessToken: string;
-  readonly refreshToken: string;
+  __typename: "LoginPayload";
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface Register {
-  readonly register: Register_register;
+  register: Register_register;
 }
 
 export interface RegisterVariables {
-  readonly input: RegisterInput;
+  input: RegisterInput;
 }
 
 /* tslint:disable */
@@ -148,36 +204,70 @@ export interface RegisterVariables {
 // GraphQL mutation operation: Login
 // ====================================================
 
-export interface Login_login_account_profile {
-  readonly __typename: "Profile";
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly public: boolean;
-}
-
-export interface Login_login_account {
-  readonly __typename: "Account";
-  readonly id: string | null;
-  readonly email: string;
-  readonly username: string | null;
-  readonly profile: Login_login_account_profile;
-  readonly createdAt: any;
-  readonly updatedAt: any;
-}
-
 export interface Login_login {
-  readonly __typename: "LoginPayload";
-  readonly account: Login_login_account;
-  readonly accessToken: string;
-  readonly refreshToken: string;
+  __typename: "LoginPayload";
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface Login {
-  readonly login: Login_login;
+  login: Login_login;
 }
 
 export interface LoginVariables {
-  readonly input: LoginInput;
+  input: LoginInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetMe
+// ====================================================
+
+export interface GetMe_me_profile_professions {
+  __typename: "Profession";
+  organization: string;
+  start: any | null;
+  end: any | null;
+  position: string;
+  isWorking: boolean;
+}
+
+export interface GetMe_me_profile_educations {
+  __typename: "Profession";
+  organization: string;
+  start: any | null;
+  end: any | null;
+  position: string;
+  isWorking: boolean;
+}
+
+export interface GetMe_me_profile {
+  __typename: "Profile";
+  isPublic: boolean;
+  firstName: string;
+  lastName: string;
+  birthDate: any | null;
+  phoneNumber: string;
+  professions: GetMe_me_profile_professions[];
+  educations: GetMe_me_profile_educations[];
+}
+
+export interface GetMe_me {
+  __typename: "Account";
+  id: string;
+  email: string;
+  username: string | null;
+  profile: GetMe_me_profile;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetMe {
+  me: GetMe_me | null;
 }
 
 /* tslint:disable */
@@ -189,24 +279,55 @@ export interface LoginVariables {
 // START Enums and Input Objects
 //==============================================================
 
+export interface CreatePostInput {
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+}
+
 export interface LoginInput {
-  readonly email?: string | null;
-  readonly username?: string | null;
-  readonly password: string;
+  email?: string | null;
+  username?: string | null;
+  password: string;
+}
+
+export interface ProfessionInput {
+  organization: string;
+  start?: any | null;
+  end?: any | null;
+  position: string;
+  isWorking: boolean;
 }
 
 export interface ProfileInput {
-  readonly public?: boolean | null;
-  readonly firstName: string;
-  readonly lastName: string;
+  isPublic: boolean;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  birthDate?: any | null;
+  professions: ProfessionInput[];
+  educations: ProfessionInput[];
+}
+
+export interface RefreshTokenInput {
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface RegisterInput {
-  readonly email: string;
-  readonly username?: string | null;
-  readonly password: string;
-  readonly confirmationPassword: string;
-  readonly profile: ProfileInput;
+  email: string;
+  username?: string | null;
+  password: string;
+  confirmationPassword: string;
+  profile: ProfileInput;
+}
+
+export interface UpdateAccountInput {
+  id: string;
+  username: string;
+  password?: string | null;
+  confirmationPassword?: string | null;
+  profile: ProfileInput;
 }
 
 //==============================================================

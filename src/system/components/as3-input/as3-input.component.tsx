@@ -24,9 +24,9 @@ type AS3InputProps = FormControlProps & {
     | 'tel'
     | 'color'
 
-  width?: number
-
   label?: string
+
+  width?: number
 
   prefixIcon?: string
   suffixIcon?: string

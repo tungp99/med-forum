@@ -9,6 +9,8 @@ import { EditButtonComponent } from './edit-button.component'
 export function OverviewCardComponent() {
   const { account } = useAuth()
 
+  if (!account) return null
+
   return (
     <Card className="overview">
       <Ratio aspectRatio={20}>
@@ -24,7 +26,7 @@ export function OverviewCardComponent() {
             height={128} />
 
           <Card.Title className="mt-2">
-            {account?.profile?.firstName} {account?.profile?.lastName}
+            {account.profile.firstName} {account.profile.lastName}
           </Card.Title>
           <Card.Subtitle className="mb-2">Doctor</Card.Subtitle>
           <Card.Subtitle className="location">Hanoi, Vietnam</Card.Subtitle>

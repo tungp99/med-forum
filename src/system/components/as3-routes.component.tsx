@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 
 import { PAGE_ROUTE } from 'system/constants'
+import { GuardedComponent } from 'system/auth'
 import { HomePage, PostsCreatePage, ProfilePage } from 'pages'
 
 export function AS3Routes() {
@@ -12,7 +13,12 @@ export function AS3Routes() {
 
       <Route
         path={PAGE_ROUTE.PROFILE}
-        element={<ProfilePage />} />
+        element={
+          <GuardedComponent>
+            <ProfilePage />
+          </GuardedComponent>
+        }
+      />
 
       <Route
         path={PAGE_ROUTE.POSTS.CREATE}

@@ -17,8 +17,13 @@ export function AS3AuthRegister() {
       password: '',
       confirmationPassword: '',
       profile: {
+        isPublic: true,
         firstName: '',
         lastName: '',
+        phoneNumber: '',
+        birthDate: new Date(),
+        professions: [],
+        educations: [],
       },
     },
   })
@@ -85,7 +90,7 @@ export function AS3AuthRegister() {
             <AS3Button
               variant="primary"
               size="lg"
-              onClick={e => handleSubmit(data => sendRegister({ ...data }))(e)}
+              onClick={handleSubmit(data => sendRegister({ ...data }))}
             >
               Submit
             </AS3Button>

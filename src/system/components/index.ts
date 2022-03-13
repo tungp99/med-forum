@@ -6,6 +6,7 @@ export { AS3Routes } from './as3-routes.component'
 export { AS3Spacer } from './as3-spacer.component'
 export { AS3Avatar } from './as3-avatar.component'
 export { AS3Toastr } from './as3-toastr.component'
+export { AS3Switch } from './as3-switch/as3-switch.component'
 //
 export { AS3Editor } from './as3-editor/as3-editor.component'
 export { AS3Navbar } from './as3-navbar/as3-navbar.component'

@@ -21,7 +21,7 @@ export default function HomePage() {
             markdownContent
             createdAt
             updatedAt
-            published
+            isPublished
             commentsCount
           }
           pageInfo {

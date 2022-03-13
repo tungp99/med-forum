@@ -1,7 +1,8 @@
 import { Button, ButtonProps } from 'react-bootstrap'
+import Icon from '@mdi/react'
+import { mdiLoading } from '@mdi/js'
 
 import './as3-button.style.scss'
-import Icon from '@mdi/react'
 
 type AS3ButtonProps = ButtonProps & {
   variant?:
@@ -20,7 +21,6 @@ type AS3ButtonProps = ButtonProps & {
     | 'outline-warning'
     | 'outline-danger'
     | 'outline-info'
-    | 'outline-light'
     | 'outline-dark'
 
   icon?: string
@@ -28,8 +28,7 @@ type AS3ButtonProps = ButtonProps & {
 
   text?: boolean
 
-  routerLink?: boolean
-  routerLinkPath?: string
+  loading?: boolean
 }
 
 export function AS3Button(props: AS3ButtonProps) {
@@ -55,7 +54,14 @@ export function AS3Button(props: AS3ButtonProps) {
         />
       )}
 
-      {props.children}
+      {props.loading ? (
+        <Icon
+          path={mdiLoading}
+          size={props.iconSize ?? 1}
+          spin />
+      ) : (
+        props.children
+      )}
     </Button>
   )
 }

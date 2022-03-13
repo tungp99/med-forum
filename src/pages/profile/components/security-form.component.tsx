@@ -6,13 +6,12 @@ export function SecurityFormComponent() {
     <Card>
       <Card.Body>
         <Card.Title className="mb-3">Security</Card.Title>
-        <Card.Text>
-          <AS3Input label="Current Password" />
 
-          <AS3Input label="New Password" />
+        <AS3Input label="Current Password" />
 
-          <AS3Input label="Confirm New Password" />
-        </Card.Text>
+        <AS3Input label="New Password" />
+
+        <AS3Input label="Confirm New Password" />
 
         <Stack direction="horizontal">
           <AS3Spacer />
