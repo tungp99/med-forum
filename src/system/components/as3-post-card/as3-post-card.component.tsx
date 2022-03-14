@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+import { useQuery } from '@apollo/client'
 import { Card, CardProps } from 'react-bootstrap'
 import {
   mdiArrowDownBoldOutline,
@@ -12,14 +14,24 @@ import { AS3Button, AS3Spacer, AS3Link, AS3Editor } from 'system/components'
 import { CommentsComponent } from './comments.component'
 
 import './as3-post-card.style.scss'
-import { DateTime } from 'luxon'
+import { GET_COMMENTS_QUERY } from './gql'
+import { GetComments } from 'system/generated/gql.types'
 
 type AS3PostCardProps = CardProps & {
-  hasExtension?: boolean
   data: Post
 }
 
-export function AS3PostCard({ hasExtension, onClick, data }: AS3PostCardProps) {
+export function AS3PostCard({ onClick, data }: AS3PostCardProps) {
+  const { data: fetchCommentsResponse } = useQuery<GetComments>(
+    GET_COMMENTS_QUERY,
+    {
+      variables: {
+        postId: data.id,
+        skip: 0,
+      },
+    }
+  )
+
   return (
     <Card
       className="as3-post-card horizontal"
@@ -84,7 +96,7 @@ export function AS3PostCard({ hasExtension, onClick, data }: AS3PostCardProps) {
         </Card.Body>
       </div>
 
-      {hasExtension && (
+      {fetchCommentsResponse?.comments && (
         <Card.Body className="as3-post-card-extension">
           <CommentsComponent />
         </Card.Body>

@@ -38,7 +38,7 @@ export const Toast = {
       payload: { ...payload, id },
     })
 
-    setTimeout(() => store.dispatch({ type: 'UNTOAST', payload: { id } }), 3000)
+    setTimeout(() => store.dispatch({ type: 'UNTOAST', payload: { id } }), 6000)
   },
   error(payload: { title: string; content: string }) {
     const id = DateTime.now()
@@ -48,6 +48,6 @@ export const Toast = {
       payload: { ...payload, id },
     })
 
-    setTimeout(() => store.dispatch({ type: 'UNTOAST', payload: { id } }), 3000)
+    setTimeout(() => store.dispatch({ type: 'UNTOAST', payload: { id } }), 6000)
   },
 }

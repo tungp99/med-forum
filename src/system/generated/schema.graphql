@@ -80,7 +80,9 @@ type Query {
   me: Account
   accounts(skip: Int, take: Int, where: AccountFilterInput, order: [AccountSortInput!]): AccountCollectionSegment
   posts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
+  post(id: String!): Post
   comments(skip: Int, take: Int, postId: String!, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  replies(skip: Int, take: Int, commentId: String!, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
 }
 
 type Mutation {
@@ -277,8 +279,9 @@ type CollectionSegmentInfo {
 }
 
 type Post {
+  creatorAccount: Account
   comments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
-  commentsCount: Long!
+  commentsCount: Int!
   title: String!
   markdownContent: String!
   isPublished: Boolean!
@@ -288,9 +291,8 @@ type Post {
 }
 
 type Comment {
-  post: Post!
-  replies: [Comment!]!
-  repliesCount: Long!
+  post: Post
+  repliesCount: Int!
   markdownContent: String!
   id: ID!
   createdAt: DateTime!
@@ -339,7 +341,7 @@ input UpdateAccountInput {
 
 type UpdateEntityPayload {
   isSuccess: Boolean!
-  affectedRecords: Long!
+  affectedRecords: Int!
 }
 
 input RefreshTokenInput {
@@ -384,7 +386,7 @@ type Profile {
 
 type DeleteEntityPayload {
   isSuccess: Boolean!
-  affectedRecords: Long!
+  affectedRecords: Int!
 }
 
 """The `DateTime` scalar represents an ISO-8601 compliant date time type."""
@@ -413,11 +415,6 @@ input UpdateCommentInput {
   id: String!
   markdownContent: String!
 }
-
-"""
-The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
-"""
-scalar Long
 
 type Profession {
   organization: String!

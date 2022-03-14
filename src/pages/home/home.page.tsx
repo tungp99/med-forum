@@ -6,8 +6,11 @@ import { Toast, useDispatch, useSelector } from 'system/store'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 
 import { FilterComponent } from './components/filter.component'
+import { useNavigate } from 'react-router-dom'
+import { PAGE_ROUTE } from 'system/constants'
 
 export default function HomePage() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { posts, pagination } = useSelector(store => store.homePage)
 
@@ -56,16 +59,20 @@ export default function HomePage() {
     <AS3LayoutWithSidebar>
       <FilterComponent />
 
-      {posts.length ? (
-        posts.map(post => <AS3PostCard
-          key={post.id}
-          data={{ ...post }} />)
-      ) : (
+      <div className="d-flex justify-content-center mb-3">
         <AS3Button
           text
           icon={mdiSync}
           onClick={() => refetch()}></AS3Button>
-      )}
+      </div>
+
+      {posts.map(post => (
+        <AS3PostCard
+          key={post.id}
+          data={{ ...post }}
+          onClick={() => navigate(`/posts/${post.id}`)}
+        />
+      ))}
     </AS3LayoutWithSidebar>
   )
 }

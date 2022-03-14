@@ -10,9 +10,9 @@ import {
   AS3AuthLogin,
   AS3AuthRegister,
   AS3Navbar,
-  AS3Routes,
   AS3Toastr,
 } from 'system/components'
+import { Routes } from './Routes'
 
 export default function App() {
   return (
@@ -20,7 +20,7 @@ export default function App() {
       <Provider store={store}>
         <AuthProvider>
           <AS3Navbar />
-          <AS3Routes />
+          <Routes />
 
           <AS3AuthLogin />
           <AS3AuthRegister />

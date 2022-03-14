@@ -7,9 +7,11 @@ export function AS3Toastr() {
   const notifications = useSelector(store => store.notifications)
 
   return (
-    <ToastContainer position="bottom-end">
+    <ToastContainer position="top-end">
       {notifications.map(s => (
-        <Toast key={s.id.toMillis()}>
+        <Toast
+          key={s.id.toMillis()}
+          delay={5000}>
           <Toast.Header>
             <strong className="me-auto">{s.title}</strong>
             <small className="text-muted">

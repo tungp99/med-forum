@@ -15,7 +15,7 @@ export interface GetCurrentUserPosts_posts_items {
   createdAt: any;
   updatedAt: any;
   isPublished: boolean;
-  commentsCount: any;
+  commentsCount: number;
 }
 
 export interface GetCurrentUserPosts_posts_pageInfo {
@@ -65,7 +65,7 @@ export interface GetHomePageContent_posts_items {
   createdAt: any;
   updatedAt: any;
   isPublished: boolean;
-  commentsCount: any;
+  commentsCount: number;
 }
 
 export interface GetHomePageContent_posts_pageInfo {
@@ -96,6 +96,122 @@ export interface GetHomePageContent {
 export interface GetHomePageContentVariables {
   skip: number;
   take: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetPost
+// ====================================================
+
+export interface GetPost_post {
+  __typename: "Post";
+  id: string;
+  title: string;
+  markdownContent: string;
+  createdAt: any;
+  updatedAt: any;
+  isPublished: boolean;
+  commentsCount: number;
+}
+
+export interface GetPost {
+  post: GetPost_post | null;
+}
+
+export interface GetPostVariables {
+  id: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetComments
+// ====================================================
+
+export interface GetComments_comments_items {
+  __typename: "Comment";
+  id: string;
+  markdownContent: string;
+  repliesCount: number;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetComments_comments_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetComments_comments {
+  __typename: "CommentCollectionSegment";
+  items: GetComments_comments_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetComments_comments_pageInfo;
+}
+
+export interface GetComments {
+  comments: GetComments_comments | null;
+}
+
+export interface GetCommentsVariables {
+  postId: string;
+  skip: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetReplies
+// ====================================================
+
+export interface GetReplies_replies_items {
+  __typename: "Comment";
+  id: string;
+  markdownContent: string;
+  repliesCount: number;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetReplies_replies_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetReplies_replies {
+  __typename: "CommentCollectionSegment";
+  items: GetReplies_replies_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetReplies_replies_pageInfo;
+}
+
+export interface GetReplies {
+  replies: GetReplies_replies | null;
+}
+
+export interface GetRepliesVariables {
+  commentId: string;
+  skip: number;
 }
 
 /* tslint:disable */
@@ -137,7 +253,7 @@ export interface CreatePostVariables {
 export interface UpdateProfileContact_updateAccount {
   __typename: "UpdateEntityPayload";
   isSuccess: boolean;
-  affectedRecords: any;
+  affectedRecords: number;
 }
 
 export interface UpdateProfileContact {

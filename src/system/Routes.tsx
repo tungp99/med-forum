@@ -1,12 +1,12 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes as RR } from 'react-router-dom'
 
 import { PAGE_ROUTE } from 'system/constants'
 import { GuardedComponent } from 'system/auth'
-import { HomePage, PostsCreatePage, ProfilePage } from 'pages'
+import { HomePage, PostPage, PostsCreatePage, ProfilePage } from 'pages'
 
-export function AS3Routes() {
+export function Routes() {
   return (
-    <Routes>
+    <RR>
       <Route
         path={PAGE_ROUTE.HOME}
         element={<HomePage />} />
@@ -21,8 +21,12 @@ export function AS3Routes() {
       />
 
       <Route
+        path={PAGE_ROUTE.POSTS.SINGLE}
+        element={<PostPage />} />
+
+      <Route
         path={PAGE_ROUTE.POSTS.CREATE}
         element={<PostsCreatePage />} />
-    </Routes>
+    </RR>
   )
 }
