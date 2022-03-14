@@ -14,6 +14,8 @@ export default function HomePage() {
   const dispatch = useDispatch()
   const { posts, pagination } = useSelector(store => store.homePage)
 
+  console.log('hello')
+
   const { fetchMore, refetch } = useQuery<GetHomePageContent>(
     gql`
       query GetHomePageContent($skip: Int!, $take: Int!) {
