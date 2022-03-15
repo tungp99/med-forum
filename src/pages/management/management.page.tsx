@@ -9,6 +9,9 @@ export default function ManagementPage() {
     <AS3Layout>
       <Filter></Filter>
       <Post></Post>
+      <Card>
+        <Card.Body>some text</Card.Body>
+      </Card>
     </AS3Layout>
   )
 }

@@ -1,59 +1,39 @@
-import { gql, useQuery } from '@apollo/client'
+import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
-import { GetHomePageContent } from 'system/generated/gql.types'
 import { Toast, useDispatch, useSelector } from 'system/store'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
-
 import { FilterComponent } from './components/filter.component'
-import { useNavigate } from 'react-router-dom'
-import { PAGE_ROUTE } from 'system/constants'
+import { GET_POSTS_QUERY } from './gql'
+import { GetPosts } from 'system/generated/gql.types'
 
 export default function HomePage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { posts, pagination } = useSelector(store => store.homePage)
 
-  const { fetchMore, refetch } = useQuery<GetHomePageContent>(
-    gql`
-      query GetHomePageContent($skip: Int!, $take: Int!) {
-        posts(skip: $skip, take: $take, order: { createdAt: DESC }) {
-          items {
-            id
-            title
-            markdownContent
-            createdAt
-            updatedAt
-            isPublished
-            commentsCount
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-          }
-        }
+  const { refetch, loading } = useQuery<GetPosts>(GET_POSTS_QUERY, {
+    variables: {
+      skip: pagination.page * pagination.itemsPerPage,
+      take: pagination.itemsPerPage,
+    },
+    onCompleted({ posts }) {
+      if (posts?.items) {
+        dispatch({
+          type: 'SET_HOMEPAGE_POSTS',
+          payload: [...posts.items],
+        })
+        dispatch({
+          type: 'SET_HOMEPAGE_POSTS_PAGE',
+          payload: { page: 0 },
+        })
       }
-    `,
-    {
-      variables: {
-        skip: pagination.page * pagination.itemsPerPage,
-        take: pagination.itemsPerPage,
-      },
-      onError: err => Toast.error({ title: err.name, content: err.message }),
-      onCompleted: data => {
-        if (data.posts?.items) {
-          dispatch({
-            type: 'SET_HOMEPAGE_POSTS',
-            payload: [...data.posts.items],
-          })
-          dispatch({
-            type: 'SET_HOMEPAGE_POSTS_PAGE',
-            payload: { page: 0 },
-          })
-        }
-      },
-    }
-  )
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
 
   return (
     <AS3LayoutWithSidebar>
@@ -62,12 +42,16 @@ export default function HomePage() {
       <div className="d-flex justify-content-center mb-3">
         <AS3Button
           text
+          loading={loading}
+          disabled={loading}
           icon={mdiSync}
-          onClick={() => refetch()}></AS3Button>
+          onClick={() => refetch()}
+        />
       </div>
 
       {posts.map(post => (
         <AS3PostCard
+          className="navigation-enabled"
           key={post.id}
           data={{ ...post }}
           onClick={() => navigate(`/posts/${post.id}`)}

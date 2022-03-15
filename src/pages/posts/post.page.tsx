@@ -7,22 +7,24 @@ import { GetPost } from 'system/generated/gql.types'
 
 export default function PostPage() {
   const { id } = useParams()
-  const { data: fetchResponse, loading: fetchingPost } = useQuery<GetPost>(
-    GET_POST_QUERY,
-    {
-      variables: {
-        id,
-      },
-    }
-  )
+  const { data, loading } = useQuery<GetPost>(GET_POST_QUERY, {
+    variables: {
+      id,
+    },
+  })
 
-  if (fetchingPost || !fetchResponse?.post) {
+  if (loading || !data?.post) {
     return <>fetching, wait for it</>
   }
 
   return (
     <AS3LayoutWithSidebar>
-      <AS3PostCard data={fetchResponse.post} />
+      <AS3PostCard
+        data={{
+          ...data.post,
+          comments: data.post.comments?.items?.map(s => ({ ...s })),
+        }}
+      />
     </AS3LayoutWithSidebar>
   )
 }

@@ -26,10 +26,12 @@ export function NameFormComponent() {
     `,
     {
       ...gqlContext,
-      onCompleted: ({ updateAccount: response }) => {
+      onCompleted({ updateAccount: response }) {
         response.affectedRecords && refreshAccount()
       },
-      onError: err => Toast.error({ title: err.name, content: err.message }),
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
     }
   )
 

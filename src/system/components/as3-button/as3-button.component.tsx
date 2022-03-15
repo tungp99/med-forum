@@ -22,45 +22,55 @@ type AS3ButtonProps = ButtonProps & {
     | 'outline-danger'
     | 'outline-info'
     | 'outline-dark'
-
+  loading?: boolean
+  text?: boolean
   icon?: string
   iconSize?: string | number
-
-  text?: boolean
-
-  loading?: boolean
 }
 
-export function AS3Button(props: AS3ButtonProps) {
+export function AS3Button({
+  className,
+  children,
+  type,
+  size,
+  active,
+  disabled,
+  variant,
+  loading,
+  text,
+  icon,
+  iconSize,
+  onClick,
+}: AS3ButtonProps) {
   const classList = ['as3-button']
-  props.className && classList.push(props.className)
-  props.text && classList.push('text')
+  className && classList.push(className)
+  text && classList.push('text')
 
   return (
     <Button
       className={classList.join(' ')}
-      variant={props.variant ?? 'default'}
-      type={props.type}
-      size={props.size}
-      active={props.active}
-      disabled={props.disabled}
-      onClick={props.onClick}
+      variant={variant ?? 'default'}
+      type={type}
+      size={size}
+      active={active}
+      disabled={disabled}
+      onClick={onClick}
     >
-      {props.icon && (
+      {icon && !loading && (
         <Icon
-          className={props.text && props.children ? 'me-1' : ''}
-          path={props.icon}
-          size={props.iconSize ?? 1}
+          className={text && children ? 'me-1' : ''}
+          path={icon}
+          size={iconSize ?? 1}
         />
       )}
 
-      {props.loading ? (
+      {loading ? (
         <Icon
           path={mdiLoading}
-          size={props.iconSize ?? 1}
+          size={iconSize ?? 1}
           spin />
       ) : (
-        props.children
+        children
       )}
     </Button>
   )

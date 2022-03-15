@@ -12,6 +12,10 @@ export const GET_COMMENTS_QUERY = gql`
         id
         markdownContent
         repliesCount
+        creatorAccount {
+          id
+          username
+        }
         createdAt
         updatedAt
       }
@@ -23,17 +27,16 @@ export const GET_COMMENTS_QUERY = gql`
 `
 
 export const GET_REPLIES_QUERY = gql`
-  query GetReplies($commentId: String!, $skip: Int!) {
-    replies(
-      commentId: $commentId
-      order: { createdAt: DESC }
-      skip: $skip
-      take: 8
-    ) {
+  query GetReplies($commentId: String!) {
+    replies(commentId: $commentId, order: { createdAt: DESC }) {
       items {
         id
         markdownContent
         repliesCount
+        creatorAccount {
+          id
+          username
+        }
         createdAt
         updatedAt
       }

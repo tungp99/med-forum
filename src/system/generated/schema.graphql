@@ -291,7 +291,7 @@ type Post {
 }
 
 type Comment {
-  post: Post
+  creatorAccount: Account
   repliesCount: Int!
   markdownContent: String!
   id: ID!
