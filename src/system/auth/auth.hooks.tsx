@@ -81,13 +81,15 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
 
   const [sendFetchAccount, {}] = useLazyQuery<GetMe>(ME_QUERY, {
     ...gqlContext,
-    onCompleted: ({ me: response }) => {
+    onCompleted({ me: response }) {
       if (response) {
         setAccount({ ...response })
         setAuthStatus(true)
       }
     },
-    onError: err => Toast.error({ title: err.name, content: err.message }),
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
   })
 
   const [sendRefreshToken, {}] = useMutation<RefreshToken>(
@@ -159,24 +161,28 @@ export function useAuth() {
   const [sendRegister, { loading: registering }] = useMutation<Register>(
     REGISTRATION_MUTATION,
     {
-      onCompleted: ({ register: response }) => {
+      onCompleted({ register: response }) {
         setAccessToken(response.accessToken)
         setRefreshToken(response.refreshToken)
         dispatch({ type: 'CLOSE_REGISTER_POPUP' })
       },
-      onError: err => Toast.error({ title: err.name, content: err.message }),
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
     }
   )
 
   const [sendLogin, { loading: logginIn }] = useMutation<Login>(
     LOGIN_MUTATION,
     {
-      onCompleted: ({ login: response }) => {
+      onCompleted({ login: response }) {
         setAccessToken(response.accessToken)
         setRefreshToken(response.refreshToken)
         dispatch({ type: 'CLOSE_LOGIN_POPUP' })
       },
-      onError: err => Toast.error({ title: err.name, content: err.message }),
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
     }
   )
 

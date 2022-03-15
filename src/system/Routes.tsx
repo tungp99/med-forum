@@ -1,18 +1,23 @@
 import { Route, Routes as RR } from 'react-router-dom'
 
-import { PAGE_ROUTE } from 'system/constants'
 import { GuardedComponent } from 'system/auth'
-import { HomePage, PostPage, PostsCreatePage, ProfilePage } from 'pages'
+import {
+  HomePage,
+  ManagementPage,
+  PostPage,
+  PostsCreatePage,
+  ProfilePage,
+} from 'pages'
 
 export function Routes() {
   return (
     <RR>
       <Route
-        path={PAGE_ROUTE.HOME}
+        path="/"
         element={<HomePage />} />
 
       <Route
-        path={PAGE_ROUTE.PROFILE}
+        path="/profile"
         element={
           <GuardedComponent>
             <ProfilePage />
@@ -21,12 +26,26 @@ export function Routes() {
       />
 
       <Route
-        path={PAGE_ROUTE.POSTS.SINGLE}
-        element={<PostPage />} />
+        path="/management"
+        element={<ManagementPage />} />
+
+      <Route path="/posts">
+        <Route
+          index
+          element={<span>wrong way ;)</span>} />
+
+        <Route
+          path=":id"
+          element={<PostPage />} />
+
+        <Route
+          path="write"
+          element={<PostsCreatePage />} />
+      </Route>
 
       <Route
-        path={PAGE_ROUTE.POSTS.CREATE}
-        element={<PostsCreatePage />} />
+        path="*"
+        element={<span>nothing here ;)</span>} />
     </RR>
   )
 }

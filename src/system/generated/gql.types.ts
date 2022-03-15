@@ -4,96 +4,49 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetCurrentUserPosts
+// GraphQL query operation: GetPosts
 // ====================================================
 
-export interface GetCurrentUserPosts_posts_items {
+export interface GetPosts_posts_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetPosts_posts_items {
   __typename: "Post";
   id: string;
   title: string;
   markdownContent: string;
-  createdAt: any;
-  updatedAt: any;
   isPublished: boolean;
   commentsCount: number;
+  creatorAccount: GetPosts_posts_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
 }
 
-export interface GetCurrentUserPosts_posts_pageInfo {
+export interface GetPosts_posts_pageInfo {
   __typename: "CollectionSegmentInfo";
   /**
    * Indicates whether more items exist following the set defined by the clients arguments.
    */
   hasNextPage: boolean;
-  /**
-   * Indicates whether more items exist prior the set defined by the clients arguments.
-   */
-  hasPreviousPage: boolean;
 }
 
-export interface GetCurrentUserPosts_posts {
+export interface GetPosts_posts {
   __typename: "PostCollectionSegment";
-  items: GetCurrentUserPosts_posts_items[] | null;
+  items: GetPosts_posts_items[] | null;
   /**
    * Information to aid in pagination.
    */
-  pageInfo: GetCurrentUserPosts_posts_pageInfo;
+  pageInfo: GetPosts_posts_pageInfo;
 }
 
-export interface GetCurrentUserPosts {
-  posts: GetCurrentUserPosts_posts | null;
+export interface GetPosts {
+  posts: GetPosts_posts | null;
 }
 
-export interface GetCurrentUserPostsVariables {
-  skip: number;
-  take: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetHomePageContent
-// ====================================================
-
-export interface GetHomePageContent_posts_items {
-  __typename: "Post";
-  id: string;
-  title: string;
-  markdownContent: string;
-  createdAt: any;
-  updatedAt: any;
-  isPublished: boolean;
-  commentsCount: number;
-}
-
-export interface GetHomePageContent_posts_pageInfo {
-  __typename: "CollectionSegmentInfo";
-  /**
-   * Indicates whether more items exist following the set defined by the clients arguments.
-   */
-  hasNextPage: boolean;
-  /**
-   * Indicates whether more items exist prior the set defined by the clients arguments.
-   */
-  hasPreviousPage: boolean;
-}
-
-export interface GetHomePageContent_posts {
-  __typename: "PostCollectionSegment";
-  items: GetHomePageContent_posts_items[] | null;
-  /**
-   * Information to aid in pagination.
-   */
-  pageInfo: GetHomePageContent_posts_pageInfo;
-}
-
-export interface GetHomePageContent {
-  posts: GetHomePageContent_posts | null;
-}
-
-export interface GetHomePageContentVariables {
+export interface GetPostsVariables {
   skip: number;
   take: number;
 }
@@ -107,15 +60,44 @@ export interface GetHomePageContentVariables {
 // GraphQL query operation: GetPost
 // ====================================================
 
+export interface GetPost_post_comments_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetPost_post_comments_items {
+  __typename: "Comment";
+  id: string;
+  markdownContent: string;
+  repliesCount: number;
+  creatorAccount: GetPost_post_comments_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetPost_post_comments {
+  __typename: "CommentCollectionSegment";
+  items: GetPost_post_comments_items[] | null;
+}
+
+export interface GetPost_post_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
 export interface GetPost_post {
   __typename: "Post";
   id: string;
+  isPublished: boolean;
   title: string;
   markdownContent: string;
+  commentsCount: number;
+  comments: GetPost_post_comments | null;
+  creatorAccount: GetPost_post_creatorAccount | null;
   createdAt: any;
   updatedAt: any;
-  isPublished: boolean;
-  commentsCount: number;
 }
 
 export interface GetPost {
@@ -124,94 +106,6 @@ export interface GetPost {
 
 export interface GetPostVariables {
   id: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetComments
-// ====================================================
-
-export interface GetComments_comments_items {
-  __typename: "Comment";
-  id: string;
-  markdownContent: string;
-  repliesCount: number;
-  createdAt: any;
-  updatedAt: any;
-}
-
-export interface GetComments_comments_pageInfo {
-  __typename: "CollectionSegmentInfo";
-  /**
-   * Indicates whether more items exist following the set defined by the clients arguments.
-   */
-  hasNextPage: boolean;
-}
-
-export interface GetComments_comments {
-  __typename: "CommentCollectionSegment";
-  items: GetComments_comments_items[] | null;
-  /**
-   * Information to aid in pagination.
-   */
-  pageInfo: GetComments_comments_pageInfo;
-}
-
-export interface GetComments {
-  comments: GetComments_comments | null;
-}
-
-export interface GetCommentsVariables {
-  postId: string;
-  skip: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetReplies
-// ====================================================
-
-export interface GetReplies_replies_items {
-  __typename: "Comment";
-  id: string;
-  markdownContent: string;
-  repliesCount: number;
-  createdAt: any;
-  updatedAt: any;
-}
-
-export interface GetReplies_replies_pageInfo {
-  __typename: "CollectionSegmentInfo";
-  /**
-   * Indicates whether more items exist following the set defined by the clients arguments.
-   */
-  hasNextPage: boolean;
-}
-
-export interface GetReplies_replies {
-  __typename: "CommentCollectionSegment";
-  items: GetReplies_replies_items[] | null;
-  /**
-   * Information to aid in pagination.
-   */
-  pageInfo: GetReplies_replies_pageInfo;
-}
-
-export interface GetReplies {
-  replies: GetReplies_replies | null;
-}
-
-export interface GetRepliesVariables {
-  commentId: string;
-  skip: number;
 }
 
 /* tslint:disable */
@@ -384,6 +278,107 @@ export interface GetMe_me {
 
 export interface GetMe {
   me: GetMe_me | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetComments
+// ====================================================
+
+export interface GetComments_comments_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetComments_comments_items {
+  __typename: "Comment";
+  id: string;
+  markdownContent: string;
+  repliesCount: number;
+  creatorAccount: GetComments_comments_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetComments_comments_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetComments_comments {
+  __typename: "CommentCollectionSegment";
+  items: GetComments_comments_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetComments_comments_pageInfo;
+}
+
+export interface GetComments {
+  comments: GetComments_comments | null;
+}
+
+export interface GetCommentsVariables {
+  postId: string;
+  skip: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetReplies
+// ====================================================
+
+export interface GetReplies_replies_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetReplies_replies_items {
+  __typename: "Comment";
+  id: string;
+  markdownContent: string;
+  repliesCount: number;
+  creatorAccount: GetReplies_replies_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetReplies_replies_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetReplies_replies {
+  __typename: "CommentCollectionSegment";
+  items: GetReplies_replies_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetReplies_replies_pageInfo;
+}
+
+export interface GetReplies {
+  replies: GetReplies_replies | null;
+}
+
+export interface GetRepliesVariables {
+  commentId: string;
 }
 
 /* tslint:disable */

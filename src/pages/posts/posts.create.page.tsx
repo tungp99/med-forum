@@ -37,10 +37,12 @@ export default function PostsCreatePage() {
     `,
     {
       ...gqlContext,
-      onCompleted: data => {
-        console.log(data)
+      onCompleted({ createPost: response }) {
+        console.log(response)
       },
-      onError: err => Toast.error({ title: err.name, content: err.message }),
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
     }
   )
 

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { mdiAccountCircle, mdiLogout, mdiMagnify } from '@mdi/js'
 
 import { useAuth } from 'system/auth'
-import { PAGE_ROUTE } from 'system/constants'
 import { AS3Button, AS3Input, AS3Dropdown } from 'system/components'
 
 import './as3-navbar.style.scss'
@@ -41,7 +40,7 @@ export function AS3Navbar() {
                 {
                   prefixIcon: mdiAccountCircle,
                   text: 'Profile',
-                  onClick: () => navigate(PAGE_ROUTE.PROFILE),
+                  onClick: () => navigate('/profile'),
                 },
                 {
                   prefixIcon: mdiLogout,

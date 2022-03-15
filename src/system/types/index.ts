@@ -2,15 +2,8 @@ export type { Pagination } from './misc.types'
 
 export type Entity = {
   id: string
-  updatedAt: string
   createdAt: string
-}
-
-export type Post = Entity & {
-  title: string
-  markdownContent: string
-  isPublished: boolean
-  commentsCount: number
+  updatedAt: string
 }
 
 export type Profession = {
@@ -35,4 +28,19 @@ export type Account = Entity & {
   email: string
   username: string | null
   profile: Profile
+}
+
+export type Comment = Entity & {
+  markdownContent: string
+  repliesCount: number
+  creatorAccount: Partial<Account> | null
+}
+
+export type Post = Entity & {
+  title: string
+  markdownContent: string
+  isPublished: boolean
+  commentsCount: number
+  comments?: Comment[]
+  creatorAccount: Partial<Account> | null
 }

@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import { useQuery } from '@apollo/client'
 import { Card, CardProps } from 'react-bootstrap'
 import {
   mdiArrowDownBoldOutline,
@@ -14,27 +13,29 @@ import { AS3Button, AS3Spacer, AS3Link, AS3Editor } from 'system/components'
 import { CommentsComponent } from './comments.component'
 
 import './as3-post-card.style.scss'
-import { GET_COMMENTS_QUERY } from './gql'
-import { GetComments } from 'system/generated/gql.types'
 
 type AS3PostCardProps = CardProps & {
   data: Post
 }
 
-export function AS3PostCard({ onClick, data }: AS3PostCardProps) {
-  const { data: fetchCommentsResponse } = useQuery<GetComments>(
-    GET_COMMENTS_QUERY,
-    {
-      variables: {
-        postId: data.id,
-        skip: 0,
-      },
-    }
-  )
+export function AS3PostCard({
+  className,
+  data: {
+    title,
+    markdownContent,
+    commentsCount,
+    comments,
+    createdAt,
+    creatorAccount,
+  },
+  onClick,
+}: AS3PostCardProps) {
+  const classList = ['as3-post-card horizontal']
+  className && classList.push(className)
 
   return (
     <Card
-      className="as3-post-card horizontal"
+      className={classList.join(' ')}
       onClick={onClick}>
       <div className="d-flex flex-row">
         <Card.Body className="as3-post-card-prefix">
@@ -60,8 +61,8 @@ export function AS3PostCard({ onClick, data }: AS3PostCardProps) {
             <span className="category">as3/category</span>
             <span className="separator mx-1">•</span>
             <span className="publish">
-              posted by drjohnsmith &nbsp;
-              {DateTime.fromISO(data.createdAt).toLocaleString(
+              posted by {creatorAccount?.username} &nbsp;
+              {DateTime.fromISO(createdAt).toLocaleString(
                 DateTime.DATETIME_SHORT
               )}
             </span>
@@ -71,11 +72,11 @@ export function AS3PostCard({ onClick, data }: AS3PostCardProps) {
             <AS3Link icon={mdiFlagOutline}>Report</AS3Link>
           </Card.Subtitle>
 
-          <Card.Title>{data.title}</Card.Title>
+          <Card.Title>{title}</Card.Title>
 
           <AS3Editor
             preview
-            value={data.markdownContent}
+            value={markdownContent}
             height="auto" />
 
           <Card.Footer>
@@ -83,7 +84,7 @@ export function AS3PostCard({ onClick, data }: AS3PostCardProps) {
               text
               size="sm"
               icon={mdiMessageOutline}>
-              {data.commentsCount} Comments
+              {commentsCount} Comments
             </AS3Button>
 
             <AS3Button
@@ -96,9 +97,9 @@ export function AS3PostCard({ onClick, data }: AS3PostCardProps) {
         </Card.Body>
       </div>
 
-      {fetchCommentsResponse?.comments && (
+      {comments && comments.length > 0 && (
         <Card.Body className="as3-post-card-extension">
-          <CommentsComponent />
+          <CommentsComponent data={comments} />
         </Card.Body>
       )}
     </Card>
