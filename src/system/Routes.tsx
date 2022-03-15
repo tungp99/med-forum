@@ -2,7 +2,13 @@ import { Route, Routes as RR } from 'react-router-dom'
 
 import { PAGE_ROUTE } from 'system/constants'
 import { GuardedComponent } from 'system/auth'
-import { HomePage, PostPage, PostsCreatePage, ProfilePage } from 'pages'
+import {
+  HomePage,
+  ManagementPage,
+  PostPage,
+  PostsCreatePage,
+  ProfilePage,
+} from 'pages'
 
 export function Routes() {
   return (
@@ -19,6 +25,10 @@ export function Routes() {
           </GuardedComponent>
         }
       />
+
+      <Route
+        path="/management"
+        element={<ManagementPage />} />
 
       <Route
         path={PAGE_ROUTE.POSTS.SINGLE}
