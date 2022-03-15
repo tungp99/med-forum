@@ -1,6 +1,11 @@
 import { Container, Image, Navbar, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { mdiAccountCircle, mdiLogout, mdiMagnify } from '@mdi/js'
+import {
+  mdiAccountCircle,
+  mdiLogout,
+  mdiMagnify,
+  mdiProgressStar,
+} from '@mdi/js'
 
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Input, AS3Dropdown } from 'system/components'
@@ -41,6 +46,11 @@ export function AS3Navbar() {
                   prefixIcon: mdiAccountCircle,
                   text: 'Profile',
                   onClick: () => navigate('/profile'),
+                },
+                {
+                  prefixIcon: mdiProgressStar,
+                  text: 'Management',
+                  onClick: () => navigate('/manage'),
                 },
                 {
                   prefixIcon: mdiLogout,

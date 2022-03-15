@@ -48,7 +48,60 @@ export interface GetPosts {
 
 export interface GetPostsVariables {
   skip: number;
-  take: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetMyPosts
+// ====================================================
+
+export interface GetMyPosts_posts_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetMyPosts_posts_items {
+  __typename: "Post";
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+  commentsCount: number;
+  creatorAccount: GetMyPosts_posts_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetMyPosts_posts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetMyPosts_posts {
+  __typename: "PostCollectionSegment";
+  items: GetMyPosts_posts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetMyPosts_posts_pageInfo;
+}
+
+export interface GetMyPosts {
+  posts: GetMyPosts_posts | null;
+}
+
+export interface GetMyPostsVariables {
+  accountId: string;
+  isPublished?: boolean | null;
+  skip: number;
 }
 
 /* tslint:disable */
@@ -120,11 +173,6 @@ export interface GetPostVariables {
 export interface CreatePost_createPost {
   __typename: "Post";
   id: string;
-  title: string;
-  markdownContent: string;
-  isPublished: boolean;
-  createdAt: any;
-  updatedAt: any;
 }
 
 export interface CreatePost {
@@ -133,6 +181,29 @@ export interface CreatePost {
 
 export interface CreatePostVariables {
   input: CreatePostInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdatePost
+// ====================================================
+
+export interface UpdatePost_updatePost {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface UpdatePost {
+  updatePost: UpdatePost_updatePost;
+}
+
+export interface UpdatePostVariables {
+  input: UpdatePostInput;
 }
 
 /* tslint:disable */
@@ -439,6 +510,13 @@ export interface UpdateAccountInput {
   password?: string | null;
   confirmationPassword?: string | null;
   profile: ProfileInput;
+}
+
+export interface UpdatePostInput {
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
 }
 
 //==============================================================

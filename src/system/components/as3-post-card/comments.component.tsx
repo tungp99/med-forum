@@ -46,7 +46,7 @@ function CommentComponent({
       <div className="markdown-content-line">&nbsp;</div>
 
       <Card.Subtitle>
-        <AS3Avatar />
+        <AS3Avatar className="ml-2" />
         <span className="category ms-2">{creatorAccount?.username}</span>
         <span className="separator mx-1">•</span>
         <span className="publish">
