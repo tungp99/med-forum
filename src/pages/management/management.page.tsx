@@ -1,27 +1,13 @@
-import { AS3Layout } from 'system/components'
-import { AS3PostCard } from 'system/components/as3-post-card/as3-post-card.component copy'
-
-import { Filter } from './components/filter.component'
-
-import './management.style.scss'
+import { useNavigate } from 'react-router-dom'
+import { AS3Link } from 'system/components'
 
 export default function ManagementPage() {
+  const navigate = useNavigate()
+
   return (
-    <AS3Layout>
-      <Filter></Filter>
-      <AS3PostCard
-        className=""
-        data={{
-          commentsCount: 4,
-          createdAt: `${new Date()}`,
-          isPublished: false,
-          markdownContent: 'hhihi',
-          title: 'haha',
-          id: '1',
-          updatedAt: '1',
-          creatorAccount: '',
-        }}
-      />
-    </AS3Layout>
+    <>
+      <AS3Link onClick={() => navigate('/manage/posts')}>Posts</AS3Link>
+      <AS3Link onClick={() => navigate('/manage/users')}>Users</AS3Link>
+    </>
   )
 }

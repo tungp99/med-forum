@@ -10,12 +10,12 @@ type Payload = Post[] | Partial<Pagination>
 
 type State = {
   posts: Post[]
-  pagination: Pagination
+  page: number
 }
 
 const initialState: State = {
   posts: [],
-  pagination: { page: 0, itemsPerPage: 8 },
+  page: 0,
 }
 
 export const homePageStore = (
@@ -31,13 +31,13 @@ export const homePageStore = (
       const { page } = action.payload as Partial<Pagination>
       return {
         ...state,
-        pagination: { ...state.pagination, page: page ?? 0 },
+        page: page ?? 0,
       }
     }
     case 'INCREASE_HOMEPAGE_POSTS_PAGE':
       return {
         ...state,
-        pagination: { ...state.pagination, page: state.pagination.page + 1 },
+        page: state.page + 1,
       }
     default:
       return state

@@ -147,6 +147,7 @@ input PostFilterInput {
   title: StringOperationFilterInput
   markdownContent: StringOperationFilterInput
   isPublished: BooleanOperationFilterInput
+  creatorAccountId: StringOperationFilterInput
   id: StringOperationFilterInput
   createdAt: ComparableDateTimeOperationFilterInput
   updatedAt: ComparableDateTimeOperationFilterInput
@@ -156,6 +157,7 @@ input PostSortInput {
   title: SortEnumType
   markdownContent: SortEnumType
   isPublished: SortEnumType
+  creatorAccountId: SortEnumType
   id: SortEnumType
   createdAt: SortEnumType
   updatedAt: SortEnumType
@@ -285,6 +287,7 @@ type Post {
   title: String!
   markdownContent: String!
   isPublished: Boolean!
+  creatorAccountId: String!
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!

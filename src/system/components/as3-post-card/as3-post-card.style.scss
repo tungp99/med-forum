@@ -11,7 +11,6 @@
 
   &-prefix {
     max-width: 2.5rem;
-    padding: map-get($spacers, 2);
     background-color: $light;
     display: flex;
     flex-direction: column;
@@ -23,24 +22,12 @@
   }
 
   &-main {
-    &.card-body {
-      padding: 0;
-    }
-
-    .card-title,
-    .card-subtitle {
-      padding: map-get($spacers, 2) map-get($spacers, 2) map-get($spacers, 0)
-        map-get($spacers, 2);
-    }
-
     .as3-button,
     .as3-link {
-      color: $gray-600;
+      font-size: $font-size-sm;
     }
 
     .card-footer {
-      padding-left: map-get($spacers, 2);
-      padding-right: map-get($spacers, 2);
       display: flex;
       background-color: unset;
       border: none;
@@ -58,10 +45,6 @@
       align-items: center;
       margin-top: unset;
       font-size: $font-size-sm;
-
-      .as3-avatar {
-        margin-left: -#{map-get($spacers, 2)};
-      }
 
       .publish {
         font-weight: normal;

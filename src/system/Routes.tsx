@@ -4,6 +4,7 @@ import { GuardedComponent } from 'system/auth'
 import {
   HomePage,
   ManagementPage,
+  ManagementPostsPage,
   PostPage,
   PostsCreatePage,
   ProfilePage,
@@ -25,9 +26,15 @@ export function Routes() {
         }
       />
 
-      <Route
-        path="/management"
-        element={<ManagementPage />} />
+      <Route path="/manage">
+        <Route
+          index
+          element={<ManagementPostsPage />} />
+
+        <Route
+          path="users"
+          element={<ManagementPage />} />
+      </Route>
 
       <Route path="/posts">
         <Route

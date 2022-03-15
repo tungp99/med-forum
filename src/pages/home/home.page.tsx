@@ -11,13 +11,10 @@ import { GetPosts } from 'system/generated/gql.types'
 export default function HomePage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { posts, pagination } = useSelector(store => store.homePage)
+  const { posts, page } = useSelector(store => store.homePage)
 
   const { refetch, loading } = useQuery<GetPosts>(GET_POSTS_QUERY, {
-    variables: {
-      skip: pagination.page * pagination.itemsPerPage,
-      take: pagination.itemsPerPage,
-    },
+    variables: { skip: page * 8 },
     onCompleted({ posts }) {
       if (posts?.items) {
         dispatch({
@@ -53,6 +50,7 @@ export default function HomePage() {
         <AS3PostCard
           className="navigation-enabled"
           key={post.id}
+          preview
           data={{ ...post }}
           onClick={() => navigate(`/posts/${post.id}`)}
         />

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Card, Stack } from 'react-bootstrap'
 import { mdiChevronDoubleLeft } from '@mdi/js'
 
@@ -14,6 +14,7 @@ import {
   AS3Link,
   AS3Spacer,
 } from 'system/components'
+import { CREATE_POST_MUTATION } from './gql'
 import { CreatePost, CreatePostInput } from 'system/generated/gql.types'
 
 export default function PostsCreatePage() {
@@ -23,22 +24,11 @@ export default function PostsCreatePage() {
     defaultValues: { title: '', markdownContent: '', isPublished: false },
   })
   const [sendCreatePost, { loading }] = useMutation<CreatePost>(
-    gql`
-      mutation CreatePost($input: CreatePostInput!) {
-        createPost(input: $input) {
-          id
-          title
-          markdownContent
-          isPublished
-          createdAt
-          updatedAt
-        }
-      }
-    `,
+    CREATE_POST_MUTATION,
     {
       ...gqlContext,
       onCompleted({ createPost: response }) {
-        console.log(response)
+        navigate('/manage/posts')
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -47,8 +37,7 @@ export default function PostsCreatePage() {
   )
 
   const submit = handleSubmit(data => {
-    console.log(data)
-    sendCreatePost({ variables: { input: { ...data } } })
+    sendCreatePost({ variables: { input: data } })
   })
 
   return (

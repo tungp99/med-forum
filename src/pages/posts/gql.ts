@@ -30,3 +30,20 @@ export const GET_POST_QUERY = gql`
     }
   }
 `
+
+export const CREATE_POST_MUTATION = gql`
+  mutation CreatePost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      id
+    }
+  }
+`
+
+export const UPDATE_POST_MUTATION = gql`
+  mutation UpdatePost($input: UpdatePostInput!) {
+    updatePost(input: $input) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`
