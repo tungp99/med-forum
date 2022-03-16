@@ -19,8 +19,8 @@ export function AS3LayoutWithSidebar({
       className={classList.join(' ')}
       fluid="sm">
       <Row>
-        <Col lg={8}>{children}</Col>
-        <Col lg={4}>{sidebar}</Col>
+        <Col lg={9}>{children}</Col>
+        <Col lg={3}>{sidebar}</Col>
       </Row>
     </Container>
   )

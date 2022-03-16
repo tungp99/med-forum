@@ -1,0 +1,49 @@
+.filter__container {
+  // margin: 3rem 0 0rem 27rem;
+  // max-width: 50rem;
+  display: grid;
+  // font-family: 'Times New Roman', Times, serif;
+  grid-template-columns: 1fr 20fr;
+}
+
+.sort__btn {
+  background-color: #dbdee2;
+  border: none;
+  // margin: 0 0.5rem 1rem 0rem;
+  align-self: flex-end;
+}
+
+.__container {
+  // max-width: 50rem;
+  // margin: 0rem auto 2rem auto;
+  display: grid;
+  grid-template-columns: 1fr 15fr 2fr;
+  background-color: rgba(255, 255, 255, 0.589);
+  // font-family: 'Times New Roman', Times, serif;
+}
+
+.posts {
+  padding-top: 1.1rem;
+  // margin-left: 1rem;
+  // margin-right: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.post__number {
+  margin: 0;
+}
+
+.isPublic {
+  padding: 1.9rem 1.5rem 0 7rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.info__container {
+  padding: 0.4rem 0 0.4rem 1rem;
+  border-left: thin solid rgb(218, 212, 212);
+  font-size: 1.1rem;
+}
