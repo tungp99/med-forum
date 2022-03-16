@@ -7,5 +7,5 @@ export { default as PostsCreatePage } from './posts/posts.create.page'
 
 export { default as PostPage } from './posts/post.page'
 
-export { default as ManagementPage } from './management/management.page'
+export { default as ManageUsersPage } from './management/management.users.page'
 export { default as ManagementPostsPage } from './management/management.posts.page'
