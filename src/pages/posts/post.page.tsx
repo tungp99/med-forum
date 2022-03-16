@@ -21,7 +21,7 @@ export default function PostPage() {
   })
 
   useEffect(() => {
-    refetch({ variables })
+    refetch()
   }, [processor])
 
   if (loading || !data?.post) {

@@ -115,19 +115,18 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
   }, [])
 
   useEffect(() => {
+    localStorage.setItem('access_token', accessToken)
+
     if (!accessToken) {
       setAuthStatus(false)
       setAccount({} as Account)
       return
     }
 
-    localStorage.setItem('access_token', accessToken)
     sendFetchAccount(gqlContext)
   }, [accessToken])
 
   useEffect(() => {
-    if (!refreshToken) return
-
     localStorage.setItem('refresh_token', refreshToken)
   }, [refreshToken])
 

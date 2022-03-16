@@ -23,12 +23,12 @@ export default function PostsCreatePage() {
   const { handleSubmit, setValue, control } = useForm<CreatePostInput>({
     defaultValues: { title: '', markdownContent: '', isPublished: false },
   })
-  const [sendCreatePost, { loading }] = useMutation<CreatePost>(
+  const [createPost, { loading }] = useMutation<CreatePost>(
     CREATE_POST_MUTATION,
     {
       ...gqlContext,
-      onCompleted({ createPost: response }) {
-        navigate('/manage/posts')
+      onCompleted() {
+        navigate('/manage')
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -37,7 +37,7 @@ export default function PostsCreatePage() {
   )
 
   const submit = handleSubmit(data => {
-    sendCreatePost({ variables: { input: data } })
+    createPost({ variables: { input: data } })
   })
 
   return (

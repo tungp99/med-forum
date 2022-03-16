@@ -31,16 +31,21 @@ export const GET_MY_POSTS_QUERY = gql`
   }
 `
 
-export const GET_USERS_QUERY = gql`
-  query a {
-    accounts {
+export const GET_ACCOUNTS_QUERY = gql`
+  query GetAccounts($skip: Int!) {
+    accounts(skip: $skip, take: 8) {
       items {
+        id
         email
         username
         profile {
           firstName
           lastName
         }
+        isGod
+      }
+      pageInfo {
+        hasNextPage
       }
     }
   }

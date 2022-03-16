@@ -152,9 +152,12 @@ export function AS3PostCard({
           </Card.Footer>
         </Card.Body>
       </div>
-      <Card.Body className="px-1 py-0">
-        <ReplyInputComponent />
-      </Card.Body>
+
+      {!preview && (
+        <Card.Body className="px-1 py-0">
+          <ReplyInputComponent />
+        </Card.Body>
+      )}
 
       {comments && comments.length > 0 && (
         <Card.Body className="as3-post-card-extension">

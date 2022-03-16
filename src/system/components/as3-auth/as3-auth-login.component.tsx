@@ -5,12 +5,13 @@ import { mdiClose } from '@mdi/js'
 import { useDispatch, useStore } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
+import { LoginInput } from 'system/generated/gql.types'
 
 export function AS3AuthLogin() {
   const state = useStore(store => store.auth)
   const dispatch = useDispatch()
   const { login } = useAuth()
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control } = useForm<LoginInput>({
     defaultValues: { email: '', password: '' },
   })
 
@@ -47,7 +48,7 @@ export function AS3AuthLogin() {
                 <AS3Input
                   label="Email"
                   size="lg"
-                  value={value}
+                  value={value ?? ''}
                   onChange={onChange}
                 />
               )}
@@ -70,7 +71,7 @@ export function AS3AuthLogin() {
             <AS3Button
               variant="primary"
               size="lg"
-              onClick={handleSubmit(data => login({ ...data }))}
+              onClick={handleSubmit(data => login(data))}
             >
               Submit
             </AS3Button>

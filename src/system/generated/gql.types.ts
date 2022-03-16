@@ -110,6 +110,55 @@ export interface GetMyPostsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetAccounts
+// ====================================================
+
+export interface GetAccounts_accounts_items_profile {
+  __typename: "Profile";
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetAccounts_accounts_items {
+  __typename: "Account";
+  id: string;
+  email: string;
+  username: string | null;
+  profile: GetAccounts_accounts_items_profile;
+  isGod: boolean;
+}
+
+export interface GetAccounts_accounts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetAccounts_accounts {
+  __typename: "AccountCollectionSegment";
+  items: GetAccounts_accounts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetAccounts_accounts_pageInfo;
+}
+
+export interface GetAccounts {
+  accounts: GetAccounts_accounts | null;
+}
+
+export interface GetAccountsVariables {
+  skip: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetPost
 // ====================================================
 

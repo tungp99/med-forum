@@ -1,27 +1,26 @@
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
 import { useDispatch, useStore } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
+import { RegisterInput } from 'system/generated/gql.types'
 
 export function AS3AuthRegister() {
   const state = useStore(store => store.auth)
   const dispatch = useDispatch()
-  const { register: sendRegister } = useAuth()
-  const { handleSubmit, register } = useForm({
+  const { register } = useAuth()
+  const { handleSubmit, control } = useForm<RegisterInput>({
     defaultValues: {
       email: '',
-      username: '',
       password: '',
       confirmationPassword: '',
       profile: {
-        isPublic: true,
         firstName: '',
         lastName: '',
+        isPublic: true,
         phoneNumber: '',
-        birthDate: new Date(),
         professions: [],
         educations: [],
       },
@@ -54,43 +53,78 @@ export function AS3AuthRegister() {
             sm={12}>
             <h4 className="title">Sign Up</h4>
 
-            <AS3Input
-              {...register('profile.firstName')}
-              label="First Name"
-              size="lg"
+            <Controller
+              control={control}
+              name="profile.firstName"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="First Name"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
             />
 
-            <AS3Input
-              {...register('profile.lastName')}
-              label="Last Name"
-              size="lg"
+            <Controller
+              control={control}
+              name="profile.lastName"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="Last Name"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
             />
 
-            <AS3Input
-              {...register('email')}
-              type="email"
-              label="Email"
-              size="lg"
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  type="email"
+                  label="Email"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
             />
 
-            <AS3Input
-              {...register('password')}
-              type="password"
-              label="Password"
-              size="lg"
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  type="password"
+                  label="Password"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
             />
 
-            <AS3Input
-              {...register('confirmationPassword')}
-              type="password"
-              label="Confirmation Password"
-              size="lg"
+            <Controller
+              control={control}
+              name="confirmationPassword"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  type="password"
+                  label="Confirmation Password"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
             />
 
             <AS3Button
               variant="primary"
               size="lg"
-              onClick={handleSubmit(data => sendRegister({ ...data }))}
+              onClick={handleSubmit(data => register(data))}
             >
               Submit
             </AS3Button>

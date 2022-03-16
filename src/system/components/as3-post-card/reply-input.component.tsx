@@ -19,7 +19,10 @@ export function ReplyInputComponent({
   const { gqlContext } = useAuth()
 
   const { control, handleSubmit } = useForm<CreateCommentInput>({
-    defaultValues: { postId, markdownContent: '', replyToCommentId },
+    defaultValues: {
+      markdownContent: '',
+      replyToCommentId,
+    },
   })
 
   const [create] = useMutation<CreateComment>(CREATE_COMMENT_MUTATION, {
@@ -44,7 +47,9 @@ export function ReplyInputComponent({
           onChange={onChange}
           onKeyUp={e => {
             if (e.key === 'Enter') {
-              handleSubmit(data => create({ variables: { input: data } }))()
+              handleSubmit(data =>
+                create({ variables: { input: { ...data, postId } } })
+              )()
               return
             }
           }}

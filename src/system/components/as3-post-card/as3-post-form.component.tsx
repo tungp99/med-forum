@@ -46,16 +46,18 @@ export function AS3PostForm({
           <Stack
             direction="horizontal"
             gap={2}>
-            <AS3Button
-              size="sm"
-              variant="outline-success"
-              onClick={e => {
-                setValue('isPublished', false)
-                submit(e)
-              }}
-            >
-              Save
-            </AS3Button>
+            {!isPublished && (
+              <AS3Button
+                size="sm"
+                variant="outline-success"
+                onClick={e => {
+                  setValue('isPublished', false)
+                  submit(e)
+                }}
+              >
+                Save
+              </AS3Button>
+            )}
 
             <AS3Button
               size="sm"

@@ -43,6 +43,9 @@ export default function ManagementPage() {
   const [updatePost, { loading: waitingForUpdate }] =
     useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
       ...gqlContext,
+      onCompleted() {
+        refetch()
+      },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
@@ -69,12 +72,10 @@ export default function ManagementPage() {
       {data?.posts?.items?.map(post => (
         <AS3PostCard
           key={post.id}
+          preview
           data={{ ...post }}
           editable={!waitingForUpdate}
-          afterEdit={async data => {
-            await updatePost({ variables: { input: data } })
-            refetch()
-          }}
+          afterEdit={data => updatePost({ variables: { input: data } })}
         />
       ))}
     </AS3LayoutWithSidebar>

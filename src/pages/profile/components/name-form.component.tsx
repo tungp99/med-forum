@@ -36,8 +36,8 @@ export function NameFormComponent() {
   )
 
   const { handleSubmit, control } = useForm<UpdateAccountInput>({
-    defaultValues: useMemo(() => {
-      return {
+    defaultValues: useMemo(
+      () => ({
         id: account.id,
         username: account.username ?? '',
         profile: {
@@ -51,8 +51,9 @@ export function NameFormComponent() {
           professions: account.profile.professions,
           educations: account.profile.educations,
         },
-      }
-    }, [account]),
+      }),
+      [account]
+    ),
   })
 
   return (

@@ -15,5 +15,4 @@ export { AS3Button } from './as3-button/as3-button.component'
 export { AS3Input } from './as3-input/as3-input.component'
 export { AS3Dropdown } from './as3-dropdown/as3-dropdown.component'
 //
-export { postStore } from './as3-post-card/post.store'
 export { AS3PostCard } from './as3-post-card/as3-post-card.component'

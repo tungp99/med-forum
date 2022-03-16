@@ -9,7 +9,7 @@ import { DateTime } from 'luxon'
 import { authStore } from './auth.store'
 import { notificationsStore } from './notification.store'
 import { homePageStore, managementPageStore } from 'pages'
-import { postStore } from 'system/components'
+import { postStore } from './post.store'
 
 export const store = createStore(
   combineReducers({
