@@ -14,6 +14,8 @@ import { GET_REPLIES_QUERY } from './gql'
 import { GetReplies } from 'system/generated/gql.types'
 
 import './comments.style.scss'
+import { useState } from 'react'
+import { ReplyInputComponent } from './reply-input.component'
 
 type CommentComponentProps = {
   data: Comment
@@ -29,6 +31,7 @@ function CommentComponent({
     updatedAt,
   },
 }: CommentComponentProps) {
+  const [state, setState] = useState({ replying: false })
   const [fetchReplies, { data, loading }] = useLazyQuery<GetReplies>(
     GET_REPLIES_QUERY,
     {
@@ -76,12 +79,23 @@ function CommentComponent({
           <AS3Link icon={mdiArrowDownBoldOutline} />
         </div>
 
-        <AS3Link icon={mdiMessageOutline}>Reply</AS3Link>
+        <AS3Link
+          icon={mdiMessageOutline}
+          onClick={() => setState({ replying: true })}
+        >
+          Reply
+        </AS3Link>
 
         <AS3Link>Report</AS3Link>
       </Stack>
 
-      <div className="replies">
+      {state.replying && (
+        <div className="actions mt-2">
+          <ReplyInputComponent replyToCommentId={id} />
+        </div>
+      )}
+
+      <div className="py-2 ps-4">
         {data?.replies?.items ? (
           <CommentsComponent data={data.replies.items} />
         ) : (

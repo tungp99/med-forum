@@ -100,7 +100,7 @@ export interface GetMyPosts {
 
 export interface GetMyPostsVariables {
   accountId: string;
-  isPublished?: boolean | null;
+  isPublished: boolean;
   skip: number;
 }
 
@@ -457,9 +457,47 @@ export interface GetRepliesVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: CreateComment
+// ====================================================
+
+export interface CreateComment_createComment_creatorAccount {
+  __typename: "Account";
+  username: string | null;
+}
+
+export interface CreateComment_createComment {
+  __typename: "Comment";
+  id: string;
+  markdownContent: string;
+  repliesCount: number;
+  creatorAccount: CreateComment_createComment_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface CreateComment {
+  createComment: CreateComment_createComment;
+}
+
+export interface CreateCommentVariables {
+  input: CreateCommentInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export interface CreateCommentInput {
+  markdownContent: string;
+  postId: string;
+  replyToCommentId?: string | null;
+}
 
 export interface CreatePostInput {
   title: string;

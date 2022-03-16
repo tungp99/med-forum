@@ -1,4 +1,4 @@
-export type { Pagination } from './misc.types'
+export type { PostSubmission } from './misc.types'
 
 export type Entity = {
   id: string

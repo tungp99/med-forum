@@ -5,13 +5,13 @@ import { apollo } from './plugins'
 import { store } from './store'
 import { AuthProvider } from './auth'
 
-import 'system/assets/styles/_app.scss'
 import {
   AS3AuthLogin,
   AS3AuthRegister,
   AS3Navbar,
   AS3Toastr,
 } from 'system/components'
+import 'system/assets/styles/_app.scss'
 import { Routes } from './Routes'
 
 export default function App() {

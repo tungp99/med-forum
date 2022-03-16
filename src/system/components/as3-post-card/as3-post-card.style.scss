@@ -25,6 +25,10 @@
     .as3-button,
     .as3-link {
       font-size: $font-size-sm;
+
+      &.action:not(:focus, :hover) {
+        color: $gray-600;
+      }
     }
 
     .card-footer {

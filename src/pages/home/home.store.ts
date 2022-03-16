@@ -1,12 +1,5 @@
 import { StoreAction } from 'system/store'
-import { Pagination, Post } from 'system/types'
-
-type Action =
-  | 'SET_HOMEPAGE_POSTS'
-  | 'SET_HOMEPAGE_POSTS_PAGE'
-  | 'INCREASE_HOMEPAGE_POSTS_PAGE'
-
-type Payload = Post[] | Partial<Pagination>
+import { Post } from 'system/types'
 
 type State = {
   posts: Post[]
@@ -20,7 +13,12 @@ const initialState: State = {
 
 export const homePageStore = (
   state = initialState,
-  action: StoreAction<Action, Payload>
+  action: StoreAction<
+    | 'SET_HOMEPAGE_POSTS'
+    | 'SET_HOMEPAGE_POSTS_PAGE'
+    | 'INCREASE_HOMEPAGE_POSTS_PAGE',
+    Post[] | number
+  >
 ): State => {
   if (!action.payload) return state
 
@@ -28,7 +26,7 @@ export const homePageStore = (
     case 'SET_HOMEPAGE_POSTS':
       return { ...state, posts: action.payload as Post[] }
     case 'SET_HOMEPAGE_POSTS_PAGE': {
-      const { page } = action.payload as Partial<Pagination>
+      const page = action.payload as number
       return {
         ...state,
         page: page ?? 0,

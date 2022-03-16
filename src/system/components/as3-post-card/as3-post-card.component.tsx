@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DateTime } from 'luxon'
+import { useNavigate } from 'react-router-dom'
 import { Card, CardProps, Stack } from 'react-bootstrap'
 import {
   mdiArrowDownBoldOutline,
@@ -11,9 +12,12 @@ import {
 } from '@mdi/js'
 
 import { Post } from 'system/types'
-import { AS3Button, AS3Spacer, AS3Link, AS3Editor } from 'system/components'
+import { useAuth } from 'system/auth'
+import { AS3Button, AS3Spacer, AS3Editor } from 'system/components'
 import { CommentsComponent } from './comments.component'
 import { AS3PostForm } from './as3-post-form.component'
+import { ReplyInputComponent } from './reply-input.component'
+import { CreatePostInput, UpdatePostInput } from 'system/generated/gql.types'
 
 import './as3-post-card.style.scss'
 
@@ -21,6 +25,7 @@ type AS3PostCardProps = CardProps & {
   data: Post
   preview?: boolean
   editable?: boolean
+  afterEdit?: (data: CreatePostInput | UpdatePostInput) => void
 }
 
 export function AS3PostCard({
@@ -28,39 +33,40 @@ export function AS3PostCard({
   data,
   preview,
   editable,
-  onClick,
+  afterEdit,
 }: AS3PostCardProps) {
   const classList = ['as3-post-card']
   className && classList.push(className)
 
-  const [state, setState] = useState({ editing: false })
-  const { editing } = state
-
   const {
+    id,
     title,
     markdownContent,
-    commentsCount,
     comments,
+    commentsCount,
     createdAt,
     creatorAccount,
   } = data
 
-  return editing ? (
+  const { account } = useAuth()
+  const navigate = useNavigate()
+  const isMine = useMemo(() => creatorAccount?.id === account.id, [account])
+  const [state, setState] = useState({ editing: false })
+
+  return state.editing ? (
     <AS3PostForm
       data={data}
       onSave={data => {
         setState({ ...state, editing: false })
-        console.log(data)
+        afterEdit && afterEdit(data)
       }}
     />
   ) : (
-    <Card
-      className={classList.join(' ')}
-      onClick={onClick}>
+    <Card className={classList.join(' ')}>
       <div className="d-flex flex-row">
         <Card.Body className="as3-post-card-prefix p-2">
           <AS3Button
-            className="px-1"
+            className="action px-1"
             icon={mdiArrowUpBoldOutline}
             size="sm"
             iconSize={0.8}
@@ -68,7 +74,7 @@ export function AS3PostCard({
           />
           <span className="card-subtitle">34k</span>
           <AS3Button
-            className="px-1"
+            className="action px-1"
             icon={mdiArrowDownBoldOutline}
             size="sm"
             iconSize={0.8}
@@ -91,14 +97,27 @@ export function AS3PostCard({
 
             <Stack
               direction="horizontal"
-              gap={3}>
-              {editable && (
-                <AS3Link
+              gap={2}>
+              {(editable || isMine) && (
+                <AS3Button
+                  className="action"
+                  text
+                  size="sm"
                   icon={mdiPencilOutline}
                   onClick={() => setState({ ...state, editing: true })}
                 />
               )}
-              <AS3Link icon={mdiFlagOutline}>Report</AS3Link>
+
+              {!isMine && (
+                <AS3Button
+                  className="action"
+                  text
+                  size="sm"
+                  icon={mdiFlagOutline}
+                >
+                  Report
+                </AS3Button>
+              )}
             </Stack>
           </Card.Subtitle>
 
@@ -113,21 +132,29 @@ export function AS3PostCard({
 
           <Card.Footer className="px-2 d-flex">
             <AS3Button
+              className="action"
               text
               size="sm"
-              icon={mdiMessageOutline}>
+              icon={mdiMessageOutline}
+              onClick={() => navigate(`/posts/${id}`)}
+            >
               {commentsCount} Comments
             </AS3Button>
 
             <AS3Button
+              className="action"
               text
               size="sm"
-              icon={mdiBookmarkOutline}>
+              icon={mdiBookmarkOutline}
+            >
               Collect
             </AS3Button>
           </Card.Footer>
         </Card.Body>
       </div>
+      <Card.Body className="px-1 py-0">
+        <ReplyInputComponent />
+      </Card.Body>
 
       {comments && comments.length > 0 && (
         <Card.Body className="as3-post-card-extension">

@@ -1,17 +1,16 @@
-import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
-import { Toast, useDispatch, useSelector } from 'system/store'
+import { Toast, useDispatch, useStore } from 'system/store'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
 import { GET_POSTS_QUERY } from './gql'
 import { GetPosts } from 'system/generated/gql.types'
+import { PicksComponent } from './components/picks.component'
 
 export default function HomePage() {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { posts, page } = useSelector(store => store.homePage)
+  const { posts, page } = useStore(store => store.homePage)
 
   const { refetch, loading } = useQuery<GetPosts>(GET_POSTS_QUERY, {
     variables: { skip: page * 8 },
@@ -23,7 +22,7 @@ export default function HomePage() {
         })
         dispatch({
           type: 'SET_HOMEPAGE_POSTS_PAGE',
-          payload: { page: 0 },
+          payload: 0,
         })
       }
     },
@@ -33,7 +32,7 @@ export default function HomePage() {
   })
 
   return (
-    <AS3LayoutWithSidebar>
+    <AS3LayoutWithSidebar sidebar={<PicksComponent />}>
       <FilterComponent />
 
       <div className="d-flex justify-content-center mb-3">
@@ -52,7 +51,6 @@ export default function HomePage() {
           key={post.id}
           preview
           data={{ ...post }}
-          onClick={() => navigate(`/posts/${post.id}`)}
         />
       ))}
     </AS3LayoutWithSidebar>

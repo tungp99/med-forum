@@ -2,12 +2,12 @@ import { useForm } from 'react-hook-form'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
-import { useDispatch, useSelector } from 'system/store'
+import { useDispatch, useStore } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
 
 export function AS3AuthRegister() {
-  const state = useSelector(store => store.auth)
+  const state = useStore(store => store.auth)
   const dispatch = useDispatch()
   const { register: sendRegister } = useAuth()
   const { handleSubmit, register } = useForm({
@@ -35,7 +35,7 @@ export function AS3AuthRegister() {
       size="lg"
       show={state.isRegisterPopupActive}
     >
-      <Modal.Header className="as3-auth-popup-header">
+      <Modal.Header className="border-bottom-0 p-0">
         <AS3Spacer />
         <AS3Button
           text
@@ -46,7 +46,7 @@ export function AS3AuthRegister() {
         ></AS3Button>
       </Modal.Header>
 
-      <Modal.Body className="as3-auth-popup-body">
+      <Modal.Body className="as3-auth-popup-body border-bottom-0">
         <Row className="justify-content-center py-5">
           <Col
             lg={6}

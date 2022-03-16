@@ -1,19 +1,6 @@
 import { DateTime } from 'luxon'
 import { StoreAction } from 'system/store'
 
-type Action =
-  | 'TOAST_SUCCESS'
-  | 'TOAST_ERROR'
-  | 'TOAST_INFO'
-  | 'TOAST_WARNING'
-  | 'UNTOAST'
-
-type Payload = {
-  id: DateTime
-  title?: string
-  content?: string
-}
-
 type Store = {
   id: DateTime
   variant?: 'success' | 'danger' | 'info' | 'warning'
@@ -25,7 +12,18 @@ const initialState: Store[] = []
 
 export const notificationsStore = (
   state = initialState,
-  action: StoreAction<Action, Payload>
+  action: StoreAction<
+    | 'TOAST_SUCCESS'
+    | 'TOAST_ERROR'
+    | 'TOAST_INFO'
+    | 'TOAST_WARNING'
+    | 'UNTOAST',
+    {
+      id: DateTime
+      title?: string
+      content?: string
+    }
+  >
 ): Store[] => {
   if (!action.payload) return state
 

@@ -1,24 +1,35 @@
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 
+import { useDispatch, useStore } from 'system/store'
 import { AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { GET_POST_QUERY } from './gql'
 import { GetPost } from 'system/generated/gql.types'
+import { useEffect } from 'react'
 
 export default function PostPage() {
+  const { processor } = useStore(store => store.post)
+  const dispatch = useDispatch()
   const { id } = useParams()
-  const { data, loading } = useQuery<GetPost>(GET_POST_QUERY, {
-    variables: {
-      id,
+  const variables = { id }
+
+  const { data, loading, refetch } = useQuery<GetPost>(GET_POST_QUERY, {
+    variables,
+    onCompleted({ post: response }) {
+      response && dispatch({ type: 'SET_POST_ID', payload: response.id })
     },
   })
+
+  useEffect(() => {
+    refetch({ variables })
+  }, [processor])
 
   if (loading || !data?.post) {
     return <>fetching, wait for it</>
   }
 
   return (
-    <AS3LayoutWithSidebar>
+    <AS3LayoutWithSidebar sidebar={<span>hello</span>}>
       <AS3PostCard
         data={{
           ...data.post,

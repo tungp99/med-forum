@@ -29,11 +29,21 @@ export function Routes() {
       <Route path="/manage">
         <Route
           index
-          element={<ManagementPostsPage />} />
+          element={
+            <GuardedComponent>
+              <ManagementPostsPage />
+            </GuardedComponent>
+          }
+        />
 
         <Route
           path="users"
-          element={<ManagementPage />} />
+          element={
+            <GuardedComponent>
+              <ManagementPage />
+            </GuardedComponent>
+          }
+        />
       </Route>
 
       <Route path="/posts">
@@ -47,7 +57,12 @@ export function Routes() {
 
         <Route
           path="write"
-          element={<PostsCreatePage />} />
+          element={
+            <GuardedComponent>
+              <PostsCreatePage />
+            </GuardedComponent>
+          }
+        />
       </Route>
 
       <Route

@@ -46,3 +46,18 @@ export const GET_REPLIES_QUERY = gql`
     }
   }
 `
+
+export const CREATE_COMMENT_MUTATION = gql`
+  mutation CreateComment($input: CreateCommentInput!) {
+    createComment(input: $input) {
+      id
+      markdownContent
+      repliesCount
+      creatorAccount {
+        username
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`

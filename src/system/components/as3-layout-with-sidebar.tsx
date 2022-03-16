@@ -1,10 +1,17 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
-import { AS3Picks } from '.'
 
-export function AS3LayoutWithSidebar(props: ComponentPropsWithoutRef<'div'>) {
+type AS3LayoutWithSidebarProps = ComponentPropsWithoutRef<'div'> & {
+  sidebar: ReactNode
+}
+
+export function AS3LayoutWithSidebar({
+  children,
+  className,
+  sidebar,
+}: AS3LayoutWithSidebarProps) {
   const classList = ['pt-4']
-  props.className && classList.push(props.className)
+  className && classList.push(className)
 
   return (
     <Container
@@ -12,10 +19,8 @@ export function AS3LayoutWithSidebar(props: ComponentPropsWithoutRef<'div'>) {
       className={classList.join(' ')}
       fluid="sm">
       <Row>
-        <Col lg={8}>{props.children}</Col>
-        <Col lg={4}>
-          <AS3Picks />
-        </Col>
+        <Col lg={8}>{children}</Col>
+        <Col lg={4}>{sidebar}</Col>
       </Row>
     </Container>
   )

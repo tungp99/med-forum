@@ -44,7 +44,7 @@ export function AS3Input(props: AS3InputProps) {
       style={{ width: props.width }}>
       <InputGroup size={props.size}>
         {props.prefixIcon && (
-          <InputGroup.Text className="pe-0">
+          <InputGroup.Text className="pe-0 as3-input-icon-prefix">
             <Icon
               path={props.prefixIcon}
               size={1} />
@@ -58,6 +58,7 @@ export function AS3Input(props: AS3InputProps) {
               placeholder={props.placeholder ?? ''}
               value={props.value}
               onChange={props.onChange}
+              onKeyUp={props.onKeyUp}
             />
           </FloatingLabel>
         ) : (
@@ -66,11 +67,12 @@ export function AS3Input(props: AS3InputProps) {
             placeholder={props.placeholder ?? ''}
             value={props.value}
             onChange={props.onChange}
+            onKeyUp={props.onKeyUp}
           />
         )}
 
         {props.suffixIcon && (
-          <InputGroup.Text className="ps-0">
+          <InputGroup.Text className="ps-0 as3-input-icon-suffix">
             <Icon
               path={props.suffixIcon}
               size={1} />

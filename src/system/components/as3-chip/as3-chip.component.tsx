@@ -27,26 +27,36 @@ type AS3ChipProps = ButtonProps & {
   iconSize?: string | number
 }
 
-export function AS3Chip(props: AS3ChipProps) {
+export function AS3Chip({
+  children,
+  className,
+  active,
+  size,
+  variant,
+  icon,
+  iconSize,
+  onClick,
+}: AS3ChipProps) {
   const classList = ['as3-chip']
-  props.className && classList.push(props.className)
+  className && classList.push(className)
 
   return (
     <Button
       className={classList.join(' ')}
-      size={props.size}
-      variant={props.variant ?? 'light'}
-      onClick={props.onClick}
+      active={active}
+      size={size}
+      variant={variant ?? 'light'}
+      onClick={onClick}
     >
-      {props.icon && (
+      {icon && (
         <Icon
-          className={props.children ? 'me-1' : ''}
-          path={props.icon}
-          size={props.iconSize ?? 1}
+          className={children ? 'me-1' : ''}
+          path={icon}
+          size={iconSize ?? 1}
         />
       )}
 
-      {props.children}
+      {children}
     </Button>
   )
 }

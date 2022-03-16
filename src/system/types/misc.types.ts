@@ -1,1 +1,4 @@
-export type Pagination = { page: number; itemsPerPage: number }
+export type PostSubmission<Action, Data> = {
+  type: Action
+  payload: Data
+}

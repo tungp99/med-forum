@@ -1,10 +1,10 @@
 import { Toast, ToastContainer } from 'react-bootstrap'
 import { DateTime } from 'luxon'
 
-import { useSelector } from 'system/store'
+import { useStore } from 'system/store'
 
 export function AS3Toastr() {
-  const notifications = useSelector(store => store.notifications)
+  const notifications = useStore(store => store.notifications)
 
   return (
     <ToastContainer position="top-end">
