@@ -34,3 +34,18 @@ export const GET_MY_POSTS_QUERY = gql`
     }
   }
 `
+
+export const GET_USERS_QUERY = gql`
+  query a {
+    accounts {
+      items {
+        email
+        username
+        profile {
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`

@@ -3,7 +3,7 @@ import { Route, Routes as RR } from 'react-router-dom'
 import { GuardedComponent } from 'system/auth'
 import {
   HomePage,
-  ManagementPage,
+  ManageUsersPage,
   ManagementPostsPage,
   PostPage,
   PostsCreatePage,
@@ -33,7 +33,7 @@ export function Routes() {
 
         <Route
           path="users"
-          element={<ManagementPage />} />
+          element={<ManageUsersPage />} />
       </Route>
 
       <Route path="/posts">
