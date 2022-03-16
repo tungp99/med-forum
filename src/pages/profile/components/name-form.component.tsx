@@ -76,6 +76,12 @@ export function NameFormComponent() {
           />
         </Card.Title>
 
+        <AS3Input
+          label="Email"
+          size="lg"
+          value={account.email}
+          readOnly />
+
         <Controller
           control={control}
           name="username"

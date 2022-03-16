@@ -26,6 +26,9 @@ type AS3InputProps = FormControlProps & {
 
   label?: string
 
+  disabled?: boolean
+  readOnly?: boolean
+
   width?: number
 
   prefixIcon?: string
@@ -55,6 +58,8 @@ export function AS3Input(props: AS3InputProps) {
           <FloatingLabel label={props.label}>
             <Form.Control
               type={props.type ?? 'text'}
+              readOnly={props.readOnly}
+              disabled={props.disabled}
               placeholder={props.placeholder ?? ''}
               value={props.value}
               onChange={props.onChange}
@@ -64,6 +69,8 @@ export function AS3Input(props: AS3InputProps) {
         ) : (
           <Form.Control
             type={props.type ?? 'text'}
+            readOnly={props.readOnly}
+            disabled={props.disabled}
             placeholder={props.placeholder ?? ''}
             value={props.value}
             onChange={props.onChange}

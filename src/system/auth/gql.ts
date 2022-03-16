@@ -27,36 +27,3 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `
-
-export const ME_QUERY = gql`
-  query GetMe {
-    me {
-      id
-      email
-      username
-      profile {
-        isPublic
-        firstName
-        lastName
-        birthDate
-        phoneNumber
-        professions {
-          organization
-          start
-          end
-          position
-          isWorking
-        }
-        educations {
-          organization
-          start
-          end
-          position
-          isWorking
-        }
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`

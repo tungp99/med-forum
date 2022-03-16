@@ -17,14 +17,24 @@ export function Routes() {
         path="/"
         element={<HomePage />} />
 
-      <Route
-        path="/profile"
-        element={
-          <GuardedComponent>
-            <ProfilePage />
-          </GuardedComponent>
-        }
-      />
+      <Route path="/profile">
+        <Route
+          index
+          element={
+            <GuardedComponent>
+              <ProfilePage />
+            </GuardedComponent>
+          }
+        />
+        <Route
+          path=":id"
+          element={
+            <GuardedComponent>
+              <ProfilePage />
+            </GuardedComponent>
+          }
+        />
+      </Route>
 
       <Route path="/manage">
         <Route
@@ -64,10 +74,6 @@ export function Routes() {
           }
         />
       </Route>
-
-      <Route
-        path="*"
-        element={<span>nothing here ;)</span>} />
     </RR>
   )
 }

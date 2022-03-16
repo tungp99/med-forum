@@ -20,12 +20,12 @@ import { Toast, useDispatch } from 'system/store'
 import { Account } from 'system/types'
 import {
   LOGIN_MUTATION,
-  ME_QUERY,
   REFRESH_TOKEN_MUTATION,
   REGISTRATION_MUTATION,
 } from './gql'
+import { GET_ACCOUNT_QUERY } from 'pages/profile/gql'
 import {
-  GetMe,
+  GetAccount,
   Login,
   LoginInput,
   RefreshToken,
@@ -40,7 +40,7 @@ type AuthContextType = {
   setRefreshToken: Dispatch<React.SetStateAction<string>>
   fetchAccount: (
     options?: QueryLazyOptions<OperationVariables>
-  ) => Promise<LazyQueryResult<GetMe, OperationVariables>>
+  ) => Promise<LazyQueryResult<GetAccount, OperationVariables>>
   gqlContext: {
     context: {
       headers: {
@@ -56,7 +56,7 @@ const AuthContext = createContext<AuthContextType>({
   setAccessToken: () => {},
   setRefreshToken: () => {},
   fetchAccount: () =>
-    ({} as Promise<LazyQueryResult<GetMe, OperationVariables>>),
+    ({} as Promise<LazyQueryResult<GetAccount, OperationVariables>>),
   gqlContext: {
     context: {
       headers: {
@@ -79,9 +79,9 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     [accessToken]
   )
 
-  const [sendFetchAccount, {}] = useLazyQuery<GetMe>(ME_QUERY, {
+  const [sendFetchAccount, {}] = useLazyQuery<GetAccount>(GET_ACCOUNT_QUERY, {
     ...gqlContext,
-    onCompleted({ me: response }) {
+    onCompleted({ account: response }) {
       if (response) {
         setAccount({ ...response })
         setAuthStatus(true)
