@@ -33,6 +33,7 @@ export function AS3AuthRegister() {
       centered
       size="lg"
       show={state.isRegisterPopupActive}
+      onEscapeKeyDown={() => dispatch({ type: 'CLOSE_REGISTER_POPUP' })}
     >
       <Modal.Header className="border-bottom-0 p-0">
         <AS3Spacer />
@@ -40,7 +41,7 @@ export function AS3AuthRegister() {
           text
           size="lg"
           icon={mdiClose}
-          iconSize="lg"
+          iconSize={1.5}
           onClick={() => dispatch({ type: 'CLOSE_REGISTER_POPUP' })}
         ></AS3Button>
       </Modal.Header>

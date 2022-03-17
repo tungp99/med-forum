@@ -13,6 +13,7 @@ import {
 } from 'system/components'
 import 'system/assets/styles/_app.scss'
 import { Routes } from './Routes'
+import { AS3CreateUser } from 'pages/management/components/create_user.component'
 
 export default function App() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
         <AuthProvider>
           <AS3Navbar />
           <Routes />
-
+          <AS3CreateUser></AS3CreateUser>
           <AS3AuthLogin />
           <AS3AuthRegister />
         </AuthProvider>

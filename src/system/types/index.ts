@@ -28,6 +28,7 @@ export type Account = Entity & {
   email: string
   username: string | null
   profile: Profile
+  isGod?: boolean
 }
 
 export type Comment = Entity & {

@@ -110,11 +110,65 @@ export interface GetMyPostsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetFilterAccounts
+// ====================================================
+
+export interface GetFilterAccounts_accounts_items_profile {
+  __typename: "Profile";
+  isPublic: boolean;
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetFilterAccounts_accounts_items {
+  __typename: "Account";
+  id: string;
+  email: string;
+  username: string | null;
+  profile: GetFilterAccounts_accounts_items_profile;
+  isGod: boolean;
+  writtenPostsCount: number;
+}
+
+export interface GetFilterAccounts_accounts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetFilterAccounts_accounts {
+  __typename: "AccountCollectionSegment";
+  items: GetFilterAccounts_accounts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetFilterAccounts_accounts_pageInfo;
+}
+
+export interface GetFilterAccounts {
+  accounts: GetFilterAccounts_accounts | null;
+}
+
+export interface GetFilterAccountsVariables {
+  skip: number;
+  isPublic: boolean;
+  filter: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetAccounts
 // ====================================================
 
 export interface GetAccounts_accounts_items_profile {
   __typename: "Profile";
+  isPublic: boolean;
   firstName: string;
   lastName: string;
 }
@@ -126,6 +180,7 @@ export interface GetAccounts_accounts_items {
   username: string | null;
   profile: GetAccounts_accounts_items_profile;
   isGod: boolean;
+  writtenPostsCount: number;
 }
 
 export interface GetAccounts_accounts_pageInfo {
@@ -150,6 +205,58 @@ export interface GetAccounts {
 }
 
 export interface GetAccountsVariables {
+  skip: number;
+  isPublic: boolean;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetAllAccounts
+// ====================================================
+
+export interface GetAllAccounts_accounts_items_profile {
+  __typename: "Profile";
+  isPublic: boolean;
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetAllAccounts_accounts_items {
+  __typename: "Account";
+  id: string;
+  email: string;
+  username: string | null;
+  profile: GetAllAccounts_accounts_items_profile;
+  isGod: boolean;
+  writtenPostsCount: number;
+}
+
+export interface GetAllAccounts_accounts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetAllAccounts_accounts {
+  __typename: "AccountCollectionSegment";
+  items: GetAllAccounts_accounts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetAllAccounts_accounts_pageInfo;
+}
+
+export interface GetAllAccounts {
+  accounts: GetAllAccounts_accounts | null;
+}
+
+export interface GetAllAccountsVariables {
   skip: number;
 }
 

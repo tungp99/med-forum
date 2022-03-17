@@ -4,15 +4,27 @@ import { mdiClose } from '@mdi/js'
 
 import { useDispatch, useStore } from 'system/store'
 import { useAuth } from 'system/auth'
-import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
-import { LoginInput } from 'system/generated/gql.types'
+import { AS3Button, AS3Spacer, AS3Input } from 'system/components'
+import { RegisterInput } from 'system/generated/gql.types'
 
-export function AS3AuthLogin() {
+export function AS3CreateUser() {
   const state = useStore(store => store.auth)
   const dispatch = useDispatch()
-  const { login } = useAuth()
-  const { handleSubmit, control } = useForm<LoginInput>({
-    defaultValues: { email: '', password: '' },
+  const { register } = useAuth()
+  const { handleSubmit, control } = useForm<RegisterInput>({
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmationPassword: '',
+      profile: {
+        firstName: '',
+        lastName: '',
+        isPublic: true,
+        phoneNumber: '',
+        professions: [],
+        educations: [],
+      },
+    },
   })
 
   return (
@@ -20,8 +32,8 @@ export function AS3AuthLogin() {
       className="as3-auth-popup"
       centered
       size="lg"
-      show={state.isLoginPopupActive}
-      onEscapeKeyDown={() => dispatch({ type: 'CLOSE_LOGIN_POPUP' })}
+      show={state.isCreateUserPopupActive}
+      onEscapeKeyDown={() => dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })}
     >
       <Modal.Header className="border-bottom-0 p-0">
         <AS3Spacer />
@@ -30,7 +42,7 @@ export function AS3AuthLogin() {
           size="lg"
           icon={mdiClose}
           iconSize={1.5}
-          onClick={() => dispatch({ type: 'CLOSE_LOGIN_POPUP' })}
+          onClick={() => dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })}
         ></AS3Button>
       </Modal.Header>
 
@@ -40,16 +52,43 @@ export function AS3AuthLogin() {
             lg={6}
             md={8}
             sm={12}>
-            <h4 className="title">Sign In</h4>
+            <h4 className="title">Create User</h4>
+
+            <Controller
+              control={control}
+              name="profile.firstName"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="First Name"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="profile.lastName"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="Last Name"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
 
             <Controller
               control={control}
               name="email"
               render={({ field: { onChange, value } }) => (
                 <AS3Input
+                  type="email"
                   label="Email"
                   size="lg"
-                  value={value ?? ''}
+                  value={value}
                   onChange={onChange}
                 />
               )}
@@ -72,23 +111,10 @@ export function AS3AuthLogin() {
             <AS3Button
               variant="primary"
               size="lg"
-              onClick={handleSubmit(data => login(data))}
+              onClick={handleSubmit(data => register(data))}
             >
               Submit
             </AS3Button>
-
-            <div className="extension">
-              New to AS3 Doctor Forum? &nbsp;
-              <AS3Link
-                className="extension-link"
-                onClick={() => {
-                  dispatch({ type: 'CLOSE_LOGIN_POPUP' })
-                  dispatch({ type: 'OPEN_REGISTER_POPUP' })
-                }}
-              >
-                Sign Up
-              </AS3Link>
-            </div>
           </Col>
         </Row>
       </Modal.Body>

@@ -31,18 +31,87 @@ export const GET_MY_POSTS_QUERY = gql`
   }
 `
 
-export const GET_ACCOUNTS_QUERY = gql`
-  query GetAccounts($skip: Int!) {
-    accounts(skip: $skip, take: 8) {
+export const GET_FILTER_ACCOUNTS_QUERY = gql`
+  query GetFilterAccounts($skip: Int!, $isPublic: Boolean!, $search: String!) {
+    accounts(
+      skip: $skip
+      take: 8
+      where: {
+        profile: { isPublic: { eq: $isPublic } }
+        and: {
+          username: { contains: $search }
+          or: {
+            email: { contains: $search }
+            or: {
+              profile: {
+                firstName: { contains: $search }
+                or: { lastName: { contains: $search } }
+              }
+            }
+          }
+        }
+      }
+    ) {
       items {
         id
         email
         username
         profile {
+          isPublic
           firstName
           lastName
         }
         isGod
+        writtenPostsCount
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`
+export const GET_ACCOUNTS_QUERY = gql`
+  query GetAccounts($skip: Int!, $isPublic: Boolean!, $search: String!) {
+    accounts(
+      skip: $skip
+      take: 8
+      where: {
+        profile: { isPublic: { eq: $isPublic } }
+        and: { email: { contains: $search } }
+      }
+    ) {
+      items {
+        id
+        email
+        username
+        profile {
+          isPublic
+          firstName
+          lastName
+        }
+        isGod
+        writtenPostsCount
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`
+export const GET_ALL_ACCOUNTS_QUERY = gql`
+  query GetAllAccounts($skip: Int!, $search: String!) {
+    accounts(skip: $skip, take: 8, where: { email: { contains: $search } }) {
+      items {
+        id
+        email
+        username
+        profile {
+          isPublic
+          firstName
+          lastName
+        }
+        isGod
+        writtenPostsCount
       }
       pageInfo {
         hasNextPage

@@ -78,6 +78,7 @@ directive @connection(
 
 type Query {
   me: Account
+  account(id: String): Account
   accounts(skip: Int, take: Int, where: AccountFilterInput, order: [AccountSortInput!]): AccountCollectionSegment
   posts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
   post(id: String!): Post
@@ -254,8 +255,10 @@ input ProfileSortInput {
 }
 
 type Account {
-  publishedPosts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
+  writtenPosts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
+  writtenPostsCount: Int!
   writtenComments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  writtenCommentsCount: Int!
   email: String!
   username: String
   refreshToken: String!
