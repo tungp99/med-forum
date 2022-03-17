@@ -50,7 +50,7 @@ export default function ProfilePage() {
             md={8}>
             <OverviewCardComponent data={data.profile} />
 
-            <AboutCardComponent />
+            <AboutCardComponent data={data} />
 
             <ExperienceCardComponent
               title="Education"
