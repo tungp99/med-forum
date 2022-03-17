@@ -391,6 +391,62 @@ export interface UpdateProfileContactVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetAccount
+// ====================================================
+
+export interface GetAccount_account_profile_professions {
+  __typename: "Profession";
+  organization: string;
+  start: any | null;
+  end: any | null;
+  position: string;
+  isWorking: boolean;
+}
+
+export interface GetAccount_account_profile_educations {
+  __typename: "Profession";
+  organization: string;
+  start: any | null;
+  end: any | null;
+  position: string;
+  isWorking: boolean;
+}
+
+export interface GetAccount_account_profile {
+  __typename: "Profile";
+  isPublic: boolean;
+  firstName: string;
+  lastName: string;
+  birthDate: any | null;
+  phoneNumber: string;
+  professions: GetAccount_account_profile_professions[];
+  educations: GetAccount_account_profile_educations[];
+}
+
+export interface GetAccount_account {
+  __typename: "Account";
+  id: string;
+  email: string;
+  username: string | null;
+  profile: GetAccount_account_profile;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetAccount {
+  account: GetAccount_account | null;
+}
+
+export interface GetAccountVariables {
+  id?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: RefreshToken
 // ====================================================
 
@@ -453,58 +509,6 @@ export interface Login {
 
 export interface LoginVariables {
   input: LoginInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetMe
-// ====================================================
-
-export interface GetMe_me_profile_professions {
-  __typename: "Profession";
-  organization: string;
-  start: any | null;
-  end: any | null;
-  position: string;
-  isWorking: boolean;
-}
-
-export interface GetMe_me_profile_educations {
-  __typename: "Profession";
-  organization: string;
-  start: any | null;
-  end: any | null;
-  position: string;
-  isWorking: boolean;
-}
-
-export interface GetMe_me_profile {
-  __typename: "Profile";
-  isPublic: boolean;
-  firstName: string;
-  lastName: string;
-  birthDate: any | null;
-  phoneNumber: string;
-  professions: GetMe_me_profile_professions[];
-  educations: GetMe_me_profile_educations[];
-}
-
-export interface GetMe_me {
-  __typename: "Account";
-  id: string;
-  email: string;
-  username: string | null;
-  profile: GetMe_me_profile;
-  createdAt: any;
-  updatedAt: any;
-}
-
-export interface GetMe {
-  me: GetMe_me | null;
 }
 
 /* tslint:disable */

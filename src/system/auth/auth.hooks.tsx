@@ -8,24 +8,18 @@ import {
   useMemo,
   useState,
 } from 'react'
-import {
-  LazyQueryResult,
-  OperationVariables,
-  QueryLazyOptions,
-  useLazyQuery,
-  useMutation,
-} from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { Toast, useDispatch } from 'system/store'
 import { Account } from 'system/types'
 import {
   LOGIN_MUTATION,
-  ME_QUERY,
   REFRESH_TOKEN_MUTATION,
   REGISTRATION_MUTATION,
 } from './gql'
+import { GET_ACCOUNT_QUERY } from 'pages/profile/gql'
 import {
-  GetMe,
+  GetAccount,
   Login,
   LoginInput,
   RefreshToken,
@@ -38,9 +32,6 @@ type AuthContextType = {
   account: Account
   setAccessToken: Dispatch<React.SetStateAction<string>>
   setRefreshToken: Dispatch<React.SetStateAction<string>>
-  fetchAccount: (
-    options?: QueryLazyOptions<OperationVariables>
-  ) => Promise<LazyQueryResult<GetMe, OperationVariables>>
   gqlContext: {
     context: {
       headers: {
@@ -55,8 +46,6 @@ const AuthContext = createContext<AuthContextType>({
   account: {} as Account,
   setAccessToken: () => {},
   setRefreshToken: () => {},
-  fetchAccount: () =>
-    ({} as Promise<LazyQueryResult<GetMe, OperationVariables>>),
   gqlContext: {
     context: {
       headers: {
@@ -79,9 +68,9 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     [accessToken]
   )
 
-  const [sendFetchAccount, {}] = useLazyQuery<GetMe>(ME_QUERY, {
+  const [sendFetchAccount, {}] = useLazyQuery<GetAccount>(GET_ACCOUNT_QUERY, {
     ...gqlContext,
-    onCompleted({ me: response }) {
+    onCompleted({ account: response }) {
       if (response) {
         setAccount({ ...response })
         setAuthStatus(true)
@@ -100,6 +89,9 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
           setAccessToken(response.accessToken)
           setRefreshToken(response.refreshToken)
         }
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
       },
     }
   )
@@ -137,7 +129,6 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
         account,
         setAccessToken,
         setRefreshToken,
-        fetchAccount: sendFetchAccount,
         gqlContext,
       }}
     >
@@ -152,7 +143,6 @@ export function useAuth() {
     account,
     setAccessToken,
     setRefreshToken,
-    fetchAccount,
     gqlContext,
   } = useContext(AuthContext)
   const dispatch = useDispatch()
@@ -197,9 +187,6 @@ export function useAuth() {
     logout() {
       setAccessToken('')
       setRefreshToken('')
-    },
-    refreshAccount: () => {
-      authenticated && fetchAccount()
     },
     gqlContext,
   }
