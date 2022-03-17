@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { DateTime } from 'luxon'
 import { Controller, useForm } from 'react-hook-form'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Card, Stack } from 'react-bootstrap'
 import { mdiEarth } from '@mdi/js'
 
+import { Account } from 'system/types'
 import { useAuth } from 'system/auth'
 import { Toast } from 'system/store'
 import { AS3Button, AS3Input, AS3Spacer, AS3Switch } from 'system/components'
@@ -12,22 +13,20 @@ import {
   UpdateAccountInput,
   UpdateProfileContact,
 } from 'system/generated/gql.types'
+import { UPDATE_PROFILE_CONTACT_MUTATION } from '../gql'
 
-export function NameFormComponent() {
-  const { account, refreshAccount, gqlContext } = useAuth()
+type NameFormComponentProps = {
+  data: Account
+}
+
+export function NameFormComponent({ data }: NameFormComponentProps) {
+  const { gqlContext } = useAuth()
   const [save, { loading }] = useMutation<UpdateProfileContact>(
-    gql`
-      mutation UpdateProfileContact($input: UpdateAccountInput!) {
-        updateAccount(input: $input) {
-          isSuccess
-          affectedRecords
-        }
-      }
-    `,
+    UPDATE_PROFILE_CONTACT_MUTATION,
     {
       ...gqlContext,
       onCompleted({ updateAccount: response }) {
-        response.affectedRecords && refreshAccount()
+        response.affectedRecords && console.log(response)
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -35,26 +34,33 @@ export function NameFormComponent() {
     }
   )
 
-  const { handleSubmit, control } = useForm<UpdateAccountInput>({
-    defaultValues: useMemo(
-      () => ({
-        id: account.id,
-        username: account.username ?? '',
-        profile: {
-          isPublic: account.profile.isPublic,
-          firstName: account.profile.firstName,
-          lastName: account.profile.lastName,
-          phoneNumber: account.profile.phoneNumber,
-          birthDate: account.profile.birthDate
-            ? DateTime.fromISO(account.profile.birthDate).toISODate()
-            : DateTime.now().toISODate(),
-          professions: account.profile.professions,
-          educations: account.profile.educations,
-        },
-      }),
-      [account]
-    ),
+  const defaultValues = useMemo(() => {
+    const { id, username, profile } = data
+
+    return {
+      id,
+      username: username ?? '',
+      profile: {
+        isPublic: profile.isPublic,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        phoneNumber: profile.phoneNumber,
+        birthDate: profile.birthDate
+          ? DateTime.fromISO(profile.birthDate).toISODate()
+          : DateTime.now().toISODate(),
+        professions: profile.professions,
+        educations: profile.educations,
+      },
+    }
+  }, [data])
+
+  const { handleSubmit, control, reset } = useForm<UpdateAccountInput>({
+    defaultValues,
   })
+
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues])
 
   return (
     <Card>
@@ -79,7 +85,7 @@ export function NameFormComponent() {
         <AS3Input
           label="Email"
           size="lg"
-          value={account.email}
+          value={data.email}
           readOnly />
 
         <Controller
@@ -121,19 +127,26 @@ export function NameFormComponent() {
           )}
         />
 
-        <Controller
-          control={control}
-          name="profile.birthDate"
-          render={({ field: { onChange, value } }) => (
-            <AS3Input
-              type="date"
-              label="Birthday"
-              size="lg"
-              value={value}
-              onChange={onChange}
-            />
-          )}
-        />
+        {data.profile.birthDate ? (
+          <Controller
+            control={control}
+            name="profile.birthDate"
+            render={({ field: { onChange, value } }) => (
+              <AS3Input
+                type="date"
+                label="Birthday"
+                size="lg"
+                value={value}
+                onChange={onChange}
+              />
+            )}
+          />
+        ) : (
+          <AS3Input
+            type="date"
+            label="Birthday"
+            size="lg" />
+        )}
 
         <Controller
           control={control}

@@ -78,7 +78,7 @@ directive @connection(
 
 type Query {
   me: Account
-  account(id: String!): Account
+  account(id: String): Account
   accounts(skip: Int, take: Int, where: AccountFilterInput, order: [AccountSortInput!]): AccountCollectionSegment
   posts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
   post(id: String!): Post

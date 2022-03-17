@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/client'
 import { Container, Row, Col } from 'react-bootstrap'
 
-import { Account } from 'system/types'
 import { Toast } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AboutCardComponent } from './components/about-card.component'
@@ -18,20 +17,23 @@ import './profile.style.scss'
 export default function ProfilePage() {
   const { id } = useParams()
   const { account, gqlContext } = useAuth()
-  const [data, setData] = useState<Account>(account)
 
-  const [fetchAccount, { loading }] = useLazyQuery<GetAccount>(
+  const [fetchAccount, { data: otherAccountData }] = useLazyQuery<GetAccount>(
     GET_ACCOUNT_QUERY,
     {
       ...gqlContext,
-      onCompleted({ account: response }) {
-        response && setData({ ...response })
-      },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
     }
   )
+
+  const data = useMemo(
+    () =>
+      id && otherAccountData?.account ? otherAccountData.account : account,
+    [id, otherAccountData]
+  )
+
   useEffect(() => {
     if (id) fetchAccount({ variables: { id } })
   }, [id])
@@ -41,33 +43,35 @@ export default function ProfilePage() {
       as="main"
       className="pt-4 profile"
       fluid="sm">
-      <Row>
-        <Col
-          sm={12}
-          md={8}>
-          <OverviewCardComponent />
+      {data && (
+        <Row>
+          <Col
+            sm={12}
+            md={8}>
+            <OverviewCardComponent data={data.profile} />
 
-          <AboutCardComponent />
+            <AboutCardComponent />
 
-          <ExperienceCardComponent
-            title="Education"
-            data={data.profile.educations}
-          />
+            <ExperienceCardComponent
+              title="Education"
+              data={data.profile.educations}
+            />
 
-          <ExperienceCardComponent
-            title="Experience"
-            data={data.profile.professions}
-          />
-        </Col>
+            <ExperienceCardComponent
+              title="Experience"
+              data={data.profile.professions}
+            />
+          </Col>
 
-        <Col
-          sm={12}
-          md={4}>
-          <NameFormComponent />
+          <Col
+            sm={12}
+            md={4}>
+            <NameFormComponent data={data} />
 
-          <SecurityFormComponent />
-        </Col>
-      </Row>
+            <SecurityFormComponent />
+          </Col>
+        </Row>
+      )}
     </Container>
   )
 }

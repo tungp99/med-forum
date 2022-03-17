@@ -32,3 +32,12 @@ export const GET_ACCOUNT_QUERY = gql`
     }
   }
 `
+
+export const UPDATE_PROFILE_CONTACT_MUTATION = gql`
+  mutation UpdateProfileContact($input: UpdateAccountInput!) {
+    updateAccount(input: $input) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`

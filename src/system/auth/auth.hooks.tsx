@@ -8,13 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import {
-  LazyQueryResult,
-  OperationVariables,
-  QueryLazyOptions,
-  useLazyQuery,
-  useMutation,
-} from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { Toast, useDispatch } from 'system/store'
 import { Account } from 'system/types'
@@ -38,9 +32,6 @@ type AuthContextType = {
   account: Account
   setAccessToken: Dispatch<React.SetStateAction<string>>
   setRefreshToken: Dispatch<React.SetStateAction<string>>
-  fetchAccount: (
-    options?: QueryLazyOptions<OperationVariables>
-  ) => Promise<LazyQueryResult<GetAccount, OperationVariables>>
   gqlContext: {
     context: {
       headers: {
@@ -55,8 +46,6 @@ const AuthContext = createContext<AuthContextType>({
   account: {} as Account,
   setAccessToken: () => {},
   setRefreshToken: () => {},
-  fetchAccount: () =>
-    ({} as Promise<LazyQueryResult<GetAccount, OperationVariables>>),
   gqlContext: {
     context: {
       headers: {
@@ -101,6 +90,9 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
           setRefreshToken(response.refreshToken)
         }
       },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
     }
   )
 
@@ -137,7 +129,6 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
         account,
         setAccessToken,
         setRefreshToken,
-        fetchAccount: sendFetchAccount,
         gqlContext,
       }}
     >
@@ -152,7 +143,6 @@ export function useAuth() {
     account,
     setAccessToken,
     setRefreshToken,
-    fetchAccount,
     gqlContext,
   } = useContext(AuthContext)
   const dispatch = useDispatch()
@@ -196,9 +186,6 @@ export function useAuth() {
     logout() {
       setAccessToken('')
       setRefreshToken('')
-    },
-    refreshAccount: () => {
-      authenticated && fetchAccount()
     },
     gqlContext,
   }
