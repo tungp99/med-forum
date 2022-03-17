@@ -154,7 +154,7 @@ export interface GetFilterAccounts {
 export interface GetFilterAccountsVariables {
   skip: number;
   isPublic: boolean;
-  filter: string;
+  search: string;
 }
 
 /* tslint:disable */
@@ -207,6 +207,7 @@ export interface GetAccounts {
 export interface GetAccountsVariables {
   skip: number;
   isPublic: boolean;
+  search: string;
 }
 
 /* tslint:disable */
@@ -258,6 +259,7 @@ export interface GetAllAccounts {
 
 export interface GetAllAccountsVariables {
   skip: number;
+  search: string;
 }
 
 /* tslint:disable */
@@ -368,29 +370,6 @@ export interface UpdatePostVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: UpdateProfileContact
-// ====================================================
-
-export interface UpdateProfileContact_updateAccount {
-  __typename: "UpdateEntityPayload";
-  isSuccess: boolean;
-  affectedRecords: number;
-}
-
-export interface UpdateProfileContact {
-  updateAccount: UpdateProfileContact_updateAccount;
-}
-
-export interface UpdateProfileContactVariables {
-  input: UpdateAccountInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetAccount
 // ====================================================
 
@@ -439,6 +418,29 @@ export interface GetAccount {
 
 export interface GetAccountVariables {
   id?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateProfileContact
+// ====================================================
+
+export interface UpdateProfileContact_updateAccount {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface UpdateProfileContact {
+  updateAccount: UpdateProfileContact_updateAccount;
+}
+
+export interface UpdateProfileContactVariables {
+  input: UpdateAccountInput;
 }
 
 /* tslint:disable */

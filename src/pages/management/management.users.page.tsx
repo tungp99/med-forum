@@ -26,9 +26,10 @@ export default function ManageUsersPage() {
   const fetchAccountsVariables = useMemo(
     () => ({
       skip: 0,
-      isPublic,
+      isPublic: isPublic,
+      search: filter_text,
     }),
-    [isPublic]
+    [isPublic, filter_text]
   )
   const [getAccount_fetch] = useLazyQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
     ...gqlContext,
@@ -47,7 +48,7 @@ export default function ManageUsersPage() {
       skip: 0,
       search: filter_text,
     }),
-    [isPublic]
+    [filter_text]
   )
   const { refetch: getAllAccount_refetch } = useQuery<GetAllAccounts>(
     GET_ALL_ACCOUNTS_QUERY,
@@ -66,15 +67,13 @@ export default function ManageUsersPage() {
 
   useEffect(() => {
     if (filter_title === 'All') {
+      console.log(filter_text)
       getAllAccount_refetch()
     } else {
       getAccount_fetch()
     }
-  }, [filter_title])
+  }, [filter_title, filter_text])
 
-  useEffect(() => {
-    getAllAccount_refetch()
-  }, [filter_text])
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
       <div className="filter__container">
