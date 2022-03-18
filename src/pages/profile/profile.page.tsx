@@ -5,8 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 import { Toast } from 'system/store'
 import { useAuth } from 'system/auth'
-import { AboutCardComponent } from './components/about-card.component'
-import { ExperienceCardComponent } from './components/experience-card.component'
+import { ProfessionCardComponent } from './components/profession-card.component'
 import { OverviewCardComponent } from './components/overview-card.component'
 import { NameFormComponent } from './components/name-form.component'
 import { SecurityFormComponent } from './components/security-form.component'
@@ -16,9 +15,14 @@ import './profile.style.scss'
 
 export default function ProfilePage() {
   const { id } = useParams()
-  const { account, gqlContext } = useAuth()
+  const { account: currentAccount, gqlContext } = useAuth()
 
-  const [fetchAccount, { data: otherAccountData }] = useLazyQuery<GetAccount>(
+  const gqlVariables = useMemo(
+    () => ({ variables: { id: id ?? currentAccount.id } }),
+    [id]
+  )
+
+  const [fetchAccount, { data, loading }] = useLazyQuery<GetAccount>(
     GET_ACCOUNT_QUERY,
     {
       ...gqlContext,
@@ -28,45 +32,39 @@ export default function ProfilePage() {
     }
   )
 
-  const data = useMemo(
-    () =>
-      id && otherAccountData?.account ? otherAccountData.account : account,
-    [id, otherAccountData]
-  )
-
   useEffect(() => {
-    if (id) fetchAccount({ variables: { id } })
-  }, [id])
+    fetchAccount(gqlVariables)
+  }, [gqlVariables])
 
   return (
     <Container
       as="main"
       className="pt-4 profile"
       fluid="sm">
-      {data && (
+      {loading && 'pls wait ;)'}
+
+      {data?.account && (
         <Row>
           <Col
             sm={12}
             md={8}>
-            <OverviewCardComponent data={data.profile} />
+            <OverviewCardComponent data={data.account.profile} />
 
-            <AboutCardComponent data={data} />
-
-            <ExperienceCardComponent
-              title="Education"
-              data={data.profile.educations}
+            <ProfessionCardComponent
+              title="Experience"
+              data={data.account.profile.experience}
             />
 
-            <ExperienceCardComponent
-              title="Experience"
-              data={data.profile.professions}
+            <ProfessionCardComponent
+              title="Education"
+              data={data.account.profile.education}
             />
           </Col>
 
           <Col
             sm={12}
             md={4}>
-            <NameFormComponent data={data} />
+            <NameFormComponent data={data.account} />
 
             <SecurityFormComponent />
           </Col>

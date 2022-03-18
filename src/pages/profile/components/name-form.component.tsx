@@ -26,7 +26,11 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
     {
       ...gqlContext,
       onCompleted({ updateAccount: response }) {
-        response.affectedRecords && console.log(response)
+        response.affectedRecords === 1 &&
+          Toast.success({
+            title: 'Updated profile successfully!',
+            content: 'Changes will be applied in several minutes',
+          })
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -34,7 +38,7 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
     }
   )
 
-  const defaultValues = useMemo(() => {
+  const defaultValues = useMemo<UpdateAccountInput>(() => {
     const { id, username, profile } = data
 
     return {
@@ -47,9 +51,7 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
         phoneNumber: profile.phoneNumber,
         birthDate: profile.birthDate
           ? DateTime.fromISO(profile.birthDate).toISODate()
-          : DateTime.now().toISODate(),
-        professions: profile.professions,
-        educations: profile.educations,
+          : null,
       },
     }
   }, [data])

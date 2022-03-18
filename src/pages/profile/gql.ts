@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GET_ACCOUNT_QUERY = gql`
-  query GetAccount($id: String) {
+  query GetAccount($id: String!) {
     account(id: $id) {
       id
       email
@@ -12,14 +12,14 @@ export const GET_ACCOUNT_QUERY = gql`
         lastName
         birthDate
         phoneNumber
-        professions {
+        experience {
           organization
           start
           end
           position
           isWorking
         }
-        educations {
+        education {
           organization
           start
           end

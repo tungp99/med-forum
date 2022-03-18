@@ -3,10 +3,8 @@ import { gql } from '@apollo/client'
 export const GET_MY_POSTS_QUERY = gql`
   query GetMyPosts($accountId: String!, $isPublished: Boolean!, $skip: Int!) {
     posts(
-      where: {
-        creatorAccountId: { eq: $accountId }
-        and: { isPublished: { eq: $isPublished } }
-      }
+      accountId: $accountId
+      where: { and: { isPublished: { eq: $isPublished } } }
       skip: $skip
       take: 8
       order: { createdAt: DESC }

@@ -11,7 +11,7 @@ type ExperienceCardComponentProps = {
   data: Profession[]
 }
 
-export function ExperienceCardComponent({
+export function ProfessionCardComponent({
   title,
   data,
 }: ExperienceCardComponentProps) {
