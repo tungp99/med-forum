@@ -1,14 +1,14 @@
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 
-import { useDispatch, useStore } from 'system/store'
+import { useDispatch, useSelector } from 'system/store'
 import { AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { GET_POST_QUERY } from './gql'
 import { GetPost } from 'system/generated/gql.types'
 import { useEffect } from 'react'
 
 export default function PostPage() {
-  const { processor } = useStore(store => store.post)
+  const { processor } = useSelector(store => store.post)
   const dispatch = useDispatch()
   const { id } = useParams()
   const variables = { id }

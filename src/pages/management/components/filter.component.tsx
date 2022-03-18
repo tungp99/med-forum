@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { Card, Stack } from 'react-bootstrap'
 import { mdiEarth, mdiFile, mdiPencilBoxOutline } from '@mdi/js'
 
-import { useDispatch, useStore } from 'system/store'
+import { useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Chip, AS3Spacer } from 'system/components'
 
 export function FilterComponent() {
   const navigate = useNavigate()
-  const { fetchPublished } = useStore(store => store.managementPage)
+  const { fetchPublished } = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
   const { authenticated } = useAuth()
 

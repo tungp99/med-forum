@@ -8,23 +8,25 @@ import { DateTime } from 'luxon'
 
 import { authStore } from './auth.store'
 import { notificationsStore } from './notification.store'
-import { homePageStore, managementPageStore } from 'pages'
 import { postStore } from './post.store'
+import { homePageStore, managementPageStore, profilePageStore } from 'pages'
 
 export const store = createStore(
   combineReducers({
     auth: authStore,
     notifications: notificationsStore,
+    post: postStore,
+    profilePage: profilePageStore,
     homePage: homePageStore,
     managementPage: managementPageStore,
-    post: postStore,
   })
 )
 
 export const useDispatch = () => reduxDispatch<typeof store.dispatch>()
 
-export const useStore: TypedUseSelectorHook<ReturnType<typeof store.getState>> =
-  reduxSelector
+export const useSelector: TypedUseSelectorHook<
+  ReturnType<typeof store.getState>
+> = reduxSelector
 
 export type StoreAction<ActionType, PayloadType> = {
   type: ActionType

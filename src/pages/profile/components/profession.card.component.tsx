@@ -2,9 +2,11 @@ import { DateTime } from 'luxon'
 import { Card, ListGroup, Stack } from 'react-bootstrap'
 
 import { Profession } from 'system/types'
-import { AS3Avatar, AS3Spacer } from 'system/components'
-import { AddButtonComponent } from './add-button.component'
+import { AS3Avatar, AS3Button, AS3Spacer } from 'system/components'
 import { EditButtonComponent } from './edit-button.component'
+import { ProfessionPopupComponent } from './profession-popup.component'
+import { useDispatch } from 'system/store'
+import { mdiPlus } from '@mdi/js'
 
 type ExperienceCardComponentProps = {
   title: string
@@ -15,6 +17,8 @@ export function ProfessionCardComponent({
   title,
   data,
 }: ExperienceCardComponentProps) {
+  const dispatch = useDispatch()
+
   return (
     <Card className="experience">
       <Card.Body>
@@ -24,7 +28,13 @@ export function ProfessionCardComponent({
           <Stack
             direction="horizontal"
             gap={2}>
-            <AddButtonComponent />
+            <AS3Button
+              className="btn-edit"
+              icon={mdiPlus}
+              iconSize={1.1}
+              text
+              onClick={() => dispatch({ type: 'OPEN_PROFESSION_POPUP' })}
+            />
             <EditButtonComponent />
           </Stack>
         </Card.Title>
@@ -52,6 +62,8 @@ export function ProfessionCardComponent({
           ))}
         </ListGroup>
       </Card.Body>
+
+      <ProfessionPopupComponent />
     </Card>
   )
 }

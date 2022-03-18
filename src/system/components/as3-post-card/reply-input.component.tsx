@@ -1,6 +1,6 @@
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
-import { Toast, useDispatch, useStore } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 
 import { AS3Input } from 'system/components'
@@ -14,7 +14,7 @@ type ReplyInputComponentProps = {
 export function ReplyInputComponent({
   replyToCommentId,
 }: ReplyInputComponentProps) {
-  const { id: postId } = useStore(store => store.post)
+  const { id: postId } = useSelector(store => store.post)
   const dispatch = useDispatch()
   const { gqlContext } = useAuth()
 
