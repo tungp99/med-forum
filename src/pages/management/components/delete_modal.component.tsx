@@ -1,11 +1,28 @@
 import { Modal } from 'react-bootstrap'
-import { useDispatch, useStore } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { AS3Button, AS3Spacer } from 'system/components'
 import { mdiClose } from '@mdi/js'
+import { useMutation } from '@apollo/client'
+import { DeleteAccount } from 'system/generated/gql.types'
+import { DELETE_ACCOUNT_MUTATION } from '../gql'
+import { useAuth } from 'system/auth'
 
-export function AS3Delete() {
-  const state = useStore(store => store.managementPage)
+type id = { id?: string }
+
+export function AS3Delete(id: id) {
+  const { gqlContext } = useAuth()
+  const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
+  const [deleteAccount_fetch] = useMutation<DeleteAccount>(
+    DELETE_ACCOUNT_MUTATION,
+    {
+      ...gqlContext,
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+      variables: { id },
+    }
+  )
 
   return (
     <Modal
@@ -30,7 +47,15 @@ export function AS3Delete() {
         Are you sure?
       </Modal.Body>
       <Modal.Footer className="justify-content-center pt-3">
-        <AS3Button className="fs-6 btn-danger me-4">Delete</AS3Button>
+        <AS3Button
+          className="fs-6 btn-danger me-4"
+          onClick={() => {
+            deleteAccount_fetch()
+            dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })
+          }}
+        >
+          Delete
+        </AS3Button>
         <AS3Button
           className="fs-6 btn-light ms-4"
           onClick={() => dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })}

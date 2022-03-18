@@ -110,59 +110,6 @@ export interface GetMyPostsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetFilterAccounts
-// ====================================================
-
-export interface GetFilterAccounts_accounts_items_profile {
-  __typename: "Profile";
-  isPublic: boolean;
-  firstName: string;
-  lastName: string;
-}
-
-export interface GetFilterAccounts_accounts_items {
-  __typename: "Account";
-  id: string;
-  email: string;
-  username: string | null;
-  profile: GetFilterAccounts_accounts_items_profile;
-  isGod: boolean;
-  writtenPostsCount: number;
-}
-
-export interface GetFilterAccounts_accounts_pageInfo {
-  __typename: "CollectionSegmentInfo";
-  /**
-   * Indicates whether more items exist following the set defined by the clients arguments.
-   */
-  hasNextPage: boolean;
-}
-
-export interface GetFilterAccounts_accounts {
-  __typename: "AccountCollectionSegment";
-  items: GetFilterAccounts_accounts_items[] | null;
-  /**
-   * Information to aid in pagination.
-   */
-  pageInfo: GetFilterAccounts_accounts_pageInfo;
-}
-
-export interface GetFilterAccounts {
-  accounts: GetFilterAccounts_accounts | null;
-}
-
-export interface GetFilterAccountsVariables {
-  skip: number;
-  isPublic: boolean;
-  search: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetAccounts
 // ====================================================
 
@@ -230,7 +177,7 @@ export interface GetAllAccounts_accounts_items {
   __typename: "Account";
   id: string;
   email: string;
-  username: string | null;
+  username: string;
   profile: GetAllAccounts_accounts_items_profile;
   isGod: boolean;
   writtenPostsCount: number;
@@ -260,6 +207,29 @@ export interface GetAllAccounts {
 export interface GetAllAccountsVariables {
   skip: number;
   search: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: DeleteAccount
+// ====================================================
+
+export interface DeleteAccount_deleteAccount {
+  __typename: "DeleteEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface DeleteAccount {
+  deleteAccount: DeleteAccount_deleteAccount;
+}
+
+export interface DeleteAccountVariables {
+  id: string;
 }
 
 /* tslint:disable */
@@ -418,29 +388,6 @@ export interface GetAccount {
 
 export interface GetAccountVariables {
   id: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UpdateProfileContact
-// ====================================================
-
-export interface UpdateProfileContact_updateAccount {
-  __typename: "UpdateEntityPayload";
-  isSuccess: boolean;
-  affectedRecords: number;
-}
-
-export interface UpdateProfileContact {
-  updateAccount: UpdateProfileContact_updateAccount;
-}
-
-export interface UpdateProfileContactVariables {
-  input: UpdateAccountInput;
 }
 
 /* tslint:disable */

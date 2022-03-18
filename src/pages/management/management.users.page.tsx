@@ -3,7 +3,7 @@ import Icon from '@mdi/react'
 import { mdiMenuDown, mdiMinus, mdiPostOutline } from '@mdi/js'
 
 import { useAuth } from 'system/auth'
-import { Toast, useDispatch, useStore } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import {
   AS3Button,
   AS3Dropdown,
@@ -24,12 +24,14 @@ import { AS3Delete } from './components/delete_modal.component'
 export default function ManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isPublic, filter_title, filter_text } = useStore(
+  const { isPublic, filter_title, filter_text } = useSelector(
     store => store.managementPage
   )
   const { gqlContext } = useAuth()
 
   const [data, setData] = useState<Account[]>([])
+
+  const [state, setState] = useState({ deleteId: '1' })
 
   const fetchAccountsVariables = useMemo(
     () => ({
@@ -85,7 +87,7 @@ export default function ManageUsersPage() {
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
       <AS3CreateUser></AS3CreateUser>
-      <AS3Delete></AS3Delete>
+      <AS3Delete id={state.deleteId}></AS3Delete>
       <div className="filter__container">
         <AS3Input
           placeholder="Search"
@@ -130,13 +132,13 @@ export default function ManageUsersPage() {
           isPublic = 'Public'
           $isPublic_class = 'isPublic text-success'
         }
-
         return (
           <div
             key={s.id}
             className={`${$container_class} mb-2`}
-            onClick={() => {
-              navigate(`/profile/${s.id}`)
+            onClick={e => {
+              if (e.target.toString() !== '[object SVGSVGElement]')
+                navigate(`/profile/${s.id}`)
             }}
           >
             <div className="posts">
@@ -159,7 +161,10 @@ export default function ManageUsersPage() {
                 size="sm"
                 iconSize={0.7}
                 className="delete__icon"
-                onClick={() => dispatch({ type: 'OPEN_DELETE_USER_POPUP' })}
+                onClick={() => {
+                  dispatch({ type: 'OPEN_DELETE_USER_POPUP' })
+                  setState({ deleteId: s.id })
+                }}
               ></AS3Button>
               <div className={$isPublic_class}>{isPublic}</div>
             </div>

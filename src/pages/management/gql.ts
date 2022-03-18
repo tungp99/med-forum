@@ -78,3 +78,11 @@ export const GET_ALL_ACCOUNTS_QUERY = gql`
     }
   }
 `
+export const DELETE_ACCOUNT_MUTATION = gql`
+  mutation DeleteAccount($id: String!) {
+    deleteAccount(id: $id) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`

@@ -7,6 +7,7 @@ type Store = {
   filter_text: string
   isCreateUserPopupActive: boolean
   isDeleteUserPopupActive: boolean
+  deleteId?: string
 }
 
 const initialState: Store = {
@@ -16,6 +17,7 @@ const initialState: Store = {
   filter_text: '',
   isCreateUserPopupActive: false,
   isDeleteUserPopupActive: false,
+  deleteId: '',
 }
 
 export const managementPageStore = (
@@ -30,7 +32,8 @@ export const managementPageStore = (
     | 'OPEN_CREATE_USER_POPUP'
     | 'CLOSE_CREATE_USER_POPUP'
     | 'OPEN_DELETE_USER_POPUP'
-    | 'CLOSE_DELETE_USER_POPUP',
+    | 'CLOSE_DELETE_USER_POPUP'
+    | 'DELETE_ID',
     string
   >
 ): Store => {
@@ -87,6 +90,11 @@ export const managementPageStore = (
       return {
         ...state,
         isDeleteUserPopupActive: false,
+      }
+    case 'DELETE_ID':
+      return {
+        ...state,
+        deleteId: action.payload,
       }
     default:
       return state
