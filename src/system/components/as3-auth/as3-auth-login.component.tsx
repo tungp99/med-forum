@@ -2,13 +2,13 @@ import { Controller, useForm } from 'react-hook-form'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
-import { useDispatch, useStore } from 'system/store'
+import { useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input, AS3Link } from 'system/components'
 import { LoginInput } from 'system/generated/gql.types'
 
 export function AS3AuthLogin() {
-  const state = useStore(store => store.auth)
+  const state = useSelector(store => store.auth)
   const dispatch = useDispatch()
   const { login } = useAuth()
   const { handleSubmit, control } = useForm<LoginInput>({

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 
-import { Toast, useStore } from 'system/store'
+import { Toast, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
@@ -14,7 +14,7 @@ import { SidebarComponent } from './components/sidebar.component'
 
 export default function ManagementPage() {
   const { account, authenticated, gqlContext } = useAuth()
-  const { fetchPublished } = useStore(store => store.managementPage)
+  const { fetchPublished } = useSelector(store => store.managementPage)
   const [state] = useState({ page: 0 })
 
   const fetchVariables = useMemo(

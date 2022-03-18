@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
-import { Toast, useDispatch, useStore } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
@@ -12,7 +12,7 @@ import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
 import { GetPosts, UpdatePostInput } from 'system/generated/gql.types'
 
 export default function HomePage() {
-  const { posts, page } = useStore(store => store.homePage)
+  const { posts, page } = useSelector(store => store.homePage)
   const dispatch = useDispatch()
   const { gqlContext } = useAuth()
 
