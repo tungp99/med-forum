@@ -8,7 +8,7 @@ import { AS3Button, AS3Spacer, AS3Input } from 'system/components'
 import { RegisterInput } from 'system/generated/gql.types'
 
 export function AS3CreateUser() {
-  const state = useStore(store => store.auth)
+  const state = useStore(store => store.managementPage)
   const dispatch = useDispatch()
   const { register } = useAuth()
   const { handleSubmit, control } = useForm<RegisterInput>({
@@ -41,7 +41,7 @@ export function AS3CreateUser() {
           text
           size="lg"
           icon={mdiClose}
-          iconSize={1.5}
+          iconSize={1.2}
           onClick={() => dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })}
         ></AS3Button>
       </Modal.Header>

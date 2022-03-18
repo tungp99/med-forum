@@ -1,10 +1,15 @@
 import { useLazyQuery, useQuery } from '@apollo/client'
 import Icon from '@mdi/react'
-import { mdiMenuDown, mdiPostOutline } from '@mdi/js'
+import { mdiMenuDown, mdiMinus, mdiPostOutline } from '@mdi/js'
 
 import { useAuth } from 'system/auth'
 import { Toast, useDispatch, useStore } from 'system/store'
-import { AS3Dropdown, AS3Input, AS3LayoutWithSidebar } from 'system/components'
+import {
+  AS3Button,
+  AS3Dropdown,
+  AS3Input,
+  AS3LayoutWithSidebar,
+} from 'system/components'
 import { SidebarComponent } from './components/sidebar.component'
 import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
 import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from './gql'
@@ -12,9 +17,12 @@ import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from './gql'
 import './management.style.scss'
 import { useEffect, useMemo, useState } from 'react'
 import { Account } from 'system/types'
+import { useNavigate } from 'react-router'
+import { AS3CreateUser } from './components/create_user.component'
+import { AS3Delete } from './components/delete_modal.component'
 
 export default function ManageUsersPage() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { isPublic, filter_title, filter_text } = useStore(
     store => store.managementPage
@@ -76,6 +84,8 @@ export default function ManageUsersPage() {
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
+      <AS3CreateUser></AS3CreateUser>
+      <AS3Delete></AS3Delete>
       <div className="filter__container">
         <AS3Input
           placeholder="Search"
@@ -124,7 +134,11 @@ export default function ManageUsersPage() {
         return (
           <div
             key={s.id}
-            className={`${$container_class} mb-2`}>
+            className={`${$container_class} mb-2`}
+            onClick={() => {
+              navigate(`/profile/${s.id}`)
+            }}
+          >
             <div className="posts">
               <h4 className="post__number">20</h4>
               <Icon
@@ -138,7 +152,17 @@ export default function ManageUsersPage() {
                 Name: {s.profile.firstName} {s.profile.lastName}
               </div>
             </div>
-            <div className={$isPublic_class}>{isPublic}</div>
+            <div className="text-end">
+              <AS3Button
+                icon={mdiMinus}
+                text
+                size="sm"
+                iconSize={0.7}
+                className="delete__icon"
+                onClick={() => dispatch({ type: 'OPEN_DELETE_USER_POPUP' })}
+              ></AS3Button>
+              <div className={$isPublic_class}>{isPublic}</div>
+            </div>
           </div>
         )
       })}

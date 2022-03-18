@@ -5,6 +5,8 @@ type Store = {
   isPublic: boolean | undefined
   filter_title: string
   filter_text: string
+  isCreateUserPopupActive: boolean
+  isDeleteUserPopupActive: boolean
 }
 
 const initialState: Store = {
@@ -12,6 +14,8 @@ const initialState: Store = {
   isPublic: undefined,
   filter_title: 'All',
   filter_text: '',
+  isCreateUserPopupActive: false,
+  isDeleteUserPopupActive: false,
 }
 
 export const managementPageStore = (
@@ -22,7 +26,11 @@ export const managementPageStore = (
     | 'SET_ACCOUNT_FILTER_PUBLIC'
     | 'SET_ACCOUNT_FILTER_PRIVATE'
     | 'SET_ACCOUNT_FILTER_ALL'
-    | 'SET_ACCOUNT_UPDATE_FILTER',
+    | 'SET_ACCOUNT_UPDATE_FILTER'
+    | 'OPEN_CREATE_USER_POPUP'
+    | 'CLOSE_CREATE_USER_POPUP'
+    | 'OPEN_DELETE_USER_POPUP'
+    | 'CLOSE_DELETE_USER_POPUP',
     string
   >
 ): Store => {
@@ -59,6 +67,26 @@ export const managementPageStore = (
       return {
         ...state,
         filter_text: filter_text ?? '',
+      }
+    case 'OPEN_CREATE_USER_POPUP':
+      return {
+        ...state,
+        isCreateUserPopupActive: true,
+      }
+    case 'CLOSE_CREATE_USER_POPUP':
+      return {
+        ...state,
+        isCreateUserPopupActive: false,
+      }
+    case 'OPEN_DELETE_USER_POPUP':
+      return {
+        ...state,
+        isDeleteUserPopupActive: true,
+      }
+    case 'CLOSE_DELETE_USER_POPUP':
+      return {
+        ...state,
+        isDeleteUserPopupActive: false,
       }
     default:
       return state

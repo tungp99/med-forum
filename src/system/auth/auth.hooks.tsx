@@ -181,7 +181,6 @@ export function useAuth() {
     account,
     register: (input: RegisterInput) => sendRegister({ variables: { input } }),
     openRegisterPopup: () => dispatch({ type: 'OPEN_REGISTER_POPUP' }),
-    openCreateUserPopup: () => dispatch({ type: 'OPEN_CREATE_USER_POPUP' }),
     login: (input: LoginInput) => sendLogin({ variables: { input } }),
     openLoginPopup: () => dispatch({ type: 'OPEN_LOGIN_POPUP' }),
     logout() {

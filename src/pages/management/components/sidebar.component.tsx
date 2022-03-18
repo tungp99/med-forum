@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { Card, ListGroup } from 'react-bootstrap'
 import { AS3Link } from 'system/components'
-import { useAuth } from 'system/auth'
+import { useDispatch } from 'system/store'
 
 export function SidebarComponent() {
   const navigate = useNavigate()
-  const { openCreateUserPopup } = useAuth()
+  const dispatch = useDispatch()
 
   return (
     <Card>
@@ -19,7 +19,7 @@ export function SidebarComponent() {
         <ListGroup.Item className="text-end">
           <AS3Link
             onClick={() => {
-              openCreateUserPopup()
+              dispatch({ type: 'OPEN_CREATE_USER_POPUP' })
             }}
           >
             + Users
