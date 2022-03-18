@@ -20,8 +20,8 @@ export type Profile = {
   lastName: string
   phoneNumber: string
   birthDate?: string
-  professions: Profession[]
-  educations: Profession[]
+  experience: Profession[]
+  education: Profession[]
 }
 
 export type Account = Entity & {
@@ -42,6 +42,6 @@ export type Post = Entity & {
   markdownContent: string
   isPublished: boolean
   commentsCount: number
-  comments?: Comment[]
+  comments: Comment[]
   creatorAccount: Partial<Account> | null
 }

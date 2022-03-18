@@ -27,3 +27,22 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `
+
+export const GET_ME = gql`
+  query GetMe {
+    me {
+      id
+      email
+      username
+      profile {
+        isPublic
+        firstName
+        lastName
+        birthDate
+        phoneNumber
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`

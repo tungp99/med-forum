@@ -13,13 +13,13 @@ import { useLazyQuery, useMutation } from '@apollo/client'
 import { Toast, useDispatch } from 'system/store'
 import { Account } from 'system/types'
 import {
+  GET_ME,
   LOGIN_MUTATION,
   REFRESH_TOKEN_MUTATION,
   REGISTRATION_MUTATION,
 } from './gql'
-import { GET_ACCOUNT_QUERY } from 'pages/profile/gql'
 import {
-  GetAccount,
+  GetMe,
   Login,
   LoginInput,
   RefreshToken,
@@ -68,11 +68,11 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     [accessToken]
   )
 
-  const [sendFetchAccount, {}] = useLazyQuery<GetAccount>(GET_ACCOUNT_QUERY, {
+  const [sendFetchAccount, {}] = useLazyQuery<GetMe>(GET_ME, {
     ...gqlContext,
-    onCompleted({ account: response }) {
+    onCompleted({ me: response }) {
       if (response) {
-        setAccount({ ...response })
+        setAccount({ ...response } as unknown as Account)
         setAuthStatus(true)
       }
     },

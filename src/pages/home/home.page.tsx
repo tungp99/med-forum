@@ -22,7 +22,7 @@ export default function HomePage() {
       if (posts?.items) {
         dispatch({
           type: 'SET_HOMEPAGE_POSTS',
-          payload: [...posts.items],
+          payload: posts.items.map(s => ({ ...s, comments: [] })),
         })
         dispatch({
           type: 'SET_HOMEPAGE_POSTS_PAGE',

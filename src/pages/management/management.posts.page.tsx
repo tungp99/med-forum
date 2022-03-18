@@ -73,7 +73,7 @@ export default function ManagementPage() {
         <AS3PostCard
           key={post.id}
           preview
-          data={{ ...post }}
+          data={{ ...post, comments: [] }}
           editable={!waitingForUpdate}
           afterEdit={data => updatePost({ variables: { input: data } })}
         />

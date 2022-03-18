@@ -33,7 +33,7 @@ export default function PostPage() {
       <AS3PostCard
         data={{
           ...data.post,
-          comments: data.post.comments?.items?.map(s => ({ ...s })),
+          comments: data.post.comments?.items?.map(s => ({ ...s })) ?? [],
         }}
       />
     </AS3LayoutWithSidebar>

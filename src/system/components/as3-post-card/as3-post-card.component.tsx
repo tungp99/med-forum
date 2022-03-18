@@ -159,7 +159,7 @@ export function AS3PostCard({
         </Card.Body>
       )}
 
-      {comments && comments.length > 0 && (
+      {comments.length > 0 && (
         <Card.Body className="as3-post-card-extension">
           <CommentsComponent data={comments} />
         </Card.Body>

@@ -10,7 +10,7 @@
 export interface GetPosts_posts_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string | null;
+  username: string;
 }
 
 export interface GetPosts_posts_items {
@@ -62,7 +62,7 @@ export interface GetPostsVariables {
 export interface GetMyPosts_posts_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string | null;
+  username: string;
 }
 
 export interface GetMyPosts_posts_items {
@@ -177,7 +177,7 @@ export interface GetAccounts_accounts_items {
   __typename: "Account";
   id: string;
   email: string;
-  username: string | null;
+  username: string;
   profile: GetAccounts_accounts_items_profile;
   isGod: boolean;
   writtenPostsCount: number;
@@ -274,7 +274,7 @@ export interface GetAllAccountsVariables {
 export interface GetPost_post_comments_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string | null;
+  username: string;
 }
 
 export interface GetPost_post_comments_items {
@@ -295,7 +295,7 @@ export interface GetPost_post_comments {
 export interface GetPost_post_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string | null;
+  username: string;
 }
 
 export interface GetPost_post {
@@ -373,7 +373,7 @@ export interface UpdatePostVariables {
 // GraphQL query operation: GetAccount
 // ====================================================
 
-export interface GetAccount_account_profile_professions {
+export interface GetAccount_account_profile_experience {
   __typename: "Profession";
   organization: string;
   start: any | null;
@@ -382,7 +382,7 @@ export interface GetAccount_account_profile_professions {
   isWorking: boolean;
 }
 
-export interface GetAccount_account_profile_educations {
+export interface GetAccount_account_profile_education {
   __typename: "Profession";
   organization: string;
   start: any | null;
@@ -398,15 +398,15 @@ export interface GetAccount_account_profile {
   lastName: string;
   birthDate: any | null;
   phoneNumber: string;
-  professions: GetAccount_account_profile_professions[];
-  educations: GetAccount_account_profile_educations[];
+  experience: GetAccount_account_profile_experience[];
+  education: GetAccount_account_profile_education[];
 }
 
 export interface GetAccount_account {
   __typename: "Account";
   id: string;
   email: string;
-  username: string | null;
+  username: string;
   profile: GetAccount_account_profile;
   createdAt: any;
   updatedAt: any;
@@ -417,7 +417,30 @@ export interface GetAccount {
 }
 
 export interface GetAccountVariables {
-  id?: string | null;
+  id: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateProfileContact
+// ====================================================
+
+export interface UpdateProfileContact_updateAccount {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface UpdateProfileContact {
+  updateAccount: UpdateProfileContact_updateAccount;
+}
+
+export interface UpdateProfileContactVariables {
+  input: UpdateAccountInput;
 }
 
 /* tslint:disable */
@@ -519,13 +542,45 @@ export interface LoginVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetMe
+// ====================================================
+
+export interface GetMe_me_profile {
+  __typename: "Profile";
+  isPublic: boolean;
+  firstName: string;
+  lastName: string;
+  birthDate: any | null;
+  phoneNumber: string;
+}
+
+export interface GetMe_me {
+  __typename: "Account";
+  id: string;
+  email: string;
+  username: string;
+  profile: GetMe_me_profile;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetMe {
+  me: GetMe_me | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetComments
 // ====================================================
 
 export interface GetComments_comments_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string | null;
+  username: string;
 }
 
 export interface GetComments_comments_items {
@@ -576,7 +631,7 @@ export interface GetCommentsVariables {
 export interface GetReplies_replies_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string | null;
+  username: string;
 }
 
 export interface GetReplies_replies_items {
@@ -625,7 +680,7 @@ export interface GetRepliesVariables {
 
 export interface CreateComment_createComment_creatorAccount {
   __typename: "Account";
-  username: string | null;
+  username: string;
 }
 
 export interface CreateComment_createComment {
@@ -673,22 +728,12 @@ export interface LoginInput {
   password: string;
 }
 
-export interface ProfessionInput {
-  organization: string;
-  start?: any | null;
-  end?: any | null;
-  position: string;
-  isWorking: boolean;
-}
-
 export interface ProfileInput {
   isPublic: boolean;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   birthDate?: any | null;
-  professions: ProfessionInput[];
-  educations: ProfessionInput[];
 }
 
 export interface RefreshTokenInput {
@@ -698,7 +743,7 @@ export interface RefreshTokenInput {
 
 export interface RegisterInput {
   email: string;
-  username?: string | null;
+  username: string;
   password: string;
   confirmationPassword: string;
   profile: ProfileInput;
@@ -707,8 +752,6 @@ export interface RegisterInput {
 export interface UpdateAccountInput {
   id: string;
   username: string;
-  password?: string | null;
-  confirmationPassword?: string | null;
   profile: ProfileInput;
 }
 

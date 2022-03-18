@@ -17,12 +17,10 @@ export function AS3AuthRegister() {
       password: '',
       confirmationPassword: '',
       profile: {
+        isPublic: true,
         firstName: '',
         lastName: '',
-        isPublic: true,
         phoneNumber: '',
-        professions: [],
-        educations: [],
       },
     },
   })
