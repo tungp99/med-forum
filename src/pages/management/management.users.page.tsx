@@ -138,7 +138,10 @@ export default function ManageUsersPage() {
             key={s.id}
             className={`${$container_class} mb-2`}
             onClick={e => {
-              if (e.target.toString() !== '[object SVGSVGElement]')
+              if (
+                e.target.toString() !== '[object SVGSVGElement]' &&
+                e.target.toString() !== '[object HTMLButtonElement]'
+              )
                 navigate(`/profile/${s.id}`)
             }}
           >
@@ -162,7 +165,7 @@ export default function ManageUsersPage() {
                 size="sm"
                 iconSize={0.7}
                 className="delete__icon"
-                onClick={() => {
+                onClick={e => {
                   dispatch({ type: 'OPEN_DELETE_USER_POPUP' })
                   dispatch({ type: 'DELETE_ID', payload: `${s.id}` })
                 }}
