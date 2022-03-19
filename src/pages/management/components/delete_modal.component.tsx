@@ -9,7 +9,7 @@ import { useAuth } from 'system/auth'
 
 type id = { id?: string }
 
-export function AS3Delete(id: id) {
+export function AS3Delete($id: id) {
   const { gqlContext } = useAuth()
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
@@ -20,7 +20,7 @@ export function AS3Delete(id: id) {
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: { id },
+      variables: { id: $id.id },
     }
   )
 
@@ -52,13 +52,16 @@ export function AS3Delete(id: id) {
           onClick={() => {
             deleteAccount_fetch()
             dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })
+            dispatch({ type: 'DELETE_ID', payload: '0' })
           }}
         >
           Delete
         </AS3Button>
         <AS3Button
           className="fs-6 btn-light ms-4"
-          onClick={() => dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })}
+          onClick={() => {
+            dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })
+          }}
         >
           Cancel
         </AS3Button>

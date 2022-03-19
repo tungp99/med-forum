@@ -24,14 +24,12 @@ import { AS3Delete } from './components/delete_modal.component'
 export default function ManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isPublic, filter_title, filter_text } = useSelector(
+  const { isPublic, filter_title, filter_text, deleteId } = useSelector(
     store => store.managementPage
   )
   const { gqlContext } = useAuth()
 
   const [data, setData] = useState<Account[]>([])
-
-  const [state, setState] = useState({ deleteId: '1' })
 
   const fetchAccountsVariables = useMemo(
     () => ({
@@ -77,17 +75,20 @@ export default function ManageUsersPage() {
 
   useEffect(() => {
     if (filter_title === 'All') {
-      console.log(filter_text)
       getAllAccount_refetch()
     } else {
       getAccount_fetch()
     }
   }, [filter_title, filter_text])
+  if (deleteId === '0') {
+    filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+    dispatch({ type: 'DELETE_ID', payload: '1' })
+  }
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
       <AS3CreateUser></AS3CreateUser>
-      <AS3Delete id={state.deleteId}></AS3Delete>
+      <AS3Delete id={deleteId}></AS3Delete>
       <div className="filter__container">
         <AS3Input
           placeholder="Search"
@@ -163,7 +164,7 @@ export default function ManageUsersPage() {
                 className="delete__icon"
                 onClick={() => {
                   dispatch({ type: 'OPEN_DELETE_USER_POPUP' })
-                  setState({ deleteId: s.id })
+                  dispatch({ type: 'DELETE_ID', payload: `${s.id}` })
                 }}
               ></AS3Button>
               <div className={$isPublic_class}>{isPublic}</div>
