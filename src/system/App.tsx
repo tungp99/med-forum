@@ -13,6 +13,8 @@ import {
   AS3Toastr,
 } from 'system/components'
 import { Routes } from './Routes'
+import { AS3CreateUser } from 'pages/management/components/create_user.component'
+import { AS3Delete } from 'pages/management/components/delete_modal.component'
 
 export default function App() {
   return (
@@ -21,7 +23,6 @@ export default function App() {
         <AuthProvider>
           <AS3Navbar />
           <Routes />
-
           <AS3AuthLogin />
           <AS3AuthRegister />
         </AuthProvider>

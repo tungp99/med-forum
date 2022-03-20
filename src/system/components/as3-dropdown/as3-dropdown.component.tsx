@@ -3,10 +3,31 @@ import { Dropdown, DropdownProps } from 'react-bootstrap'
 import Icon from '@mdi/react'
 
 import './as3-dropdown.style.scss'
+import { AlignType } from 'react-bootstrap/esm/types'
 
 type AS3DropdownProps = DropdownProps & {
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info'
+    | 'light'
+    | 'dark'
+    | 'link'
+    | 'outline-primary'
+    | 'outline-secondary'
+    | 'outline-success'
+    | 'outline-warning'
+    | 'outline-danger'
+    | 'outline-info'
+    | 'outline-dark'
+
   prefixIcon?: string
   suffixIcon?: string
+  align?: AlignType
+  className?: string
 
   items: {
     prefixIcon?: string
@@ -18,22 +39,29 @@ type AS3DropdownProps = DropdownProps & {
 
 export function AS3Dropdown(props: AS3DropdownProps) {
   return (
-    <Dropdown className="as3-dropdown">
+    <Dropdown className={`as3-dropdown ${props.className}`}>
       <Dropdown.Toggle
-        variant="default"
-        className="px-0">
-        {props.prefixIcon && <Icon
-          className="me-1"
-          path={props.prefixIcon} />}
+        className="px-0 rounded-0"
+        variant={props.variant ?? 'default'}
+      >
+        {props.prefixIcon && (
+          <Icon
+            className="me-1"
+            path={props.prefixIcon}
+            size={0.8} />
+        )}
         {props.children}
-        {props.suffixIcon && <Icon
-          className="ms-1"
-          path={props.suffixIcon} />}
+        {props.suffixIcon && (
+          <Icon
+            className="ms-1"
+            path={props.suffixIcon}
+            size={0.8} />
+        )}
       </Dropdown.Toggle>
 
       <Dropdown.Menu
         className="py-0"
-        align="end">
+        align={props.align ?? 'end'}>
         {props.items.map((itemProps, i) => {
           const $element = (
             <Dropdown.Item

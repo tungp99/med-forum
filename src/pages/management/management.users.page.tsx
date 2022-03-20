@@ -1,41 +1,150 @@
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import Icon from '@mdi/react'
-import { mdiPostOutline } from '@mdi/js'
+import { mdiMenuDown, mdiMinus, mdiPostOutline } from '@mdi/js'
 
 import { useAuth } from 'system/auth'
-import { Toast } from 'system/store'
-import { AS3Input, AS3LayoutWithSidebar } from 'system/components'
+import { Toast, useDispatch, useSelector } from 'system/store'
+import {
+  AS3Button,
+  AS3Dropdown,
+  AS3Input,
+  AS3LayoutWithSidebar,
+} from 'system/components'
 import { SidebarComponent } from './components/sidebar.component'
-import { GetAccounts } from 'system/generated/gql.types'
-import { GET_ACCOUNTS_QUERY } from './gql'
+import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
+import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from './gql'
 
 import './management.style.scss'
+import { useEffect, useMemo, useState } from 'react'
+import { Account } from 'system/types'
+import { useNavigate } from 'react-router'
+import { AS3CreateUser } from './components/create_user.component'
+import { AS3Delete } from './components/delete_modal.component'
 
 export default function ManageUsersPage() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { isPublic, filter_title, filter_text, deleteId } = useSelector(
+    store => store.managementPage
+  )
   const { gqlContext } = useAuth()
-  const { data, loading, refetch } = useQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
-    ...gqlContext,
-    variables: {
+
+  const [data, setData] = useState<Account[]>([])
+
+  const fetchAccountsVariables = useMemo(
+    () => ({
       skip: 0,
+      isPublic: isPublic,
+      search: filter_text,
+    }),
+    [isPublic, filter_text]
+  )
+  const [getAccount_fetch] = useLazyQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
+    ...gqlContext,
+    variables: fetchAccountsVariables,
+    onCompleted({ accounts: response }) {
+      response?.items &&
+        setData(response.items.map(s => s as unknown as Account))
     },
     onError({ name, message }) {
       Toast.error({ title: name, content: message })
     },
   })
 
+  const fetchAllVariables = useMemo(
+    () => ({
+      skip: 0,
+      search: filter_text,
+    }),
+    [filter_text]
+  )
+  const { refetch: getAllAccount_refetch } = useQuery<GetAllAccounts>(
+    GET_ALL_ACCOUNTS_QUERY,
+    {
+      ...gqlContext,
+      variables: fetchAllVariables,
+      onCompleted({ accounts: response }) {
+        response?.items &&
+          setData(response.items.map(s => s as unknown as Account))
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+
+  useEffect(() => {
+    if (filter_title === 'All') {
+      getAllAccount_refetch()
+    } else {
+      getAccount_fetch()
+    }
+  }, [filter_title, filter_text])
+  if (deleteId === '0') {
+    filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+    dispatch({ type: 'DELETE_ID', payload: '1' })
+  }
+
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
+      <AS3CreateUser></AS3CreateUser>
+      <AS3Delete id={deleteId}></AS3Delete>
       <div className="filter__container">
-        <button className="sort__btn">Sort</button>
-        <AS3Input placeholder="Search"></AS3Input>
+        <AS3Input
+          placeholder="Search"
+          onChange={e => {
+            dispatch({
+              type: 'SET_ACCOUNT_UPDATE_FILTER',
+              payload: e.target.value,
+            })
+          }}
+        ></AS3Input>
+        <AS3Dropdown
+          className="ms-4"
+          suffixIcon={mdiMenuDown}
+          align="start"
+          items={[
+            {
+              text: 'All',
+              separate: true,
+              onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_ALL' }),
+            },
+            {
+              text: 'Public',
+              separate: true,
+              onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_PUBLIC' }),
+            },
+            {
+              text: 'Private',
+              separate: true,
+              onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_PRIVATE' }),
+            },
+          ]}
+        >
+          <span>{filter_title}</span>
+        </AS3Dropdown>
       </div>
-
-      {data?.accounts?.items &&
-        data.accounts.items.map(s => (
+      {data.map(s => {
+        let $container_class = '__container'
+        let $isPublic_class = 'isPublic text-danger'
+        let isPublic = 'Private'
+        if (s.isGod === true) $container_class = 'vip__container'
+        if (s.profile.isPublic === true) {
+          isPublic = 'Public'
+          $isPublic_class = 'isPublic text-success'
+        }
+        return (
           <div
             key={s.id}
-            className="__container">
+            className={`${$container_class} mb-2`}
+            onClick={e => {
+              if (
+                e.target.toString() !== '[object SVGSVGElement]' &&
+                e.target.toString() !== '[object HTMLButtonElement]'
+              )
+                navigate(`/profile/${s.id}`)
+            }}
+          >
             <div className="posts">
               <h4 className="post__number">20</h4>
               <Icon
@@ -44,12 +153,28 @@ export default function ManageUsersPage() {
             </div>
             <div className="info__container">
               <div className="usersInfo">Username: {s.username}</div>
-              <div className="usersInfo">Email: bao426834@gmail.com</div>
-              <div className="usersInfo">Name: PhamBao</div>
+              <div className="usersInfo">Email: {s.email}</div>
+              <div className="usersInfo">
+                Name: {s.profile.firstName} {s.profile.lastName}
+              </div>
             </div>
-            <div className="isPublic text-success">Public</div>
+            <div className="text-end">
+              <AS3Button
+                icon={mdiMinus}
+                text
+                size="sm"
+                iconSize={0.7}
+                className="delete__icon"
+                onClick={e => {
+                  dispatch({ type: 'OPEN_DELETE_USER_POPUP' })
+                  dispatch({ type: 'DELETE_ID', payload: `${s.id}` })
+                }}
+              ></AS3Button>
+              <div className={$isPublic_class}>{isPublic}</div>
+            </div>
           </div>
-        ))}
+        )
+      })}
     </AS3LayoutWithSidebar>
   )
 }
