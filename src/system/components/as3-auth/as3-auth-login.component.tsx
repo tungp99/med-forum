@@ -21,6 +21,7 @@ export function AS3AuthLogin() {
       centered
       size="lg"
       show={state.isLoginPopupActive}
+      onEscapeKeyDown={() => dispatch({ type: 'CLOSE_LOGIN_POPUP' })}
     >
       <Modal.Header className="border-bottom-0 p-0">
         <AS3Spacer />

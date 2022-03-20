@@ -41,6 +41,7 @@ export const authStore = (
         ...state,
         isRegisterPopupActive: false,
       }
+
     default:
       return state
   }

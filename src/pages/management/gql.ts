@@ -30,21 +30,59 @@ export const GET_MY_POSTS_QUERY = gql`
 `
 
 export const GET_ACCOUNTS_QUERY = gql`
-  query GetAccounts($skip: Int!) {
-    accounts(skip: $skip, take: 8) {
+  query GetAccounts($skip: Int!, $isPublic: Boolean!, $search: String!) {
+    accounts(
+      skip: $skip
+      take: 8
+      where: {
+        profile: { isPublic: { eq: $isPublic } }
+        and: { email: { contains: $search } }
+      }
+    ) {
       items {
         id
         email
         username
         profile {
+          isPublic
           firstName
           lastName
         }
         isGod
+        writtenPostsCount
       }
       pageInfo {
         hasNextPage
       }
+    }
+  }
+`
+export const GET_ALL_ACCOUNTS_QUERY = gql`
+  query GetAllAccounts($skip: Int!, $search: String!) {
+    accounts(skip: $skip, take: 8, where: { email: { contains: $search } }) {
+      items {
+        id
+        email
+        username
+        profile {
+          isPublic
+          firstName
+          lastName
+        }
+        isGod
+        writtenPostsCount
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`
+export const DELETE_ACCOUNT_MUTATION = gql`
+  mutation DeleteAccount($id: String!) {
+    deleteAccount(id: $id) {
+      isSuccess
+      affectedRecords
     }
   }
 `
