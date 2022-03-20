@@ -13,8 +13,6 @@ import {
   AS3Toastr,
 } from 'system/components'
 import { Routes } from './Routes'
-import { AS3CreateUser } from 'pages/management/components/create_user.component'
-import { AS3Delete } from 'pages/management/components/delete_modal.component'
 
 export default function App() {
   return (
