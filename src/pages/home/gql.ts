@@ -9,6 +9,10 @@ export const GET_POSTS_QUERY = gql`
       order: { createdAt: DESC }
     ) {
       items {
+        rating {
+          upvotes
+          downvotes
+        }
         id
         title
         markdownContent

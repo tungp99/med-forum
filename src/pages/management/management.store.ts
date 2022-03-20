@@ -17,7 +17,6 @@ const initialState: Store = {
   filter_text: '',
   isCreateUserPopupActive: false,
   isDeleteUserPopupActive: false,
-  deleteId: '1',
 }
 
 export const managementPageStore = (

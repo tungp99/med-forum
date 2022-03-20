@@ -96,7 +96,10 @@ export default function ProfilePage() {
                     input: {
                       accountId: fetchAccountVariables.variables.id,
                       professions: [
-                        ...data.account.profile.experience,
+                        data.account.profile.experience.map(s => ({
+                          ...s,
+                          __typename: undefined,
+                        })),
                         newProfession,
                       ],
                     },
@@ -115,7 +118,10 @@ export default function ProfilePage() {
                     input: {
                       accountId: fetchAccountVariables.variables.id,
                       professions: [
-                        ...data.account.profile.experience,
+                        ...data.account.profile.education.map(s => ({
+                          ...s,
+                          __typename: undefined,
+                        })),
                         newProfession,
                       ],
                     },

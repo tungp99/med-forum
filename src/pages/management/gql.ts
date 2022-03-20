@@ -40,6 +40,7 @@ export const GET_ACCOUNTS_QUERY = gql`
       }
     ) {
       items {
+        writtenPostsCount
         id
         email
         username
@@ -61,6 +62,7 @@ export const GET_ALL_ACCOUNTS_QUERY = gql`
   query GetAllAccounts($skip: Int!, $search: String!) {
     accounts(skip: $skip, take: 8, where: { email: { contains: $search } }) {
       items {
+        writtenPostsCount
         id
         email
         username
@@ -83,6 +85,13 @@ export const DELETE_ACCOUNT_MUTATION = gql`
     deleteAccount(id: $id) {
       isSuccess
       affectedRecords
+    }
+  }
+`
+export const CREATE_ACCOUNT_MUTATION = gql`
+  mutation CreateAccount($input: CreateAccountInput!) {
+    createAccount(input: $input) {
+      id
     }
   }
 `

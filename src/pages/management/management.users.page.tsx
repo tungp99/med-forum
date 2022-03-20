@@ -44,6 +44,7 @@ export default function ManageUsersPage() {
     variables: fetchAccountsVariables,
     onCompleted({ accounts: response }) {
       response?.items &&
+        filter_title !== 'All' &&
         setData(response.items.map(s => s as unknown as Account))
     },
     onError({ name, message }) {
@@ -65,6 +66,7 @@ export default function ManageUsersPage() {
       variables: fetchAllVariables,
       onCompleted({ accounts: response }) {
         response?.items &&
+          filter_title === 'All' &&
           setData(response.items.map(s => s as unknown as Account))
       },
       onError({ name, message }) {
@@ -80,15 +82,20 @@ export default function ManageUsersPage() {
       getAccount_fetch()
     }
   }, [filter_title, filter_text])
-  if (deleteId === '0') {
-    filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
-    dispatch({ type: 'DELETE_ID', payload: '1' })
-  }
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
-      <AS3CreateUser></AS3CreateUser>
-      <AS3Delete id={deleteId}></AS3Delete>
+      <AS3CreateUser
+        onCreated={() => {
+          filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+        }}
+      ></AS3CreateUser>
+      <AS3Delete
+        id={deleteId}
+        onDeleted={() => {
+          filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+        }}
+      ></AS3Delete>
       <div className="filter__container">
         <AS3Input
           placeholder="Search"
@@ -146,7 +153,7 @@ export default function ManageUsersPage() {
             }}
           >
             <div className="posts">
-              <h4 className="post__number">20</h4>
+              <h4 className="post__number">{s.writtenPostsCount}</h4>
               <Icon
                 path={mdiPostOutline}
                 style={{ height: '1.5rem' }}></Icon>
@@ -165,7 +172,7 @@ export default function ManageUsersPage() {
                 size="sm"
                 iconSize={0.7}
                 className="delete__icon"
-                onClick={e => {
+                onClick={() => {
                   dispatch({ type: 'OPEN_DELETE_USER_POPUP' })
                   dispatch({ type: 'DELETE_ID', payload: `${s.id}` })
                 }}

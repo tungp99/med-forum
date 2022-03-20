@@ -2,10 +2,12 @@ import { StoreAction } from 'system/store'
 
 type Store = {
   isProfessionPopupOpen: boolean
+  isSecurityPopupOpen: boolean
 }
 
 const initialState: Store = {
   isProfessionPopupOpen: false,
+  isSecurityPopupOpen: false,
 }
 
 export const profilePageStore = (

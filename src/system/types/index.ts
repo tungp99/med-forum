@@ -29,6 +29,7 @@ export type Account = Entity & {
   username: string | null
   profile: Profile
   isGod?: boolean
+  writtenPostsCount?: number
 }
 
 export type Comment = Entity & {
@@ -44,4 +45,5 @@ export type Post = Entity & {
   commentsCount: number
   comments: Comment[]
   creatorAccount: Partial<Account> | null
+  rating: { upvotes: number; downvotes: number }
 }

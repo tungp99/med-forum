@@ -2,20 +2,35 @@ import { Controller, useForm } from 'react-hook-form'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
-import { useDispatch, useSelector} from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input } from 'system/components'
-import { RegisterInput } from 'system/generated/gql.types'
+import { CreateAccount, CreateAccountInput } from 'system/generated/gql.types'
+import { useMutation } from '@apollo/client'
+import { CREATE_ACCOUNT_MUTATION } from '../gql'
+type CreateUserProps = { onCreated: () => void }
 
-export function AS3CreateUser() {
+export function AS3CreateUser(props: CreateUserProps) {
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
-  const { register } = useAuth()
-  const { handleSubmit, control } = useForm<RegisterInput>({
+  const { gqlContext } = useAuth()
+  const [CreateAccount_fetch] = useMutation<CreateAccount>(
+    CREATE_ACCOUNT_MUTATION,
+    {
+      ...gqlContext,
+      onCompleted() {
+        props.onCreated()
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+  const { handleSubmit, control } = useForm<CreateAccountInput>({
     defaultValues: {
+      username: '',
       email: '',
       password: '',
-      confirmationPassword: '',
       profile: {
         firstName: '',
         lastName: '',
@@ -51,6 +66,19 @@ export function AS3CreateUser() {
             md={8}
             sm={12}>
             <h4 className="title">Create User</h4>
+
+            <Controller
+              control={control}
+              name="username"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="Username"
+                  size="lg"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
 
             <Controller
               control={control}
@@ -109,7 +137,15 @@ export function AS3CreateUser() {
             <AS3Button
               variant="primary"
               size="lg"
-              onClick={handleSubmit(data => register(data))}
+              onClick={handleSubmit(data => {
+                dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })
+
+                CreateAccount_fetch({
+                  variables: {
+                    input: data,
+                  },
+                })
+              })}
             >
               Submit
             </AS3Button>
