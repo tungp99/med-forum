@@ -440,7 +440,7 @@ type DeleteEntityPayload {
 }
 
 input ProfessionsInput {
-  id: String
+  accountId: String
   professions: [ProfessionInput!]!
 }
 

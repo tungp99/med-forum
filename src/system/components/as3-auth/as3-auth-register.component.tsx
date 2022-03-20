@@ -14,6 +14,7 @@ export function AS3AuthRegister() {
   const { handleSubmit, control } = useForm<RegisterInput>({
     defaultValues: {
       email: '',
+      username: '',
       password: '',
       confirmationPassword: '',
       profile: {

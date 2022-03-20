@@ -1,12 +1,20 @@
-.form-switch {
+@import '/src/system/assets/styles/variables';
+
+.as3-switch.form-switch {
   &.form-check-inline {
     display: inline-flex;
-    align-content: center;
+    align-items: center;
     margin-right: unset;
+    margin-left: unset;
+    padding-left: unset;
   }
 
   .form-check-input {
     margin-left: unset;
     margin-top: unset;
+  }
+
+  .form-check-label {
+    margin-left: map-get($spacers, 1);
   }
 }

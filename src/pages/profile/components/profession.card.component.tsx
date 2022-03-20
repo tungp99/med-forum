@@ -1,21 +1,23 @@
 import { DateTime } from 'luxon'
 import { Card, ListGroup, Stack } from 'react-bootstrap'
+import { mdiPlus } from '@mdi/js'
 
 import { Profession } from 'system/types'
+import { useDispatch } from 'system/store'
 import { AS3Avatar, AS3Button, AS3Spacer } from 'system/components'
 import { EditButtonComponent } from './edit-button.component'
 import { ProfessionPopupComponent } from './profession-popup.component'
-import { useDispatch } from 'system/store'
-import { mdiPlus } from '@mdi/js'
 
 type ExperienceCardComponentProps = {
   title: string
   data: Profession[]
+  onAddNewItem: (data: Profession) => void
 }
 
 export function ProfessionCardComponent({
   title,
   data,
+  onAddNewItem,
 }: ExperienceCardComponentProps) {
   const dispatch = useDispatch()
 
@@ -63,7 +65,7 @@ export function ProfessionCardComponent({
         </ListGroup>
       </Card.Body>
 
-      <ProfessionPopupComponent />
+      <ProfessionPopupComponent onSave={data => onAddNewItem(data)} />
     </Card>
   )
 }

@@ -13,6 +13,7 @@ type AS3SwitchProps = FormCheckProps & {
 }
 
 export function AS3Switch({
+  className,
   prefixIcon,
   suffixIcon,
   iconSize,
@@ -20,6 +21,9 @@ export function AS3Switch({
   checked,
   onChange,
 }: AS3SwitchProps) {
+  const classList = ['as3-switch mb-3']
+  className && classList.push(className)
+
   return (
     <>
       {prefixIcon && (
@@ -30,9 +34,10 @@ export function AS3Switch({
       )}
       <Form.Check
         type="switch"
+        className={classList.join(' ')}
         inline
         label={label}
-        checked={checked ?? false}
+        checked={checked}
         onChange={onChange}
       />
       {suffixIcon && (

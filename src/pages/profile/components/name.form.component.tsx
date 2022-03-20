@@ -38,7 +38,7 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
     }
   )
 
-  const defaultValues = useMemo<UpdateAccountInput>(() => {
+  const formValues = useMemo<UpdateAccountInput>(() => {
     const { id, username, profile } = data
 
     return {
@@ -55,14 +55,13 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
       },
     }
   }, [data])
-
-  const { handleSubmit, control, reset } = useForm<UpdateAccountInput>({
-    defaultValues,
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: formValues,
   })
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues])
+    reset(formValues)
+  }, [formValues])
 
   return (
     <Card>

@@ -12,6 +12,7 @@ body {
 }
 
 .form-control,
+.form-select,
 .btn {
   @include no-focus-shadow;
 }

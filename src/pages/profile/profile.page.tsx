@@ -1,27 +1,35 @@
 import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import { Container, Row, Col } from 'react-bootstrap'
 
-import { Toast } from 'system/store'
+import { Toast, useDispatch } from 'system/store'
 import { useAuth } from 'system/auth'
 import { ProfessionCardComponent } from './components/profession.card.component'
 import { OverviewCardComponent } from './components/overview.card.component'
 import { NameFormComponent } from './components/name.form.component'
 import { SecurityFormComponent } from './components/security.form.component'
-import { GET_ACCOUNT_QUERY } from './gql'
-import { GetAccount } from 'system/generated/gql.types'
 import './profile.style.scss'
+import {
+  GET_ACCOUNT_QUERY,
+  UPDATE_EDUCATION_MUTATION,
+  UPDATE_EXPERIENCE_MUTATION,
+} from './gql'
+import {
+  GetAccount,
+  UpdateEducation,
+  UpdateExperience,
+} from 'system/generated/gql.types'
 
 export default function ProfilePage() {
   const { id } = useParams()
+  const dispatch = useDispatch()
   const { account: currentAccount, gqlContext } = useAuth()
 
-  const gqlVariables = useMemo(
+  const fetchAccountVariables = useMemo(
     () => ({ variables: { id: id ?? currentAccount.id } }),
     [id]
   )
-
   const [fetchAccount, { data, loading }] = useLazyQuery<GetAccount>(
     GET_ACCOUNT_QUERY,
     {
@@ -33,8 +41,36 @@ export default function ProfilePage() {
   )
 
   useEffect(() => {
-    fetchAccount(gqlVariables)
-  }, [gqlVariables])
+    fetchAccount(fetchAccountVariables)
+  }, [fetchAccountVariables])
+
+  const [updateExperience] = useMutation<UpdateExperience>(
+    UPDATE_EXPERIENCE_MUTATION,
+    {
+      ...gqlContext,
+      onCompleted({ updateExperience: response }) {
+        dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
+        response.affectedRecords && fetchAccount(fetchAccountVariables)
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+
+  const [updateEducation] = useMutation<UpdateEducation>(
+    UPDATE_EDUCATION_MUTATION,
+    {
+      ...gqlContext,
+      onCompleted({ updateEducation: response }) {
+        dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
+        response.affectedRecords && fetchAccount(fetchAccountVariables)
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
 
   return (
     <Container
@@ -53,11 +89,39 @@ export default function ProfilePage() {
             <ProfessionCardComponent
               title="Experience"
               data={data.account.profile.experience}
+              onAddNewItem={newProfession =>
+                data.account &&
+                updateExperience({
+                  variables: {
+                    input: {
+                      accountId: fetchAccountVariables.variables.id,
+                      professions: [
+                        ...data.account.profile.experience,
+                        newProfession,
+                      ],
+                    },
+                  },
+                })
+              }
             />
 
             <ProfessionCardComponent
               title="Education"
               data={data.account.profile.education}
+              onAddNewItem={newProfession =>
+                data.account &&
+                updateEducation({
+                  variables: {
+                    input: {
+                      accountId: fetchAccountVariables.variables.id,
+                      professions: [
+                        ...data.account.profile.experience,
+                        newProfession,
+                      ],
+                    },
+                  },
+                })
+              }
             />
           </Col>
 

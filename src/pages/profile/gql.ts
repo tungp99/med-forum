@@ -41,3 +41,21 @@ export const UPDATE_PROFILE_CONTACT_MUTATION = gql`
     }
   }
 `
+
+export const UPDATE_EXPERIENCE_MUTATION = gql`
+  mutation UpdateExperience($input: ProfessionsInput!) {
+    updateExperience(input: $input) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`
+
+export const UPDATE_EDUCATION_MUTATION = gql`
+  mutation UpdateEducation($input: ProfessionsInput!) {
+    updateEducation(input: $input) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`

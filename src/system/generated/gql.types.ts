@@ -340,6 +340,52 @@ export interface UpdateProfileContactVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: UpdateExperience
+// ====================================================
+
+export interface UpdateExperience_updateExperience {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface UpdateExperience {
+  updateExperience: UpdateExperience_updateExperience;
+}
+
+export interface UpdateExperienceVariables {
+  input: ProfessionsInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateEducation
+// ====================================================
+
+export interface UpdateEducation_updateEducation {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface UpdateEducation {
+  updateEducation: UpdateEducation_updateEducation;
+}
+
+export interface UpdateEducationVariables {
+  input: ProfessionsInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: RefreshToken
 // ====================================================
 
@@ -594,6 +640,19 @@ export interface LoginInput {
   email?: string | null;
   username?: string | null;
   password: string;
+}
+
+export interface ProfessionInput {
+  organization: string;
+  start?: any | null;
+  end?: any | null;
+  position: string;
+  isWorking: boolean;
+}
+
+export interface ProfessionsInput {
+  accountId?: string | null;
+  professions: ProfessionInput[];
 }
 
 export interface ProfileInput {
