@@ -10,6 +10,7 @@ export const GET_MY_POSTS_QUERY = gql`
       order: { createdAt: DESC }
     ) {
       items {
+        score
         id
         title
         markdownContent

@@ -7,12 +7,6 @@
 // GraphQL query operation: GetPosts
 // ====================================================
 
-export interface GetPosts_posts_items_rating {
-  __typename: "Rating";
-  upvotes: number;
-  downvotes: number;
-}
-
 export interface GetPosts_posts_items_creatorAccount {
   __typename: "Account";
   id: string;
@@ -21,7 +15,7 @@ export interface GetPosts_posts_items_creatorAccount {
 
 export interface GetPosts_posts_items {
   __typename: "Post";
-  rating: GetPosts_posts_items_rating;
+  score: number;
   id: string;
   title: string;
   markdownContent: string;
@@ -74,6 +68,7 @@ export interface GetMyPosts_posts_items_creatorAccount {
 
 export interface GetMyPosts_posts_items {
   __typename: "Post";
+  score: number;
   id: string;
   title: string;
   markdownContent: string;
@@ -270,12 +265,6 @@ export interface CreateAccountVariables {
 // GraphQL query operation: GetPost
 // ====================================================
 
-export interface GetPost_post_rating {
-  __typename: "Rating";
-  upvotes: number;
-  downvotes: number;
-}
-
 export interface GetPost_post_comments_items_creatorAccount {
   __typename: "Account";
   id: string;
@@ -310,7 +299,7 @@ export interface GetPost_post {
   title: string;
   markdownContent: string;
   commentsCount: number;
-  rating: GetPost_post_rating;
+  score: number;
   comments: GetPost_post_comments | null;
   creatorAccount: GetPost_post_creatorAccount | null;
   createdAt: any;
@@ -774,6 +763,34 @@ export interface PostRate {
 
 export interface PostRateVariables {
   input: RatePostInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: postRate
+// ====================================================
+
+export interface postRate_posts_items {
+  __typename: "Post";
+  id: string;
+  score: number;
+}
+
+export interface postRate_posts {
+  __typename: "PostCollectionSegment";
+  items: postRate_posts_items[] | null;
+}
+
+export interface postRate {
+  posts: postRate_posts | null;
+}
+
+export interface postRateVariables {
+  postId: string;
 }
 
 /* tslint:disable */

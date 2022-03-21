@@ -45,5 +45,5 @@ export type Post = Entity & {
   commentsCount: number
   comments: Comment[]
   creatorAccount: Partial<Account> | null
-  rating: { upvotes: number; downvotes: number }
+  score: number
 }

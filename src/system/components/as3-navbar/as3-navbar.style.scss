@@ -3,6 +3,7 @@
 
 .as3-navbar {
   background-color: $white;
+  border-bottom: thin solid rgba(206, 205, 205, 0.637);
 
   .as3-input.as3-navbar-search {
     flex-grow: 1;

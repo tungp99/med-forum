@@ -54,7 +54,7 @@ export function AS3PostCard({
     commentsCount,
     createdAt,
     creatorAccount,
-    rating,
+    score,
   } = data
 
   const { account, gqlContext } = useAuth()
@@ -62,14 +62,16 @@ export function AS3PostCard({
   const isMine = useMemo(() => creatorAccount?.id === account.id, [account])
   const [state, setState] = useState({
     editing: false,
+    postRate: score,
   })
 
-  const [postRate_fetch] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
+  const [postRate_update] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
     ...gqlContext,
     onError({ name, message }) {
       Toast.error({ title: name, content: message })
     },
   })
+
   return state.editing ? (
     <AS3PostForm
       data={data}
@@ -89,16 +91,18 @@ export function AS3PostCard({
             iconSize={0.8}
             text
             onClick={() => {
-              postRate_fetch({
+              postRate_update({
                 variables: {
                   input: { postId: id, quality: Quality.GOOD },
                 },
               })
+              setState({
+                ...state,
+                postRate: state.postRate + 1,
+              })
             }}
           />
-          <span className="card-subtitle">
-            {rating.upvotes - rating.downvotes}
-          </span>
+          <span className="card-subtitle">{state.postRate}</span>
           <AS3Button
             className="action px-1"
             icon={mdiArrowDownBoldOutline}
@@ -106,10 +110,14 @@ export function AS3PostCard({
             iconSize={0.8}
             text
             onClick={() => {
-              postRate_fetch({
+              postRate_update({
                 variables: {
                   input: { postId: id, quality: Quality.BAD },
                 },
+              })
+              setState({
+                ...state,
+                postRate: state.postRate - 1,
               })
             }}
           />

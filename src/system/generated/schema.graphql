@@ -153,7 +153,7 @@ input PostFilterInput {
   title: StringOperationFilterInput
   markdownContent: StringOperationFilterInput
   isPublished: BooleanOperationFilterInput
-  rating: RatingFilterInput
+  score: ComparableInt32OperationFilterInput
   id: StringOperationFilterInput
   createdAt: ComparableDateTimeOperationFilterInput
   updatedAt: ComparableDateTimeOperationFilterInput
@@ -163,7 +163,7 @@ input PostSortInput {
   title: SortEnumType
   markdownContent: SortEnumType
   isPublished: SortEnumType
-  rating: RatingSortInput
+  score: SortEnumType
   id: SortEnumType
   createdAt: SortEnumType
   updatedAt: SortEnumType
@@ -288,16 +288,19 @@ type CollectionSegmentInfo {
   hasPreviousPage: Boolean!
 }
 
-input RatingFilterInput {
-  and: [RatingFilterInput!]
-  or: [RatingFilterInput!]
-  upvotes: ComparableInt32OperationFilterInput
-  downvotes: ComparableInt32OperationFilterInput
-}
-
-input RatingSortInput {
-  upvotes: SortEnumType
-  downvotes: SortEnumType
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
 }
 
 type Post {
@@ -307,7 +310,7 @@ type Post {
   title: String!
   markdownContent: String!
   isPublished: Boolean!
-  rating: Rating!
+  score: Int!
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -343,21 +346,6 @@ input ListFilterInputTypeOfProfessionFilterInput {
   none: ProfessionFilterInput
   some: ProfessionFilterInput
   any: Boolean
-}
-
-input ComparableInt32OperationFilterInput {
-  eq: Int
-  neq: Int
-  in: [Int!]
-  nin: [Int!]
-  gt: Int
-  ngt: Int
-  gte: Int
-  ngte: Int
-  lt: Int
-  nlt: Int
-  lte: Int
-  nlte: Int
 }
 
 input ProfessionFilterInput {
@@ -474,11 +462,6 @@ input CreateCommentInput {
 input UpdateCommentInput {
   id: String!
   markdownContent: String!
-}
-
-type Rating {
-  upvotes: Int!
-  downvotes: Int!
 }
 
 enum Quality {
