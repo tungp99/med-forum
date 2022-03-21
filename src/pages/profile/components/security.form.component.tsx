@@ -1,11 +1,12 @@
 import { Controller, useForm } from 'react-hook-form'
-import { Card, Stack } from 'react-bootstrap'
-import { AS3Button, AS3Input, AS3Spacer } from 'system/components'
-import { ChangePassword, ChangePasswordInput } from 'system/generated/gql.types'
-import { CHANGE_PASSWORD_MUTATION } from '../gql'
-import { Toast } from 'system/store'
 import { useMutation } from '@apollo/client'
+import { Card, Stack } from 'react-bootstrap'
+
+import { Toast } from 'system/store'
 import { useAuth } from 'system/auth'
+import { AS3Button, AS3Input, AS3Spacer } from 'system/components'
+import { CHANGE_PASSWORD_MUTATION } from '../gql'
+import { ChangePassword, ChangePasswordInput } from 'system/generated/gql.types'
 
 export function SecurityFormComponent() {
   const { handleSubmit, control, reset } = useForm<ChangePasswordInput>({
@@ -16,12 +17,15 @@ export function SecurityFormComponent() {
     },
   })
   const { gqlContext } = useAuth()
-  const [ChangePassword_fetch] = useMutation<ChangePassword>(
+  const [changePassword] = useMutation<ChangePassword>(
     CHANGE_PASSWORD_MUTATION,
     {
       ...gqlContext,
-      onCompleted() {
-        Toast.success({ title: '', content: 'Password changed!' })
+      onCompleted({ changePassword: response }) {
+        if (response.isSuccess) {
+          Toast.success({ title: '', content: 'Password changed!' })
+          reset()
+        } else Toast.error({ title: '', content: 'Cannot update password ;)' })
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -37,6 +41,7 @@ export function SecurityFormComponent() {
           name="currentPassword"
           render={({ field: { onChange, value } }) => (
             <AS3Input
+              type="password"
               label="Current Password"
               value={value}
               onChange={onChange}
@@ -48,9 +53,11 @@ export function SecurityFormComponent() {
           name="newPassword"
           render={({ field: { onChange, value } }) => (
             <AS3Input
+              type="password"
               label="New Password"
               onChange={onChange}
-              value={value} />
+              value={value}
+            />
           )}
         />
         <Controller
@@ -58,6 +65,7 @@ export function SecurityFormComponent() {
           name="confirmNewPassword"
           render={({ field: { onChange, value } }) => (
             <AS3Input
+              type="password"
               label="Confirm New Password"
               value={value}
               onChange={onChange}
@@ -69,8 +77,7 @@ export function SecurityFormComponent() {
           <AS3Button
             variant="primary"
             onClick={handleSubmit(data => {
-              ChangePassword_fetch({ variables: { input: data } })
-              reset()
+              changePassword({ variables: { input: data } })
             })}
           >
             Change Password
