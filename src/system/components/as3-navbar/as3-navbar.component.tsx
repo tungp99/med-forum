@@ -18,68 +18,77 @@ export function AS3Navbar() {
   const navigate = useNavigate()
 
   return (
-    <Navbar className={['as3-navbar', 'py-0'].join(' ')}>
-      <Container
-        fluid
-        className="py-1 justify-content-between">
-        <Image
-          className="me-5"
-          src="https://via.placeholder.com/80x36.jpg"
+    <>
+      <Navbar className={['as3-navbar', 'py-0'].join(' ')}>
+        <Container
           fluid
-          onClick={() => navigate('/')}
-        />
+          className="py-1 justify-content-between">
+          <Image
+            className="me-5"
+            src="https://via.placeholder.com/80x36.jpg"
+            fluid
+            onClick={() => navigate('/')}
+          />
 
-        <AS3Input
-          className="as3-navbar-search"
-          prefixIcon={mdiMagnify}
-          placeholder="Search AS3"
-        />
+          <AS3Input
+            className="as3-navbar-search"
+            prefixIcon={mdiMagnify}
+            placeholder="Search AS3"
+          />
 
-        <Stack
-          className="ms-5"
-          direction="horizontal"
-          gap={3}>
-          {authenticated ? (
-            <AS3Dropdown
-              items={[
-                {
-                  prefixIcon: mdiAccountCircle,
-                  text: 'Profile',
-                  onClick: () => navigate('/profile'),
-                },
-                {
-                  prefixIcon: mdiProgressStar,
-                  text: 'Management',
-                  onClick: () => navigate('/manage'),
-                },
-                {
-                  prefixIcon: mdiLogout,
-                  text: 'Logout',
-                  onClick: () => logout(),
-                  separate: true,
-                },
-              ]}
-            >
-              Welcome, {account.profile?.firstName} {account.profile?.lastName}
-            </AS3Dropdown>
-          ) : (
-            <>
-              <AS3Button
-                variant="outline-primary"
-                onClick={() => openLoginPopup()}
+          <Stack
+            className="ms-5"
+            direction="horizontal"
+            gap={3}>
+            {authenticated ? (
+              <AS3Dropdown
+                items={[
+                  {
+                    prefixIcon: mdiAccountCircle,
+                    text: 'Profile',
+                    onClick: () => navigate('/profile'),
+                  },
+                  {
+                    prefixIcon: mdiProgressStar,
+                    text: 'Management',
+                    onClick: () => navigate('/manage'),
+                  },
+                  {
+                    prefixIcon: mdiLogout,
+                    text: 'Logout',
+                    onClick: () => logout(),
+                    separate: true,
+                  },
+                ]}
               >
-                Login
-              </AS3Button>
+                Welcome, {account.profile?.firstName}{' '}
+                {account.profile?.lastName}
+              </AS3Dropdown>
+            ) : (
+              <>
+                <AS3Button
+                  variant="outline-primary"
+                  onClick={() => openLoginPopup()}
+                >
+                  Login
+                </AS3Button>
 
-              <AS3Button
-                variant="primary"
-                onClick={() => openRegisterPopup()}>
-                Register
-              </AS3Button>
-            </>
-          )}
-        </Stack>
-      </Container>
-    </Navbar>
+                <AS3Button
+                  variant="primary"
+                  onClick={() => openRegisterPopup()}
+                >
+                  Register
+                </AS3Button>
+              </>
+            )}
+          </Stack>
+        </Container>
+      </Navbar>
+      <Navbar className="as3-navbar">
+        <Container>
+          <div className="text-success w-100 text-center">0 Online</div>
+        </Container>
+      </Navbar>
+    </>
   )
 }

@@ -17,9 +17,17 @@ import { AS3Button, AS3Spacer, AS3Editor } from 'system/components'
 import { CommentsComponent } from './comments.component'
 import { AS3PostForm } from './as3-post-form.component'
 import { ReplyInputComponent } from './reply-input.component'
-import { CreatePostInput, UpdatePostInput } from 'system/generated/gql.types'
+import {
+  CreatePostInput,
+  PostRate,
+  Quality,
+  UpdatePostInput,
+} from 'system/generated/gql.types'
 
 import './as3-post-card.style.scss'
+import { useMutation } from '@apollo/client'
+import { Toast } from 'system/store'
+import { UPDATE_POST_RATE_MUTATION } from './gql'
 
 type AS3PostCardProps = CardProps & {
   data: Post
@@ -46,12 +54,23 @@ export function AS3PostCard({
     commentsCount,
     createdAt,
     creatorAccount,
+    score,
   } = data
 
-  const { account } = useAuth()
+  const { account, gqlContext } = useAuth()
   const navigate = useNavigate()
   const isMine = useMemo(() => creatorAccount?.id === account.id, [account])
-  const [state, setState] = useState({ editing: false })
+  const [state, setState] = useState({
+    editing: false,
+    postRate: score,
+  })
+
+  const [postRate_update] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
+    ...gqlContext,
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
 
   return state.editing ? (
     <AS3PostForm
@@ -71,14 +90,36 @@ export function AS3PostCard({
             size="sm"
             iconSize={0.8}
             text
+            onClick={() => {
+              postRate_update({
+                variables: {
+                  input: { postId: id, quality: Quality.GOOD },
+                },
+              })
+              setState({
+                ...state,
+                postRate: state.postRate + 1,
+              })
+            }}
           />
-          <span className="card-subtitle">34k</span>
+          <span className="card-subtitle">{state.postRate}</span>
           <AS3Button
             className="action px-1"
             icon={mdiArrowDownBoldOutline}
             size="sm"
             iconSize={0.8}
             text
+            onClick={() => {
+              postRate_update({
+                variables: {
+                  input: { postId: id, quality: Quality.BAD },
+                },
+              })
+              setState({
+                ...state,
+                postRate: state.postRate - 1,
+              })
+            }}
           />
         </Card.Body>
 

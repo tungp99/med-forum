@@ -15,6 +15,7 @@ export interface GetPosts_posts_items_creatorAccount {
 
 export interface GetPosts_posts_items {
   __typename: "Post";
+  score: number;
   id: string;
   title: string;
   markdownContent: string;
@@ -67,6 +68,7 @@ export interface GetMyPosts_posts_items_creatorAccount {
 
 export interface GetMyPosts_posts_items {
   __typename: "Post";
+  score: number;
   id: string;
   title: string;
   markdownContent: string;
@@ -122,12 +124,12 @@ export interface GetAccounts_accounts_items_profile {
 
 export interface GetAccounts_accounts_items {
   __typename: "Account";
+  writtenPostsCount: number;
   id: string;
   email: string;
   username: string;
   profile: GetAccounts_accounts_items_profile;
   isGod: boolean;
-  writtenPostsCount: number;
 }
 
 export interface GetAccounts_accounts_pageInfo {
@@ -175,12 +177,12 @@ export interface GetAllAccounts_accounts_items_profile {
 
 export interface GetAllAccounts_accounts_items {
   __typename: "Account";
+  writtenPostsCount: number;
   id: string;
   email: string;
   username: string;
   profile: GetAllAccounts_accounts_items_profile;
   isGod: boolean;
-  writtenPostsCount: number;
 }
 
 export interface GetAllAccounts_accounts_pageInfo {
@@ -238,6 +240,28 @@ export interface DeleteAccountVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: CreateAccount
+// ====================================================
+
+export interface CreateAccount_createAccount {
+  __typename: "Account";
+  id: string;
+}
+
+export interface CreateAccount {
+  createAccount: CreateAccount_createAccount;
+}
+
+export interface CreateAccountVariables {
+  input: CreateAccountInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetPost
 // ====================================================
 
@@ -275,6 +299,7 @@ export interface GetPost_post {
   title: string;
   markdownContent: string;
   commentsCount: number;
+  score: number;
   comments: GetPost_post_comments | null;
   creatorAccount: GetPost_post_creatorAccount | null;
   createdAt: any;
@@ -457,6 +482,29 @@ export interface UpdateEducation {
 
 export interface UpdateEducationVariables {
   input: ProfessionsInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: ChangePassword
+// ====================================================
+
+export interface ChangePassword_changePassword {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface ChangePassword {
+  changePassword: ChangePassword_changePassword;
+}
+
+export interface ChangePasswordVariables {
+  input: ChangePasswordInput;
 }
 
 /* tslint:disable */
@@ -699,9 +747,78 @@ export interface CreateCommentVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: PostRate
+// ====================================================
+
+export interface PostRate_ratePost {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface PostRate {
+  ratePost: PostRate_ratePost;
+}
+
+export interface PostRateVariables {
+  input: RatePostInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: postRate
+// ====================================================
+
+export interface postRate_posts_items {
+  __typename: "Post";
+  id: string;
+  score: number;
+}
+
+export interface postRate_posts {
+  __typename: "PostCollectionSegment";
+  items: postRate_posts_items[] | null;
+}
+
+export interface postRate {
+  posts: postRate_posts | null;
+}
+
+export interface postRateVariables {
+  postId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export enum Quality {
+  BAD = "BAD",
+  GOOD = "GOOD",
+}
+
+export interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface CreateAccountInput {
+  email: string;
+  username: string;
+  password: string;
+  profile: ProfileInput;
+}
 
 export interface CreateCommentInput {
   markdownContent: string;
@@ -740,6 +857,11 @@ export interface ProfileInput {
   lastName: string;
   phoneNumber: string;
   birthDate?: any | null;
+}
+
+export interface RatePostInput {
+  postId: string;
+  quality: Quality;
 }
 
 export interface RefreshTokenInput {

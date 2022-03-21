@@ -7,9 +7,9 @@ import { DeleteAccount } from 'system/generated/gql.types'
 import { DELETE_ACCOUNT_MUTATION } from '../gql'
 import { useAuth } from 'system/auth'
 
-type id = { id?: string }
+type DeleteModalComponentProps = { id?: string; onDeleted: () => void }
 
-export function AS3Delete($id: id) {
+export function AS3Delete(props: DeleteModalComponentProps) {
   const { gqlContext } = useAuth()
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
@@ -17,10 +17,13 @@ export function AS3Delete($id: id) {
     DELETE_ACCOUNT_MUTATION,
     {
       ...gqlContext,
+      onCompleted() {
+        props.onDeleted()
+      },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: { id: $id.id },
+      variables: { id: props.id },
     }
   )
 
@@ -52,7 +55,6 @@ export function AS3Delete($id: id) {
           onClick={() => {
             deleteAccount_fetch()
             dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })
-            dispatch({ type: 'DELETE_ID', payload: '0' })
           }}
         >
           Delete

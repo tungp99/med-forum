@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { Container, Row, Col } from 'react-bootstrap'
 
-import { Toast, useDispatch } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { ProfessionCardComponent } from './components/profession.card.component'
 import { OverviewCardComponent } from './components/overview.card.component'
@@ -20,11 +20,13 @@ import {
   UpdateEducation,
   UpdateExperience,
 } from 'system/generated/gql.types'
+import { ProfessionPopupComponent } from './components/profession-popup.component'
 
 export default function ProfilePage() {
   const { id } = useParams()
   const dispatch = useDispatch()
   const { account: currentAccount, gqlContext } = useAuth()
+  const { title } = useSelector(store => store.profilePage)
 
   const fetchAccountVariables = useMemo(
     () => ({ variables: { id: id ?? currentAccount.id } }),
@@ -89,39 +91,11 @@ export default function ProfilePage() {
             <ProfessionCardComponent
               title="Experience"
               data={data.account.profile.experience}
-              onAddNewItem={newProfession =>
-                data.account &&
-                updateExperience({
-                  variables: {
-                    input: {
-                      accountId: fetchAccountVariables.variables.id,
-                      professions: [
-                        ...data.account.profile.experience,
-                        newProfession,
-                      ],
-                    },
-                  },
-                })
-              }
             />
 
             <ProfessionCardComponent
               title="Education"
               data={data.account.profile.education}
-              onAddNewItem={newProfession =>
-                data.account &&
-                updateEducation({
-                  variables: {
-                    input: {
-                      accountId: fetchAccountVariables.variables.id,
-                      professions: [
-                        ...data.account.profile.experience,
-                        newProfession,
-                      ],
-                    },
-                  },
-                })
-              }
             />
           </Col>
 
@@ -134,6 +108,44 @@ export default function ProfilePage() {
           </Col>
         </Row>
       )}
+
+      <ProfessionPopupComponent
+        onSave={newProfession => {
+          if (title === 'Experience') {
+            data?.account &&
+              updateExperience({
+                variables: {
+                  input: {
+                    accountId: fetchAccountVariables.variables.id,
+                    professions: [
+                      ...data?.account.profile.experience.map(s => ({
+                        ...s,
+                        __typename: undefined,
+                      })),
+                      newProfession,
+                    ],
+                  },
+                },
+              })
+          } else {
+            data?.account &&
+              updateEducation({
+                variables: {
+                  input: {
+                    accountId: fetchAccountVariables.variables.id,
+                    professions: [
+                      ...data?.account.profile.education.map(s => ({
+                        ...s,
+                        __typename: undefined,
+                      })),
+                      newProfession,
+                    ],
+                  },
+                },
+              })
+          }
+        }}
+      />
     </Container>
   )
 }

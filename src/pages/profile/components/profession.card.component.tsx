@@ -6,21 +6,17 @@ import { Profession } from 'system/types'
 import { useDispatch } from 'system/store'
 import { AS3Avatar, AS3Button, AS3Spacer } from 'system/components'
 import { EditButtonComponent } from './edit-button.component'
-import { ProfessionPopupComponent } from './profession-popup.component'
 
 type ExperienceCardComponentProps = {
   title: string
   data: Profession[]
-  onAddNewItem: (data: Profession) => void
 }
 
 export function ProfessionCardComponent({
   title,
   data,
-  onAddNewItem,
 }: ExperienceCardComponentProps) {
   const dispatch = useDispatch()
-
   return (
     <Card className="experience">
       <Card.Body>
@@ -35,7 +31,9 @@ export function ProfessionCardComponent({
               icon={mdiPlus}
               iconSize={1.1}
               text
-              onClick={() => dispatch({ type: 'OPEN_PROFESSION_POPUP' })}
+              onClick={() =>
+                dispatch({ type: 'OPEN_PROFESSION_POPUP', payload: title })
+              }
             />
             <EditButtonComponent />
           </Stack>
@@ -64,8 +62,6 @@ export function ProfessionCardComponent({
           ))}
         </ListGroup>
       </Card.Body>
-
-      <ProfessionPopupComponent onSave={data => onAddNewItem(data)} />
     </Card>
   )
 }

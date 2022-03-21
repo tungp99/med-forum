@@ -8,6 +8,7 @@ export const GET_POST_QUERY = gql`
       title
       markdownContent
       commentsCount
+      score
       comments(order: { createdAt: DESC }) {
         items {
           id

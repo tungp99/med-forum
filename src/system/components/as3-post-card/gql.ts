@@ -61,3 +61,11 @@ export const CREATE_COMMENT_MUTATION = gql`
     }
   }
 `
+export const UPDATE_POST_RATE_MUTATION = gql`
+  mutation PostRate($input: RatePostInput!) {
+    ratePost(input: $input) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`

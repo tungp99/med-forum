@@ -59,3 +59,11 @@ export const UPDATE_EDUCATION_MUTATION = gql`
     }
   }
 `
+export const CHANGE_PASSWORD_MUTATION = gql`
+  mutation ChangePassword($input: ChangePasswordInput!) {
+    changePassword(input: $input) {
+      isSuccess
+      affectedRecords
+    }
+  }
+`
