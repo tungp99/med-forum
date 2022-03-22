@@ -64,10 +64,9 @@ export function ProfessionCardComponent({
                   iconSize={0.7}
                   className="delete__icon"
                   onClick={() => {
-                    console.log(item)
                     dispatch({
                       type: 'OPEN_DELETE_PROFESSION_POPUP',
-                      payload: item,
+                      payload: { data: item, title: title },
                     })
                   }}
                 ></AS3Button>

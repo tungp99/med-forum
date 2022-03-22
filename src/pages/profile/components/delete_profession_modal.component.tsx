@@ -3,9 +3,9 @@ import { mdiClose } from '@mdi/js'
 import { Modal } from 'react-bootstrap'
 import { useAuth } from 'system/auth'
 import { AS3Spacer, AS3Button } from 'system/components'
-import { RemoveExperience } from 'system/generated/gql.types'
+import { RemoveEducation, RemoveExperience } from 'system/generated/gql.types'
 import { Toast, useDispatch, useSelector } from 'system/store'
-import { REMOVE_EXPERIENCE_MUTATION } from '../gql'
+import { REMOVE_EDUCATION_MUTATION, REMOVE_EXPERIENCE_MUTATION } from '../gql'
 
 type DeleteProfessionComponentProps = { onDeleted: () => void }
 
@@ -13,11 +13,24 @@ export function DeleteProfession(props: DeleteProfessionComponentProps) {
   const { gqlContext } = useAuth()
   const state = useSelector(store => store.profilePage)
   const dispatch = useDispatch()
-  const [deleteProfession] = useMutation<RemoveExperience>(
+  const [deleteExperience] = useMutation<RemoveExperience>(
     REMOVE_EXPERIENCE_MUTATION,
     {
       ...gqlContext,
-      variables: { input: { ...state.DeleteInfo, __typename: undefined } },
+      variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
+      onCompleted() {
+        props.onDeleted()
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+  const [deleteEducation] = useMutation<RemoveEducation>(
+    REMOVE_EDUCATION_MUTATION,
+    {
+      ...gqlContext,
+      variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
       onCompleted() {
         props.onDeleted()
       },
@@ -54,7 +67,10 @@ export function DeleteProfession(props: DeleteProfessionComponentProps) {
         <AS3Button
           className="fs-6 btn-danger me-4"
           onClick={() => {
-            deleteProfession()
+            console.log(state.DeleteInfo.title)
+            state.DeleteInfo.title === 'Education'
+              ? deleteEducation()
+              : deleteExperience()
             dispatch({ type: 'CLOSE_DELETE_PROFESSION_POPUP' })
           }}
         >

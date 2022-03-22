@@ -20,6 +20,7 @@ import {
   UpdateProfileContact,
 } from 'system/generated/gql.types'
 import { UPDATE_PROFILE_CONTACT_MUTATION } from '../gql'
+import { locales } from 'system/plugins/index'
 
 type NameFormComponentProps = {
   data: Account
@@ -43,6 +44,11 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
       },
     }
   )
+  // const arrayLocales = [] as { text: string; value: string }[]
+  // for (const [value, key] of Object.entries(locales)) {
+  //   const item = { text: key, value: value }
+  //   arrayLocales.push(item)
+  // }
 
   const formValues = useMemo<UpdateAccountInput>(() => {
     const { id, username, profile } = data
@@ -173,13 +179,11 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
           control={control}
           name="profile.country"
           render={({ field: { onChange, value } }) => (
-            <AS3Select
+            <AS3Input
               label="Country"
               size="lg"
-              items={[
-                { text: 'Vietnam', value: 'VN' },
-                { text: 'America', value: 'US' },
-              ]}
+              onChange={onChange}
+              value={value ?? ''}
             />
           )}
         />

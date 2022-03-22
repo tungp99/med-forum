@@ -6,16 +6,19 @@ type Store = {
   isProfessionPopupOpen: boolean
   isSecurityPopupOpen: boolean
   isDeleteProfessionPopupOpen: boolean
-  DeleteInfo: Profession
+  DeleteInfo: { data: Profession; title: string }
 }
 
 const initialState: Store = {
   DeleteInfo: {
-    organization: '',
-    end: '',
-    isWorking: false,
-    position: '',
-    start: '',
+    data: {
+      organization: '',
+      end: '',
+      isWorking: false,
+      position: '',
+      start: '',
+    },
+    title: '',
   },
   title: '',
   isProfessionPopupOpen: false,
@@ -30,7 +33,7 @@ export const profilePageStore = (
     | 'CLOSE_PROFESSION_POPUP'
     | 'OPEN_DELETE_PROFESSION_POPUP'
     | 'CLOSE_DELETE_PROFESSION_POPUP',
-    Profession | string
+    { data: Profession; title: string } | string
   >
 ): Store => {
   switch (action.type) {
@@ -50,7 +53,7 @@ export const profilePageStore = (
       return {
         ...state,
         isDeleteProfessionPopupOpen: true,
-        DeleteInfo: action.payload as Profession,
+        DeleteInfo: action.payload as { data: Profession; title: string },
       }
     case 'CLOSE_DELETE_PROFESSION_POPUP':
       return {
