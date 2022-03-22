@@ -8,36 +8,33 @@ import { mdiEarth } from '@mdi/js'
 import { Account } from 'system/types'
 import { useAuth } from 'system/auth'
 import { Toast } from 'system/store'
-import {
-  AS3Button,
-  AS3Input,
-  AS3Select,
-  AS3Spacer,
-  AS3Switch,
-} from 'system/components'
+import { AS3Button, AS3Input, AS3Spacer, AS3Switch } from 'system/components'
 import {
   UpdateAccountInput,
   UpdateProfileContact,
 } from 'system/generated/gql.types'
 import { UPDATE_PROFILE_CONTACT_MUTATION } from '../gql'
-import { locales } from 'system/plugins/index'
+// import { locales } from 'system/plugins/index'
 
 type NameFormComponentProps = {
   data: Account
+  onSave: () => void
 }
 
-export function NameFormComponent({ data }: NameFormComponentProps) {
+export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
   const { gqlContext } = useAuth()
   const [save, { loading }] = useMutation<UpdateProfileContact>(
     UPDATE_PROFILE_CONTACT_MUTATION,
     {
       ...gqlContext,
       onCompleted({ updateAccount: response }) {
-        response.affectedRecords === 1 &&
+        if (response.affectedRecords === 1) {
           Toast.success({
             title: 'Updated profile successfully!',
             content: 'Changes will be applied in several minutes',
           })
+          onSave()
+        }
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -191,7 +188,6 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
           <AS3Spacer />
           <AS3Button
             variant="primary"
-            loading={loading}
             disabled={loading}
             onClick={handleSubmit(data =>
               save({ variables: { input: { ...data } } })

@@ -48,3 +48,10 @@ export type Post = Entity & {
   creatorAccount: Partial<Account> | null
   score: number
 }
+
+export type Qualification = {
+  title: string
+  issuedBy: string
+  issuedAt: string
+  expireAt: string
+}

@@ -1,12 +1,13 @@
 import { StoreAction } from 'system/store'
-import { Profession } from 'system/types'
+import { Profession, Qualification } from 'system/types'
 
 type Store = {
   title?: string
   isProfessionPopupOpen: boolean
   isSecurityPopupOpen: boolean
   isDeleteProfessionPopupOpen: boolean
-  DeleteInfo: { data: Profession; title: string }
+  DeleteInfo: { data: Profession | Qualification; title: string }
+  isQualificationPopupOpen: boolean
 }
 
 const initialState: Store = {
@@ -24,6 +25,7 @@ const initialState: Store = {
   isProfessionPopupOpen: false,
   isSecurityPopupOpen: false,
   isDeleteProfessionPopupOpen: false,
+  isQualificationPopupOpen: false,
 }
 
 export const profilePageStore = (
@@ -32,8 +34,10 @@ export const profilePageStore = (
     | 'OPEN_PROFESSION_POPUP'
     | 'CLOSE_PROFESSION_POPUP'
     | 'OPEN_DELETE_PROFESSION_POPUP'
-    | 'CLOSE_DELETE_PROFESSION_POPUP',
-    { data: Profession; title: string } | string
+    | 'CLOSE_DELETE_PROFESSION_POPUP'
+    | 'OPEN_QUALIFICATION_POPUP'
+    | 'CLOSE_QUALIFICATION_POPUP',
+    { data: Profession | Qualification; title: string } | string
   >
 ): Store => {
   switch (action.type) {
@@ -53,13 +57,27 @@ export const profilePageStore = (
       return {
         ...state,
         isDeleteProfessionPopupOpen: true,
-        DeleteInfo: action.payload as { data: Profession; title: string },
+        DeleteInfo: action.payload as {
+          data: Profession | Qualification
+          title: string
+        },
       }
     case 'CLOSE_DELETE_PROFESSION_POPUP':
       return {
         ...state,
         isDeleteProfessionPopupOpen: false,
       }
+    case 'OPEN_QUALIFICATION_POPUP':
+      return {
+        ...state,
+        isQualificationPopupOpen: true,
+      }
+    case 'CLOSE_QUALIFICATION_POPUP':
+      return {
+        ...state,
+        isQualificationPopupOpen: false,
+      }
+
     default:
       return state
   }

@@ -13,6 +13,12 @@ export const GET_ACCOUNT_QUERY = gql`
         lastName
         birthDate
         phoneNumber
+        qualifications {
+          title
+          issuedBy
+          issuedAt
+          expireAt
+        }
         experience {
           organization
           start
@@ -42,7 +48,13 @@ export const UPDATE_PROFILE_CONTACT_MUTATION = gql`
     }
   }
 `
-
+export const UPDATE_QUALIFICATION_MUTATION = gql`
+  mutation updateQualification($input: QualificationInput!) {
+    addQualification(input: $input) {
+      isSuccess
+    }
+  }
+`
 export const ADD_EXPERIENCE_MUTATION = gql`
   mutation AddExperience($input: ProfessionInput!) {
     addExperience(input: $input) {

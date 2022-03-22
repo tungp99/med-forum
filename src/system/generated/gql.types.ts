@@ -368,6 +368,14 @@ export interface UpdatePostVariables {
 // GraphQL query operation: GetAccount
 // ====================================================
 
+export interface GetAccount_account_profile_qualifications {
+  __typename: "Qualification";
+  title: string;
+  issuedBy: string;
+  issuedAt: any;
+  expireAt: any;
+}
+
 export interface GetAccount_account_profile_experience {
   __typename: "Profession";
   organization: string;
@@ -394,6 +402,7 @@ export interface GetAccount_account_profile {
   lastName: string;
   birthDate: any | null;
   phoneNumber: string;
+  qualifications: GetAccount_account_profile_qualifications[];
   experience: GetAccount_account_profile_experience[];
   education: GetAccount_account_profile_education[];
 }
@@ -437,6 +446,28 @@ export interface UpdateProfileContact {
 
 export interface UpdateProfileContactVariables {
   input: UpdateAccountInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: updateQualification
+// ====================================================
+
+export interface updateQualification_addQualification {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+}
+
+export interface updateQualification {
+  addQualification: updateQualification_addQualification;
+}
+
+export interface updateQualificationVariables {
+  input: QualificationInput;
 }
 
 /* tslint:disable */

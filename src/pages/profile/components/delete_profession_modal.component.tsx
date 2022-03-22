@@ -3,9 +3,17 @@ import { mdiClose } from '@mdi/js'
 import { Modal } from 'react-bootstrap'
 import { useAuth } from 'system/auth'
 import { AS3Spacer, AS3Button } from 'system/components'
-import { RemoveEducation, RemoveExperience } from 'system/generated/gql.types'
+import {
+  RemoveEducation,
+  RemoveExperience,
+  RemoveQualification,
+} from 'system/generated/gql.types'
 import { Toast, useDispatch, useSelector } from 'system/store'
-import { REMOVE_EDUCATION_MUTATION, REMOVE_EXPERIENCE_MUTATION } from '../gql'
+import {
+  REMOVE_EDUCATION_MUTATION,
+  REMOVE_EXPERIENCE_MUTATION,
+  REMOVE_QUALIFICATION_MUTATION,
+} from '../gql'
 
 type DeleteProfessionComponentProps = { onDeleted: () => void }
 
@@ -28,6 +36,19 @@ export function DeleteProfession(props: DeleteProfessionComponentProps) {
   )
   const [deleteEducation] = useMutation<RemoveEducation>(
     REMOVE_EDUCATION_MUTATION,
+    {
+      ...gqlContext,
+      variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
+      onCompleted() {
+        props.onDeleted()
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+  const [deleteQualification] = useMutation<RemoveQualification>(
+    REMOVE_QUALIFICATION_MUTATION,
     {
       ...gqlContext,
       variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
@@ -70,6 +91,8 @@ export function DeleteProfession(props: DeleteProfessionComponentProps) {
             console.log(state.DeleteInfo.title)
             state.DeleteInfo.title === 'Education'
               ? deleteEducation()
+              : state.DeleteInfo.title === ''
+              ? deleteQualification()
               : deleteExperience()
             dispatch({ type: 'CLOSE_DELETE_PROFESSION_POPUP' })
           }}

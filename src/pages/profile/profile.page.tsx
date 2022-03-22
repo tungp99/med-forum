@@ -14,14 +14,18 @@ import {
   ADD_EDUCATION_MUTATION,
   ADD_EXPERIENCE_MUTATION,
   GET_ACCOUNT_QUERY,
+  UPDATE_QUALIFICATION_MUTATION,
 } from './gql'
 import {
   AddEducation,
   AddExperience,
   GetAccount,
+  updateQualification,
 } from 'system/generated/gql.types'
 import { ProfessionPopupComponent } from './components/profession-popup.component'
 import { DeleteProfession } from './components/delete_profession_modal.component'
+import { QualificationCardComponent } from './components/qualification.card.component'
+import { QualificationPopup } from './components/qualification_popup.component'
 
 export default function ProfilePage() {
   const { id } = useParams()
@@ -46,6 +50,20 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchAccount(fetchAccountVariables)
   }, [fetchAccountVariables])
+
+  const [updateQualification] = useMutation<updateQualification>(
+    UPDATE_QUALIFICATION_MUTATION,
+    {
+      ...gqlContext,
+      onCompleted() {
+        dispatch({ type: 'CLOSE_QUALIFICATION_POPUP' })
+        fetchAccount(fetchAccountVariables)
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
 
   const [addExperience] = useMutation<AddExperience>(ADD_EXPERIENCE_MUTATION, {
     ...gqlContext,
@@ -82,7 +100,9 @@ export default function ProfilePage() {
             sm={12}
             md={8}>
             <OverviewCardComponent data={data.account.profile} />
-
+            <QualificationCardComponent
+              data={data.account.profile.qualifications}
+            ></QualificationCardComponent>
             <ProfessionCardComponent
               title="Experience"
               data={data.account.profile.experience}
@@ -97,7 +117,10 @@ export default function ProfilePage() {
           <Col
             sm={12}
             md={4}>
-            <NameFormComponent data={data.account} />
+            <NameFormComponent
+              data={data.account}
+              onSave={() => fetchAccount(fetchAccountVariables)}
+            />
 
             <SecurityFormComponent />
           </Col>
@@ -129,6 +152,14 @@ export default function ProfilePage() {
           }
         }}
       />
+      <QualificationPopup
+        onSave={newQualification => {
+          data?.account &&
+            updateQualification({
+              variables: { input: newQualification },
+            })
+        }}
+      ></QualificationPopup>
       <DeleteProfession
         onDeleted={() => {
           fetchAccount(fetchAccountVariables)

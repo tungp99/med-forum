@@ -1,38 +1,31 @@
+import { mdiPlus, mdiMinus } from '@mdi/js'
 import { DateTime } from 'luxon'
-import { Card, ListGroup, Stack } from 'react-bootstrap'
-import { mdiMinus, mdiPlus } from '@mdi/js'
-
-import { Profession } from 'system/types'
+import { Card, Stack, ListGroup } from 'react-bootstrap'
+import { AS3Spacer, AS3Button, AS3Avatar } from 'system/components'
 import { useDispatch } from 'system/store'
-import { AS3Avatar, AS3Button, AS3Spacer } from 'system/components'
+import { Qualification } from 'system/types'
 
-type ExperienceCardComponentProps = {
-  title: string
-  data: Profession[]
-}
+type QualificationCardComponentProps = { data: Qualification[] }
 
-export function ProfessionCardComponent({
-  title,
+export function QualificationCardComponent({
   data,
-}: ExperienceCardComponentProps) {
+}: QualificationCardComponentProps) {
   const dispatch = useDispatch()
   return (
     <Card className="experience">
       <Card.Body>
         <Card.Title>
-          {title}
+          Qualification
           <AS3Spacer />
           <Stack
             direction="horizontal"
             gap={2}>
             <AS3Button
-              className="btn-edit "
+              className="btn-edit"
               icon={mdiPlus}
               iconSize={1}
               text
-              onClick={() =>
-                dispatch({ type: 'OPEN_PROFESSION_POPUP', payload: title })
-              }
+              onClick={() => dispatch({ type: 'OPEN_QUALIFICATION_POPUP' })}
             />
           </Stack>
         </Card.Title>
@@ -46,14 +39,22 @@ export function ProfessionCardComponent({
                 width={48}
                 height={48} />
               <p className="ps-3 mb-0 w-100">
-                <span className="fw-bold">{item.position}</span> <br />
-                <span>{item.organization}</span> <br />
+                <span className="fw-bold">{item.title}</span> <br />
+                <span>Issued by {item.issuedBy}</span> <br />
                 <span className="text-black-50">
-                  {item.start &&
-                    DateTime.fromISO(item.start).toLocaleString(
+                  Date:{' '}
+                  {item.issuedAt &&
+                    DateTime.fromISO(item.issuedAt).toLocaleString(
                       DateTime.DATE_MED
                     )}{' '}
-                  - {item.isWorking && 'Present'}
+                  -{' '}
+                  <span>
+                    Expire:{' '}
+                    {item.expireAt &&
+                      DateTime.fromISO(item.expireAt).toLocaleString(
+                        DateTime.DATE_MED
+                      )}
+                  </span>
                 </span>
               </p>
               <div className="text-end">
@@ -66,7 +67,7 @@ export function ProfessionCardComponent({
                   onClick={() => {
                     dispatch({
                       type: 'OPEN_DELETE_PROFESSION_POPUP',
-                      payload: { data: item, title: title },
+                      payload: { data: item, title: '' },
                     })
                   }}
                 ></AS3Button>
