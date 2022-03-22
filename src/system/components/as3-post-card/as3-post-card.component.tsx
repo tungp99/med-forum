@@ -63,10 +63,19 @@ export function AS3PostCard({
   const [state, setState] = useState({
     editing: false,
     postRate: score,
+    rateState: false,
   })
 
   const [postRate_update] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
     ...gqlContext,
+    onCompleted(reponse) {
+      console.log(state.rateState)
+
+      if (reponse.ratePost.isSuccess)
+        state.rateState === true
+          ? setState({ ...state, postRate: state.postRate + 1 })
+          : setState({ ...state, postRate: state.postRate - 1 })
+    },
     onError({ name, message }) {
       Toast.error({ title: name, content: message })
     },
@@ -96,10 +105,6 @@ export function AS3PostCard({
                   input: { postId: id, quality: Quality.GOOD },
                 },
               })
-              setState({
-                ...state,
-                postRate: state.postRate + 1,
-              })
             }}
           />
           <span className="card-subtitle">{state.postRate}</span>
@@ -114,10 +119,6 @@ export function AS3PostCard({
                 variables: {
                   input: { postId: id, quality: Quality.BAD },
                 },
-              })
-              setState({
-                ...state,
-                postRate: state.postRate - 1,
               })
             }}
           />
