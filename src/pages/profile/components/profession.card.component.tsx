@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { Card, ListGroup, Stack } from 'react-bootstrap'
-import { mdiPlus } from '@mdi/js'
+import { mdiMinus, mdiPlus } from '@mdi/js'
 
 import { Profession } from 'system/types'
 import { useDispatch } from 'system/store'
@@ -45,7 +45,7 @@ export function ProfessionCardComponent({
               <AS3Avatar
                 width={48}
                 height={48} />
-              <p className="ps-3 mb-0">
+              <p className="ps-3 mb-0 w-100">
                 <span className="fw-bold">{item.position}</span> <br />
                 <span>{item.organization}</span> <br />
                 <span className="text-black-50">
@@ -55,9 +55,23 @@ export function ProfessionCardComponent({
                     )}{' '}
                   - {item.isWorking && 'Present'}
                 </span>
-                <br />
-                <span className="text-black-50">Hanoi, Vietnam</span> <br />
               </p>
+              <div className="text-end">
+                <AS3Button
+                  icon={mdiMinus}
+                  text
+                  size="sm"
+                  iconSize={0.7}
+                  className="delete__icon"
+                  onClick={() => {
+                    console.log(item)
+                    dispatch({
+                      type: 'OPEN_DELETE_PROFESSION_POPUP',
+                      payload: item,
+                    })
+                  }}
+                ></AS3Button>
+              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>

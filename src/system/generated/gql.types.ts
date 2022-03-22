@@ -389,6 +389,7 @@ export interface GetAccount_account_profile_education {
 export interface GetAccount_account_profile {
   __typename: "Profile";
   isPublic: boolean;
+  country: string;
   firstName: string;
   lastName: string;
   birthDate: any | null;
@@ -505,6 +506,72 @@ export interface ChangePassword {
 
 export interface ChangePasswordVariables {
   input: ChangePasswordInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveExperience
+// ====================================================
+
+export interface RemoveExperience_removeExperience {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+}
+
+export interface RemoveExperience {
+  removeExperience: RemoveExperience_removeExperience;
+}
+
+export interface RemoveExperienceVariables {
+  input: ProfessionInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveEducation
+// ====================================================
+
+export interface RemoveEducation_removeEducation {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+}
+
+export interface RemoveEducation {
+  removeEducation: RemoveEducation_removeEducation;
+}
+
+export interface RemoveEducationVariables {
+  input: ProfessionInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveQualification
+// ====================================================
+
+export interface RemoveQualification_removeQualification {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+}
+
+export interface RemoveQualification {
+  removeQualification: RemoveQualification_removeQualification;
+}
+
+export interface RemoveQualificationVariables {
+  input: QualificationInput;
 }
 
 /* tslint:disable */
@@ -827,6 +894,14 @@ export interface ProfileInput {
   country?: string | null;
   phoneNumber: string;
   birthDate?: any | null;
+}
+
+export interface QualificationInput {
+  accountId?: string | null;
+  title: string;
+  issuedBy: string;
+  issuedAt: any;
+  expireAt: any;
 }
 
 export interface RatePostInput {

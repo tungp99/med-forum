@@ -11,7 +11,7 @@ type OverviewCardComponentProps = {
 }
 
 export function OverviewCardComponent({
-  data: { firstName, lastName },
+  data: { firstName, lastName, country },
 }: OverviewCardComponentProps) {
   return (
     <Card className="overview">
@@ -31,7 +31,7 @@ export function OverviewCardComponent({
             {firstName} {lastName}
           </Card.Title>
           <Card.Subtitle className="mb-2">Doctor</Card.Subtitle>
-          <Card.Subtitle className="location">Hanoi, Vietnam</Card.Subtitle>
+          <Card.Subtitle className="location">{country}</Card.Subtitle>
         </Card.Body>
 
         <ListGroup

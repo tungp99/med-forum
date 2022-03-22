@@ -21,6 +21,7 @@ import {
   GetAccount,
 } from 'system/generated/gql.types'
 import { ProfessionPopupComponent } from './components/profession-popup.component'
+import { DeleteProfession } from './components/delete_profession_modal.component'
 
 export default function ProfilePage() {
   const { id } = useParams()
@@ -128,6 +129,11 @@ export default function ProfilePage() {
           }
         }}
       />
+      <DeleteProfession
+        onDeleted={() => {
+          fetchAccount(fetchAccountVariables)
+        }}
+      ></DeleteProfession>
     </Container>
   )
 }

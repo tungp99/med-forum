@@ -8,7 +8,13 @@ import { mdiEarth } from '@mdi/js'
 import { Account } from 'system/types'
 import { useAuth } from 'system/auth'
 import { Toast } from 'system/store'
-import { AS3Button, AS3Input, AS3Spacer, AS3Switch } from 'system/components'
+import {
+  AS3Button,
+  AS3Input,
+  AS3Select,
+  AS3Spacer,
+  AS3Switch,
+} from 'system/components'
 import {
   UpdateAccountInput,
   UpdateProfileContact,
@@ -52,6 +58,7 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
         birthDate: profile.birthDate
           ? DateTime.fromISO(profile.birthDate).toISODate()
           : null,
+        country: profile.country,
       },
     }
   }, [data])
@@ -162,7 +169,20 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
             />
           )}
         />
-
+        <Controller
+          control={control}
+          name="profile.country"
+          render={({ field: { onChange, value } }) => (
+            <AS3Select
+              label="Country"
+              size="lg"
+              items={[
+                { text: 'Vietnam', value: 'VN' },
+                { text: 'America', value: 'US' },
+              ]}
+            />
+          )}
+        />
         <Stack direction="horizontal">
           <AS3Spacer />
           <AS3Button

@@ -1,39 +1,40 @@
-import { Modal } from 'react-bootstrap'
-import { Toast, useDispatch, useSelector } from 'system/store'
-import { AS3Button, AS3Spacer } from 'system/components'
-import { mdiClose } from '@mdi/js'
 import { useMutation } from '@apollo/client'
-import { DeleteAccount } from 'system/generated/gql.types'
-import { DELETE_ACCOUNT_MUTATION } from '../gql'
+import { mdiClose } from '@mdi/js'
+import { Modal } from 'react-bootstrap'
 import { useAuth } from 'system/auth'
+import { AS3Spacer, AS3Button } from 'system/components'
+import { RemoveExperience } from 'system/generated/gql.types'
+import { Toast, useDispatch, useSelector } from 'system/store'
+import { REMOVE_EXPERIENCE_MUTATION } from '../gql'
 
-type DeleteUserComponentProps = { id?: string; onDeleted: () => void }
+type DeleteProfessionComponentProps = { onDeleted: () => void }
 
-export function DeleteUser(props: DeleteUserComponentProps) {
+export function DeleteProfession(props: DeleteProfessionComponentProps) {
   const { gqlContext } = useAuth()
-  const state = useSelector(store => store.managementPage)
+  const state = useSelector(store => store.profilePage)
   const dispatch = useDispatch()
-  const [deleteAccount_fetch] = useMutation<DeleteAccount>(
-    DELETE_ACCOUNT_MUTATION,
+  const [deleteProfession] = useMutation<RemoveExperience>(
+    REMOVE_EXPERIENCE_MUTATION,
     {
       ...gqlContext,
+      variables: { input: { ...state.DeleteInfo, __typename: undefined } },
       onCompleted() {
         props.onDeleted()
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: { id: props.id },
     }
   )
-
   return (
     <Modal
       className=" pb-0"
       centered
       size="lg"
-      show={state.isDeleteUserPopupActive}
-      onEscapeKeyDown={() => dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })}
+      show={state.isDeleteProfessionPopupOpen}
+      onEscapeKeyDown={() =>
+        dispatch({ type: 'CLOSE_DELETE_PROFESSION_POPUP' })
+      }
     >
       <Modal.Header className="border-bottom-0 p-0">
         <AS3Spacer />
@@ -42,7 +43,7 @@ export function DeleteUser(props: DeleteUserComponentProps) {
           size="lg"
           icon={mdiClose}
           iconSize={1.2}
-          onClick={() => dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })}
+          onClick={() => dispatch({ type: 'CLOSE_DELETE_PROFESSION_POPUP' })}
         ></AS3Button>
       </Modal.Header>
 
@@ -53,8 +54,8 @@ export function DeleteUser(props: DeleteUserComponentProps) {
         <AS3Button
           className="fs-6 btn-danger me-4"
           onClick={() => {
-            deleteAccount_fetch()
-            dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })
+            deleteProfession()
+            dispatch({ type: 'CLOSE_DELETE_PROFESSION_POPUP' })
           }}
         >
           Delete
@@ -62,7 +63,7 @@ export function DeleteUser(props: DeleteUserComponentProps) {
         <AS3Button
           className="fs-6 btn-light ms-4"
           onClick={() => {
-            dispatch({ type: 'CLOSE_DELETE_USER_POPUP' })
+            dispatch({ type: 'CLOSE_DELETE_PROFESSION_POPUP' })
           }}
         >
           Cancel

@@ -8,6 +8,7 @@ export const GET_ACCOUNT_QUERY = gql`
       username
       profile {
         isPublic
+        country
         firstName
         lastName
         birthDate
@@ -64,6 +65,27 @@ export const CHANGE_PASSWORD_MUTATION = gql`
     changePassword(input: $input) {
       isSuccess
       affectedRecords
+    }
+  }
+`
+export const REMOVE_EXPERIENCE_MUTATION = gql`
+  mutation RemoveExperience($input: ProfessionInput!) {
+    removeExperience(input: $input) {
+      isSuccess
+    }
+  }
+`
+export const REMOVE_EDUCATION_MUTATION = gql`
+  mutation RemoveEducation($input: ProfessionInput!) {
+    removeEducation(input: $input) {
+      isSuccess
+    }
+  }
+`
+export const REMOVE_QUALIFICATION_MUTATION = gql`
+  mutation RemoveQualification($input: QualificationInput!) {
+    removeQualification(input: $input) {
+      isSuccess
     }
   }
 `
