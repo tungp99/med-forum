@@ -1,7 +1,7 @@
 @import '/src/system/assets/styles/_variables';
 
 .as3-post-card {
-  transition: $transition;
+  // transition: $transition;
   margin-bottom: map-get($spacers, 3);
 
   &.navigation-enabled:hover {

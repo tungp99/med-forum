@@ -6,6 +6,7 @@ import { AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { GET_POST_QUERY } from './gql'
 import { GetPost } from 'system/generated/gql.types'
 import { useEffect } from 'react'
+import { DateTime } from 'luxon'
 
 export default function PostPage() {
   const { processor } = useSelector(store => store.post)
@@ -27,6 +28,9 @@ export default function PostPage() {
   if (loading || !data?.post) {
     return <>fetching, wait for it</>
   }
+
+  console.log(DateTime.now().startOf('week').toJSDate())
+  console.log(DateTime.now().endOf('week').toJSDate())
 
   return (
     <AS3LayoutWithSidebar sidebar={<span>hello</span>}>

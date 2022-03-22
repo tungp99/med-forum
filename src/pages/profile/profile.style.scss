@@ -55,17 +55,19 @@
   }
 
   .experience {
-    .delete__icon {
-      visibility: hidden;
-    }
     .list-group-item {
       display: flex;
       flex-direction: row;
-    }
-  }
-  .experience:hover {
-    .delete__icon {
-      visibility: visible;
+
+      .delete__icon {
+        visibility: hidden;
+      }
+
+      &:hover {
+        .delete__icon {
+          visibility: visible;
+        }
+      }
     }
   }
 }
