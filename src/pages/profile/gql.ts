@@ -42,18 +42,18 @@ export const UPDATE_PROFILE_CONTACT_MUTATION = gql`
   }
 `
 
-export const UPDATE_EXPERIENCE_MUTATION = gql`
-  mutation UpdateExperience($input: ProfessionsInput!) {
-    updateExperience(input: $input) {
+export const ADD_EXPERIENCE_MUTATION = gql`
+  mutation AddExperience($input: ProfessionInput!) {
+    addExperience(input: $input) {
       isSuccess
       affectedRecords
     }
   }
 `
 
-export const UPDATE_EDUCATION_MUTATION = gql`
-  mutation UpdateEducation($input: ProfessionsInput!) {
-    updateEducation(input: $input) {
+export const ADD_EDUCATION_MUTATION = gql`
+  mutation AddEducation($input: ProfessionInput!) {
+    addEducation(input: $input) {
       isSuccess
       affectedRecords
     }

@@ -11,14 +11,14 @@ import { NameFormComponent } from './components/name.form.component'
 import { SecurityFormComponent } from './components/security.form.component'
 import './profile.style.scss'
 import {
+  ADD_EDUCATION_MUTATION,
+  ADD_EXPERIENCE_MUTATION,
   GET_ACCOUNT_QUERY,
-  UPDATE_EDUCATION_MUTATION,
-  UPDATE_EXPERIENCE_MUTATION,
 } from './gql'
 import {
+  AddEducation,
+  AddExperience,
   GetAccount,
-  UpdateEducation,
-  UpdateExperience,
 } from 'system/generated/gql.types'
 import { ProfessionPopupComponent } from './components/profession-popup.component'
 
@@ -46,33 +46,27 @@ export default function ProfilePage() {
     fetchAccount(fetchAccountVariables)
   }, [fetchAccountVariables])
 
-  const [updateExperience] = useMutation<UpdateExperience>(
-    UPDATE_EXPERIENCE_MUTATION,
-    {
-      ...gqlContext,
-      onCompleted({ updateExperience: response }) {
-        dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
-        response.affectedRecords && fetchAccount(fetchAccountVariables)
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+  const [addExperience] = useMutation<AddExperience>(ADD_EXPERIENCE_MUTATION, {
+    ...gqlContext,
+    onCompleted({ addExperience: response }) {
+      dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
+      response.affectedRecords && fetchAccount(fetchAccountVariables)
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
 
-  const [updateEducation] = useMutation<UpdateEducation>(
-    UPDATE_EDUCATION_MUTATION,
-    {
-      ...gqlContext,
-      onCompleted({ updateEducation: response }) {
-        dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
-        response.affectedRecords && fetchAccount(fetchAccountVariables)
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+  const [addEducation] = useMutation<AddEducation>(ADD_EDUCATION_MUTATION, {
+    ...gqlContext,
+    onCompleted({ addEducation: response }) {
+      dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
+      response.affectedRecords && fetchAccount(fetchAccountVariables)
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
 
   return (
     <Container
@@ -113,33 +107,21 @@ export default function ProfilePage() {
         onSave={newProfession => {
           if (title === 'Experience') {
             data?.account &&
-              updateExperience({
+              addExperience({
                 variables: {
                   input: {
+                    ...newProfession,
                     accountId: fetchAccountVariables.variables.id,
-                    professions: [
-                      ...data?.account.profile.experience.map(s => ({
-                        ...s,
-                        __typename: undefined,
-                      })),
-                      newProfession,
-                    ],
                   },
                 },
               })
           } else {
             data?.account &&
-              updateEducation({
+              addEducation({
                 variables: {
                   input: {
+                    ...newProfession,
                     accountId: fetchAccountVariables.variables.id,
-                    professions: [
-                      ...data?.account.profile.education.map(s => ({
-                        ...s,
-                        __typename: undefined,
-                      })),
-                      newProfession,
-                    ],
                   },
                 },
               })

@@ -10,7 +10,7 @@
 export interface GetPosts_posts_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string;
+  username: string | null;
 }
 
 export interface GetPosts_posts_items {
@@ -63,7 +63,7 @@ export interface GetPostsVariables {
 export interface GetMyPosts_posts_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string;
+  username: string | null;
 }
 
 export interface GetMyPosts_posts_items {
@@ -127,7 +127,7 @@ export interface GetAccounts_accounts_items {
   writtenPostsCount: number;
   id: string;
   email: string;
-  username: string;
+  username: string | null;
   profile: GetAccounts_accounts_items_profile;
   isGod: boolean;
 }
@@ -180,7 +180,7 @@ export interface GetAllAccounts_accounts_items {
   writtenPostsCount: number;
   id: string;
   email: string;
-  username: string;
+  username: string | null;
   profile: GetAllAccounts_accounts_items_profile;
   isGod: boolean;
 }
@@ -268,7 +268,7 @@ export interface CreateAccountVariables {
 export interface GetPost_post_comments_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string;
+  username: string | null;
 }
 
 export interface GetPost_post_comments_items {
@@ -289,7 +289,7 @@ export interface GetPost_post_comments {
 export interface GetPost_post_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string;
+  username: string | null;
 }
 
 export interface GetPost_post {
@@ -401,7 +401,7 @@ export interface GetAccount_account {
   __typename: "Account";
   id: string;
   email: string;
-  username: string;
+  username: string | null;
   profile: GetAccount_account_profile;
   createdAt: any;
   updatedAt: any;
@@ -444,21 +444,21 @@ export interface UpdateProfileContactVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: UpdateExperience
+// GraphQL mutation operation: AddExperience
 // ====================================================
 
-export interface UpdateExperience_updateExperience {
+export interface AddExperience_addExperience {
   __typename: "UpdateEntityPayload";
   isSuccess: boolean;
   affectedRecords: number;
 }
 
-export interface UpdateExperience {
-  updateExperience: UpdateExperience_updateExperience;
+export interface AddExperience {
+  addExperience: AddExperience_addExperience;
 }
 
-export interface UpdateExperienceVariables {
-  input: ProfessionsInput;
+export interface AddExperienceVariables {
+  input: ProfessionInput;
 }
 
 /* tslint:disable */
@@ -467,21 +467,21 @@ export interface UpdateExperienceVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: UpdateEducation
+// GraphQL mutation operation: AddEducation
 // ====================================================
 
-export interface UpdateEducation_updateEducation {
+export interface AddEducation_addEducation {
   __typename: "UpdateEntityPayload";
   isSuccess: boolean;
   affectedRecords: number;
 }
 
-export interface UpdateEducation {
-  updateEducation: UpdateEducation_updateEducation;
+export interface AddEducation {
+  addEducation: AddEducation_addEducation;
 }
 
-export interface UpdateEducationVariables {
-  input: ProfessionsInput;
+export interface AddEducationVariables {
+  input: ProfessionInput;
 }
 
 /* tslint:disable */
@@ -599,7 +599,7 @@ export interface GetMe_me {
   __typename: "Account";
   id: string;
   email: string;
-  username: string;
+  username: string | null;
   profile: GetMe_me_profile;
   createdAt: any;
   updatedAt: any;
@@ -621,7 +621,7 @@ export interface GetMe {
 export interface GetComments_comments_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string;
+  username: string | null;
 }
 
 export interface GetComments_comments_items {
@@ -672,7 +672,7 @@ export interface GetCommentsVariables {
 export interface GetReplies_replies_items_creatorAccount {
   __typename: "Account";
   id: string;
-  username: string;
+  username: string | null;
 }
 
 export interface GetReplies_replies_items {
@@ -721,7 +721,7 @@ export interface GetRepliesVariables {
 
 export interface CreateComment_createComment_creatorAccount {
   __typename: "Account";
-  username: string;
+  username: string | null;
 }
 
 export interface CreateComment_createComment {
@@ -752,9 +752,10 @@ export interface CreateCommentVariables {
 // ====================================================
 
 export interface PostRate_ratePost {
-  __typename: "UpdateEntityPayload";
+  __typename: "RatePostPayload";
   isSuccess: boolean;
   affectedRecords: number;
+  quality: Quality;
 }
 
 export interface PostRate {
@@ -763,34 +764,6 @@ export interface PostRate {
 
 export interface PostRateVariables {
   input: RatePostInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: postRate
-// ====================================================
-
-export interface postRate_posts_items {
-  __typename: "Post";
-  id: string;
-  score: number;
-}
-
-export interface postRate_posts {
-  __typename: "PostCollectionSegment";
-  items: postRate_posts_items[] | null;
-}
-
-export interface postRate {
-  posts: postRate_posts | null;
-}
-
-export interface postRateVariables {
-  postId: string;
 }
 
 /* tslint:disable */
@@ -815,7 +788,7 @@ export interface ChangePasswordInput {
 
 export interface CreateAccountInput {
   email: string;
-  username: string;
+  username?: string | null;
   password: string;
   profile: ProfileInput;
 }
@@ -839,6 +812,7 @@ export interface LoginInput {
 }
 
 export interface ProfessionInput {
+  accountId?: string | null;
   organization: string;
   start?: any | null;
   end?: any | null;
@@ -846,15 +820,11 @@ export interface ProfessionInput {
   isWorking: boolean;
 }
 
-export interface ProfessionsInput {
-  accountId?: string | null;
-  professions: ProfessionInput[];
-}
-
 export interface ProfileInput {
   isPublic: boolean;
   firstName: string;
   lastName: string;
+  country?: string | null;
   phoneNumber: string;
   birthDate?: any | null;
 }
@@ -871,7 +841,7 @@ export interface RefreshTokenInput {
 
 export interface RegisterInput {
   email: string;
-  username: string;
+  username?: string | null;
   password: string;
   confirmationPassword: string;
   profile: ProfileInput;
@@ -879,7 +849,7 @@ export interface RegisterInput {
 
 export interface UpdateAccountInput {
   id: string;
-  username: string;
+  username?: string | null;
   profile: ProfileInput;
 }
 

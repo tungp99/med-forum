@@ -63,16 +63,13 @@ export function AS3PostCard({
   const [state, setState] = useState({
     editing: false,
     postRate: score,
-    rateState: false,
   })
 
   const [postRate_update] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
     ...gqlContext,
-    onCompleted(reponse) {
-      console.log(state.rateState)
-
-      if (reponse.ratePost.isSuccess)
-        state.rateState === true
+    onCompleted(response) {
+      if (response.ratePost.isSuccess)
+        response.ratePost.quality === Quality.GOOD
           ? setState({ ...state, postRate: state.postRate + 1 })
           : setState({ ...state, postRate: state.postRate - 1 })
     },
