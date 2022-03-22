@@ -135,7 +135,10 @@ export function ProfessionPopupComponent({
       <Modal.Footer>
         <AS3Button
           variant="primary"
-          onClick={handleSubmit(data => onSave(data))}
+          onClick={handleSubmit(data => {
+            onSave(data)
+            reset()
+          })}
         >
           Save
         </AS3Button>
