@@ -14,29 +14,38 @@ import {
   UpdateProfileContact,
 } from 'system/generated/gql.types'
 import { UPDATE_PROFILE_CONTACT_MUTATION } from '../gql'
+// import { locales } from 'system/plugins/index'
 
 type NameFormComponentProps = {
   data: Account
+  onSave: () => void
 }
 
-export function NameFormComponent({ data }: NameFormComponentProps) {
+export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
   const { gqlContext } = useAuth()
   const [save, { loading }] = useMutation<UpdateProfileContact>(
     UPDATE_PROFILE_CONTACT_MUTATION,
     {
       ...gqlContext,
       onCompleted({ updateAccount: response }) {
-        response.affectedRecords === 1 &&
+        if (response.affectedRecords === 1) {
           Toast.success({
             title: 'Updated profile successfully!',
             content: 'Changes will be applied in several minutes',
           })
+          onSave()
+        }
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
     }
   )
+  // const arrayLocales = [] as { text: string; value: string }[]
+  // for (const [value, key] of Object.entries(locales)) {
+  //   const item = { text: key, value: value }
+  //   arrayLocales.push(item)
+  // }
 
   const formValues = useMemo<UpdateAccountInput>(() => {
     const { id, username, profile } = data
@@ -52,6 +61,7 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
         birthDate: profile.birthDate
           ? DateTime.fromISO(profile.birthDate).toISODate()
           : null,
+        country: profile.country,
       },
     }
   }, [data])
@@ -162,12 +172,22 @@ export function NameFormComponent({ data }: NameFormComponentProps) {
             />
           )}
         />
-
+        <Controller
+          control={control}
+          name="profile.country"
+          render={({ field: { onChange, value } }) => (
+            <AS3Input
+              label="Country"
+              size="lg"
+              onChange={onChange}
+              value={value ?? ''}
+            />
+          )}
+        />
         <Stack direction="horizontal">
           <AS3Spacer />
           <AS3Button
             variant="primary"
-            loading={loading}
             disabled={loading}
             onClick={handleSubmit(data =>
               save({ variables: { input: { ...data } } })

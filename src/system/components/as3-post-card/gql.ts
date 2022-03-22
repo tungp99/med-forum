@@ -66,6 +66,7 @@ export const UPDATE_POST_RATE_MUTATION = gql`
     ratePost(input: $input) {
       isSuccess
       affectedRecords
+      quality
     }
   }
 `

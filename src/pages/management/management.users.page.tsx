@@ -19,7 +19,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Account } from 'system/types'
 import { useNavigate } from 'react-router'
 import { AS3CreateUser } from './components/create_user.component'
-import { AS3Delete } from './components/delete_modal.component'
+import { DeleteUser } from './components/delete_modal.component'
 
 export default function ManageUsersPage() {
   const navigate = useNavigate()
@@ -90,12 +90,12 @@ export default function ManageUsersPage() {
           filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
       ></AS3CreateUser>
-      <AS3Delete
+      <DeleteUser
         id={deleteId}
         onDeleted={() => {
           filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
-      ></AS3Delete>
+      ></DeleteUser>
       <div className="filter__container">
         <AS3Input
           placeholder="Search"

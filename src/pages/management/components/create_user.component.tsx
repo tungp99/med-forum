@@ -74,7 +74,7 @@ export function AS3CreateUser(props: CreateUserProps) {
                 <AS3Input
                   label="Username"
                   size="lg"
-                  value={value}
+                  value={value ?? ''}
                   onChange={onChange}
                 />
               )}

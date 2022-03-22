@@ -8,10 +8,17 @@ export const GET_ACCOUNT_QUERY = gql`
       username
       profile {
         isPublic
+        country
         firstName
         lastName
         birthDate
         phoneNumber
+        qualifications {
+          title
+          issuedBy
+          issuedAt
+          expireAt
+        }
         experience {
           organization
           start
@@ -41,19 +48,25 @@ export const UPDATE_PROFILE_CONTACT_MUTATION = gql`
     }
   }
 `
-
-export const UPDATE_EXPERIENCE_MUTATION = gql`
-  mutation UpdateExperience($input: ProfessionsInput!) {
-    updateExperience(input: $input) {
+export const UPDATE_QUALIFICATION_MUTATION = gql`
+  mutation updateQualification($input: QualificationInput!) {
+    addQualification(input: $input) {
+      isSuccess
+    }
+  }
+`
+export const ADD_EXPERIENCE_MUTATION = gql`
+  mutation AddExperience($input: ProfessionInput!) {
+    addExperience(input: $input) {
       isSuccess
       affectedRecords
     }
   }
 `
 
-export const UPDATE_EDUCATION_MUTATION = gql`
-  mutation UpdateEducation($input: ProfessionsInput!) {
-    updateEducation(input: $input) {
+export const ADD_EDUCATION_MUTATION = gql`
+  mutation AddEducation($input: ProfessionInput!) {
+    addEducation(input: $input) {
       isSuccess
       affectedRecords
     }
@@ -64,6 +77,27 @@ export const CHANGE_PASSWORD_MUTATION = gql`
     changePassword(input: $input) {
       isSuccess
       affectedRecords
+    }
+  }
+`
+export const REMOVE_EXPERIENCE_MUTATION = gql`
+  mutation RemoveExperience($input: ProfessionInput!) {
+    removeExperience(input: $input) {
+      isSuccess
+    }
+  }
+`
+export const REMOVE_EDUCATION_MUTATION = gql`
+  mutation RemoveEducation($input: ProfessionInput!) {
+    removeEducation(input: $input) {
+      isSuccess
+    }
+  }
+`
+export const REMOVE_QUALIFICATION_MUTATION = gql`
+  mutation RemoveQualification($input: QualificationInput!) {
+    removeQualification(input: $input) {
+      isSuccess
     }
   }
 `

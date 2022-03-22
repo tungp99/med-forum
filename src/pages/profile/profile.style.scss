@@ -58,6 +58,16 @@
     .list-group-item {
       display: flex;
       flex-direction: row;
+
+      .delete__icon {
+        visibility: hidden;
+      }
+
+      &:hover {
+        .delete__icon {
+          visibility: visible;
+        }
+      }
     }
   }
 }

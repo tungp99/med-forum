@@ -94,12 +94,16 @@ type Mutation {
   createAccount(input: CreateAccountInput!): Account!
   updateAccount(input: UpdateAccountInput!): UpdateEntityPayload!
   deleteAccount(id: String!): DeleteEntityPayload!
-  updateExperience(input: ProfessionsInput!): UpdateEntityPayload!
-  updateEducation(input: ProfessionsInput!): UpdateEntityPayload!
+  addExperience(input: ProfessionInput!): UpdateEntityPayload!
+  removeExperience(input: ProfessionInput!): UpdateEntityPayload!
+  addEducation(input: ProfessionInput!): UpdateEntityPayload!
+  removeEducation(input: ProfessionInput!): UpdateEntityPayload!
+  addQualification(input: QualificationInput!): UpdateEntityPayload!
+  removeQualification(input: QualificationInput!): UpdateEntityPayload!
   createPost(input: CreatePostInput!): Post!
   updatePost(input: UpdatePostInput!): UpdateEntityPayload!
   deletePost(id: String!): DeleteEntityPayload!
-  ratePost(input: RatePostInput!): UpdateEntityPayload!
+  ratePost(input: RatePostInput!): RatePostPayload!
   createComment(input: CreateCommentInput!): Comment!
   updateComment(input: UpdateCommentInput!): UpdateEntityPayload!
   deleteComment(id: String!): DeleteEntityPayload!
@@ -110,7 +114,7 @@ enum ApplyPolicy {
   AFTER_RESOLVER
 }
 
-type AuthenticationError {
+type AuthenticationError implements Error {
   message: String!
 }
 
@@ -199,6 +203,10 @@ type CommentCollectionSegment {
   pageInfo: CollectionSegmentInfo!
 }
 
+interface Error {
+  message: String!
+}
+
 input StringOperationFilterInput {
   and: [StringOperationFilterInput!]
   or: [StringOperationFilterInput!]
@@ -239,6 +247,7 @@ input ProfileFilterInput {
   birthDate: ComparableNullableOfDateTimeOperationFilterInput
   experience: ListFilterInputTypeOfProfessionFilterInput
   education: ListFilterInputTypeOfProfessionFilterInput
+  qualifications: ListFilterInputTypeOfQualificationFilterInput
 }
 
 input BooleanOperationFilterInput {
@@ -265,7 +274,7 @@ type Account {
   writtenComments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
   writtenCommentsCount: Int!
   email: String!
-  username: String!
+  username: String
   refreshToken: String!
   refreshTokenExpiration: DateTime!
   profile: Profile!
@@ -348,6 +357,13 @@ input ListFilterInputTypeOfProfessionFilterInput {
   any: Boolean
 }
 
+input ListFilterInputTypeOfQualificationFilterInput {
+  all: QualificationFilterInput
+  none: QualificationFilterInput
+  some: QualificationFilterInput
+  any: Boolean
+}
+
 input ProfessionFilterInput {
   and: [ProfessionFilterInput!]
   or: [ProfessionFilterInput!]
@@ -356,6 +372,15 @@ input ProfessionFilterInput {
   end: ComparableNullableOfDateTimeOperationFilterInput
   position: StringOperationFilterInput
   isWorking: BooleanOperationFilterInput
+}
+
+input QualificationFilterInput {
+  and: [QualificationFilterInput!]
+  or: [QualificationFilterInput!]
+  title: StringOperationFilterInput
+  issuedBy: StringOperationFilterInput
+  issuedAt: ComparableDateTimeOperationFilterInput
+  expireAt: ComparableDateTimeOperationFilterInput
 }
 
 input ChangePasswordInput {
@@ -388,7 +413,7 @@ input LoginInput {
 
 input RegisterInput {
   email: String!
-  username: String!
+  username: String
   password: String!
   confirmationPassword: String!
   profile: ProfileInput!
@@ -400,6 +425,7 @@ type LoginPayload {
 }
 
 type Profile {
+  country: String!
   isPublic: Boolean!
   firstName: String!
   lastName: String!
@@ -407,18 +433,19 @@ type Profile {
   birthDate: DateTime
   experience: [Profession!]!
   education: [Profession!]!
+  qualifications: [Qualification!]!
 }
 
 input CreateAccountInput {
   email: String!
-  username: String!
+  username: String
   password: String!
   profile: ProfileInput!
 }
 
 input UpdateAccountInput {
   id: String!
-  username: String!
+  username: String
   profile: ProfileInput!
 }
 
@@ -427,9 +454,21 @@ type DeleteEntityPayload {
   affectedRecords: Int!
 }
 
-input ProfessionsInput {
+input ProfessionInput {
   accountId: String
-  professions: [ProfessionInput!]!
+  organization: String!
+  start: DateTime
+  end: DateTime
+  position: String!
+  isWorking: Boolean!
+}
+
+input QualificationInput {
+  accountId: String
+  title: String!
+  issuedBy: String!
+  issuedAt: DateTime!
+  expireAt: DateTime!
 }
 
 """The `DateTime` scalar represents an ISO-8601 compliant date time type."""
@@ -446,6 +485,13 @@ input UpdatePostInput {
   title: String!
   markdownContent: String!
   isPublished: Boolean!
+}
+
+type RatePostPayload {
+  postId: String!
+  quality: Quality!
+  isSuccess: Boolean!
+  affectedRecords: Int!
 }
 
 input RatePostInput {
@@ -469,12 +515,11 @@ enum Quality {
   BAD
 }
 
-input ProfessionInput {
-  organization: String!
-  start: DateTime
-  end: DateTime
-  position: String!
-  isWorking: Boolean!
+type Qualification {
+  title: String!
+  issuedBy: String!
+  issuedAt: DateTime!
+  expireAt: DateTime!
 }
 
 type Profession {
@@ -489,6 +534,7 @@ input ProfileInput {
   isPublic: Boolean!
   firstName: String!
   lastName: String!
+  country: String
   phoneNumber: String!
   birthDate: DateTime
 }

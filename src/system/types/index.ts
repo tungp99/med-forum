@@ -22,6 +22,7 @@ export type Profile = {
   birthDate?: string
   experience: Profession[]
   education: Profession[]
+  country: string
 }
 
 export type Account = Entity & {
@@ -46,4 +47,11 @@ export type Post = Entity & {
   comments: Comment[]
   creatorAccount: Partial<Account> | null
   score: number
+}
+
+export type Qualification = {
+  title: string
+  issuedBy: string
+  issuedAt: string
+  expireAt: string
 }

@@ -11,16 +11,21 @@ import { NameFormComponent } from './components/name.form.component'
 import { SecurityFormComponent } from './components/security.form.component'
 import './profile.style.scss'
 import {
+  ADD_EDUCATION_MUTATION,
+  ADD_EXPERIENCE_MUTATION,
   GET_ACCOUNT_QUERY,
-  UPDATE_EDUCATION_MUTATION,
-  UPDATE_EXPERIENCE_MUTATION,
+  UPDATE_QUALIFICATION_MUTATION,
 } from './gql'
 import {
+  AddEducation,
+  AddExperience,
   GetAccount,
-  UpdateEducation,
-  UpdateExperience,
+  updateQualification,
 } from 'system/generated/gql.types'
 import { ProfessionPopupComponent } from './components/profession-popup.component'
+import { DeleteProfession } from './components/delete_profession_modal.component'
+import { QualificationCardComponent } from './components/qualification.card.component'
+import { QualificationPopup } from './components/qualification_popup.component'
 
 export default function ProfilePage() {
   const { id } = useParams()
@@ -46,13 +51,13 @@ export default function ProfilePage() {
     fetchAccount(fetchAccountVariables)
   }, [fetchAccountVariables])
 
-  const [updateExperience] = useMutation<UpdateExperience>(
-    UPDATE_EXPERIENCE_MUTATION,
+  const [updateQualification] = useMutation<updateQualification>(
+    UPDATE_QUALIFICATION_MUTATION,
     {
       ...gqlContext,
-      onCompleted({ updateExperience: response }) {
-        dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
-        response.affectedRecords && fetchAccount(fetchAccountVariables)
+      onCompleted() {
+        dispatch({ type: 'CLOSE_QUALIFICATION_POPUP' })
+        fetchAccount(fetchAccountVariables)
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -60,19 +65,27 @@ export default function ProfilePage() {
     }
   )
 
-  const [updateEducation] = useMutation<UpdateEducation>(
-    UPDATE_EDUCATION_MUTATION,
-    {
-      ...gqlContext,
-      onCompleted({ updateEducation: response }) {
-        dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
-        response.affectedRecords && fetchAccount(fetchAccountVariables)
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+  const [addExperience] = useMutation<AddExperience>(ADD_EXPERIENCE_MUTATION, {
+    ...gqlContext,
+    onCompleted({ addExperience: response }) {
+      dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
+      response.affectedRecords && fetchAccount(fetchAccountVariables)
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
+
+  const [addEducation] = useMutation<AddEducation>(ADD_EDUCATION_MUTATION, {
+    ...gqlContext,
+    onCompleted({ addEducation: response }) {
+      dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
+      response.affectedRecords && fetchAccount(fetchAccountVariables)
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
 
   return (
     <Container
@@ -87,7 +100,9 @@ export default function ProfilePage() {
             sm={12}
             md={8}>
             <OverviewCardComponent data={data.account.profile} />
-
+            <QualificationCardComponent
+              data={data.account.profile.qualifications}
+            ></QualificationCardComponent>
             <ProfessionCardComponent
               title="Experience"
               data={data.account.profile.experience}
@@ -102,7 +117,10 @@ export default function ProfilePage() {
           <Col
             sm={12}
             md={4}>
-            <NameFormComponent data={data.account} />
+            <NameFormComponent
+              data={data.account}
+              onSave={() => fetchAccount(fetchAccountVariables)}
+            />
 
             <SecurityFormComponent />
           </Col>
@@ -113,39 +131,40 @@ export default function ProfilePage() {
         onSave={newProfession => {
           if (title === 'Experience') {
             data?.account &&
-              updateExperience({
+              addExperience({
                 variables: {
                   input: {
+                    ...newProfession,
                     accountId: fetchAccountVariables.variables.id,
-                    professions: [
-                      ...data?.account.profile.experience.map(s => ({
-                        ...s,
-                        __typename: undefined,
-                      })),
-                      newProfession,
-                    ],
                   },
                 },
               })
           } else {
             data?.account &&
-              updateEducation({
+              addEducation({
                 variables: {
                   input: {
+                    ...newProfession,
                     accountId: fetchAccountVariables.variables.id,
-                    professions: [
-                      ...data?.account.profile.education.map(s => ({
-                        ...s,
-                        __typename: undefined,
-                      })),
-                      newProfession,
-                    ],
                   },
                 },
               })
           }
         }}
       />
+      <QualificationPopup
+        onSave={newQualification => {
+          data?.account &&
+            updateQualification({
+              variables: { input: newQualification },
+            })
+        }}
+      ></QualificationPopup>
+      <DeleteProfession
+        onDeleted={() => {
+          fetchAccount(fetchAccountVariables)
+        }}
+      ></DeleteProfession>
     </Container>
   )
 }
