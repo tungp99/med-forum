@@ -74,7 +74,7 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
             name="issuedBy"
             render={({ field: { onChange, value } }) => (
               <AS3Input
-                label="By"
+                label="Issued By"
                 onChange={onChange}
                 value={value} />
             )}

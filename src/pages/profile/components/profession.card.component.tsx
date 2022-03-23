@@ -53,7 +53,12 @@ export function ProfessionCardComponent({
                     DateTime.fromISO(item.start).toLocaleString(
                       DateTime.DATE_MED
                     )}{' '}
-                  - {item.isWorking && 'Present'}
+                  -{' '}
+                  {(item.isWorking && 'Present') ||
+                    (item.end &&
+                      DateTime.fromISO(item.end).toLocaleString(
+                        DateTime.DATE_MED
+                      ))}
                 </span>
               </p>
               <div className="text-end">

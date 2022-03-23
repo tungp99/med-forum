@@ -65,41 +65,26 @@ export function ProfessionPopupComponent({
             <Controller
               control={control}
               name="organization"
-              render={({ field: { onChange, value } }) =>
-                title === 'Experience' ? (
-                  <AS3Input
-                    label="Organization"
-                    onChange={onChange}
-                    value={value}
-                  />
-                ) : (
-                  <AS3Input
-                    label="School"
-                    onChange={onChange}
-                    value={value} />
-                )
-              }
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label={title === 'Experience' ? 'Organization' : 'School'}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
             />
           </Col>
           <Col sm={12}>
             <Controller
               control={control}
               name="position"
-              render={({ field: { onChange, value } }) =>
-                title === 'Experience' ? (
-                  <AS3Input
-                    label="Position"
-                    onChange={onChange}
-                    value={value}
-                  />
-                ) : (
-                  <AS3Input
-                    label="Department"
-                    onChange={onChange}
-                    value={value}
-                  />
-                )
-              }
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label={title === 'Experience' ? 'Position' : 'Department'}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
             />
           </Col>
           <Col
@@ -138,21 +123,17 @@ export function ProfessionPopupComponent({
             <Controller
               control={control}
               name="isWorking"
-              render={({ field: { onChange, value } }) =>
-                title === 'Experience' ? (
-                  <AS3Switch
-                    label="I'm still working here"
-                    onChange={onChange}
-                    checked={value}
-                  />
-                ) : (
-                  <AS3Switch
-                    label="I'm still learning here"
-                    onChange={onChange}
-                    checked={value}
-                  />
-                )
-              }
+              render={({ field: { onChange, value } }) => (
+                <AS3Switch
+                  label={
+                    title === 'Experience'
+                      ? "I'm still working here"
+                      : "I'm still learning here"
+                  }
+                  onChange={onChange}
+                  checked={value}
+                />
+              )}
             />
           </Col>
         </Row>
