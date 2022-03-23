@@ -68,17 +68,20 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
               )}
             />
           </Col>
-          <Col sm={12}></Col>
-          <Controller
-            control={control}
-            name="issuedBy"
-            render={({ field: { onChange, value } }) => (
-              <AS3Input
-                label="Issued By"
-                onChange={onChange}
-                value={value} />
-            )}
-          />
+
+          <Col sm={12}>
+            <Controller
+              control={control}
+              name="issuedBy"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="Issued by"
+                  onChange={onChange}
+                  value={value} />
+              )}
+            />
+          </Col>
+
           <Col
             md={6}
             sm={12}>
@@ -88,13 +91,14 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
               render={({ field: { onChange, value } }) => (
                 <AS3Input
                   type="date"
-                  label="Date"
+                  label="Issued on"
                   onChange={onChange}
                   value={value ?? ''}
                 />
               )}
             />
           </Col>
+
           <Col
             md={6}
             sm={12}>

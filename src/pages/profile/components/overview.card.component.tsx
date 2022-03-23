@@ -1,10 +1,6 @@
 import { Card, ListGroup, Ratio } from 'react-bootstrap'
 import Icon from '@mdi/react'
-import {
-  mdiHospitalBuilding,
-  mdiPencilOutline,
-  mdiSchoolOutline,
-} from '@mdi/js'
+import { mdiCamera, mdiHospitalBuilding, mdiSchoolOutline } from '@mdi/js'
 
 import { Profile } from 'system/types'
 import { AS3Avatar, AS3Button } from 'system/components'
@@ -51,9 +47,11 @@ export function OverviewCardComponent({
               width={128}
               height={128}>
               <AS3Button
-                icon={mdiPencilOutline}
-                iconSize={1}
-                text />
+                icon={mdiCamera}
+                iconSize={1.2}
+                text
+                iconColor="#666"
+              />
             </AS3Avatar>
           </div>
 

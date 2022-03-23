@@ -21,7 +21,7 @@ export function AS3Switch({
   checked,
   onChange,
 }: AS3SwitchProps) {
-  const classList = ['as3-switch mb-3']
+  const classList = ['as3-switch']
   className && classList.push(className)
 
   return (

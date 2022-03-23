@@ -315,6 +315,60 @@ export interface CreateAccountVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetPostsAdmin
+// ====================================================
+
+export interface GetPostsAdmin_posts_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetPostsAdmin_posts_items {
+  __typename: "Post";
+  score: number;
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+  commentsCount: number;
+  creatorAccount: GetPostsAdmin_posts_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetPostsAdmin_posts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetPostsAdmin_posts {
+  __typename: "PostCollectionSegment";
+  items: GetPostsAdmin_posts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetPostsAdmin_posts_pageInfo;
+}
+
+export interface GetPostsAdmin {
+  posts: GetPostsAdmin_posts | null;
+}
+
+export interface GetPostsAdminVariables {
+  isPublished: boolean;
+  skip: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetPost
 // ====================================================
 
@@ -734,6 +788,19 @@ export interface LoginVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: TriggerLogout
+// ====================================================
+
+export interface TriggerLogout {
+  triggerLogout: boolean;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetMe
 // ====================================================
 
@@ -766,24 +833,11 @@ export interface GetMe {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL subscription operation: AccountLoggedIn
+// GraphQL subscription operation: AuthenticationStatistics
 // ====================================================
 
-export interface AccountLoggedIn {
-  accountLoggedIn: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL subscription operation: AccountLoggedOut
-// ====================================================
-
-export interface AccountLoggedOut {
-  accountLoggedOut: number;
+export interface AuthenticationStatistics {
+  authenticationStatistics: number;
 }
 
 /* tslint:disable */

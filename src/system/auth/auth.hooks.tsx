@@ -17,6 +17,7 @@ import {
   LOGIN_MUTATION,
   REFRESH_TOKEN_MUTATION,
   REGISTRATION_MUTATION,
+  TRIGGER_LOGOUT_MUTATION,
 } from './gql'
 import {
   GetMe,
@@ -101,14 +102,13 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     const refreshToken = localStorage.getItem('refresh_token')
     localStorage.clear()
 
-    if (refreshToken) {
+    if (refreshToken && accessToken) {
       sendRefreshToken({ variables: { input: { accessToken, refreshToken } } })
     }
   }, [])
 
   useEffect(() => {
     localStorage.setItem('access_token', accessToken)
-
     if (!accessToken) {
       setAuthStatus(false)
       setAccount({} as Account)
@@ -175,6 +175,8 @@ export function useAuth() {
     }
   )
 
+  const [triggerLogout] = useMutation(TRIGGER_LOGOUT_MUTATION)
+
   return {
     loading: registering || logginIn,
     authenticated,
@@ -184,6 +186,7 @@ export function useAuth() {
     login: (input: LoginInput) => sendLogin({ variables: { input } }),
     openLoginPopup: () => dispatch({ type: 'OPEN_LOGIN_POPUP' }),
     logout() {
+      triggerLogout()
       setAccessToken('')
       setRefreshToken('')
     },

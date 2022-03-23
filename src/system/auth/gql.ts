@@ -28,6 +28,12 @@ export const LOGIN_MUTATION = gql`
   }
 `
 
+export const TRIGGER_LOGOUT_MUTATION = gql`
+  mutation TriggerLogout {
+    triggerLogout
+  }
+`
+
 export const GET_ME = gql`
   query GetMe {
     me {

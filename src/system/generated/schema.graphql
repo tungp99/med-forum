@@ -111,8 +111,7 @@ type Mutation {
 }
 
 type Subscription {
-  accountLoggedIn: Int!
-  accountLoggedOut: Int!
+  authenticationStatistics: Int!
   accountCreated: Int!
 }
 

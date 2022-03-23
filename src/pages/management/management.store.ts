@@ -11,7 +11,7 @@ type Store = {
 }
 
 const initialState: Store = {
-  fetchPublished: false,
+  fetchPublished: true,
   isPublic: undefined,
   filter_title: 'All',
   filter_text: '',

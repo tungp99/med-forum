@@ -127,16 +127,13 @@ export function AS3PostCard({
             <span className="category">as3/category</span>
             <span className="separator mx-1">•</span>
             <span className="publish">
-              posted by{' '}
+              posted by
               <AS3Link
                 onClick={() => navigate(`/profile/${creatorAccount?.id}`)}
               >
                 {creatorAccount?.username}
-              </AS3Link>{' '}
-              &nbsp;
-              {DateTime.fromISO(createdAt).toLocaleString(
-                DateTime.DATETIME_SHORT
-              )}
+              </AS3Link>
+              {DateTime.fromISO(createdAt).toRelative()}
             </span>
 
             <AS3Spacer />

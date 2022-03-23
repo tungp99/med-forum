@@ -9,6 +9,7 @@ import {
   PostsCreatePage,
   ProfilePage,
 } from 'pages'
+import AdminManagementPage from 'pages/management/admin_management_page/management.posts.page'
 
 export function Routes() {
   return (
@@ -31,6 +32,43 @@ export function Routes() {
           element={
             <GuardedComponent>
               <ProfilePage />
+            </GuardedComponent>
+          }
+        />
+      </Route>
+      <Route path="/admin">
+        <Route
+          index
+          element={
+            <GuardedComponent>
+              <AdminManagementPage />
+            </GuardedComponent>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <GuardedComponent>
+              <ManageUsersPage />
+            </GuardedComponent>
+          }
+        />
+      </Route>
+
+      <Route path="/posts">
+        <Route
+          index
+          element={<span>wrong way ;)</span>} />
+
+        <Route
+          path=":id"
+          element={<PostPage />} />
+
+        <Route
+          path="write"
+          element={
+            <GuardedComponent>
+              <PostsCreatePage />
             </GuardedComponent>
           }
         />

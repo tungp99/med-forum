@@ -26,6 +26,7 @@ type AS3ButtonProps = ButtonProps & {
   text?: boolean
   icon?: string
   iconSize?: string | number
+  iconColor?: string
 }
 
 export function AS3Button({
@@ -40,6 +41,7 @@ export function AS3Button({
   text,
   icon,
   iconSize,
+  iconColor,
   onClick,
 }: AS3ButtonProps) {
   const classList = ['as3-button']
@@ -61,6 +63,7 @@ export function AS3Button({
           className={text && children ? 'me-1' : ''}
           path={icon}
           size={iconSize ?? 1}
+          color={iconColor}
         />
       )}
 
