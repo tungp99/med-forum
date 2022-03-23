@@ -19,17 +19,24 @@
     display: flex;
     flex-direction: row;
 
+    .profile__avatar:hover {
+      background-color: #444;
+
+      .btn__upload {
+        visibility: visible;
+      }
+    }
+
+    .btn__upload {
+      visibility: visible;
+    }
+
     .card-subtitle {
       font-weight: $font-weight-normal;
 
       &.location {
         color: $gray-600;
       }
-    }
-
-    .as3-avatar {
-      position: absolute;
-      top: -#{$spacer * 4};
     }
 
     .card-body {
@@ -43,10 +50,26 @@
       width: 10rem;
     }
 
-    .as3-button.btn-edit {
+    .avatar-wrapper {
       position: absolute;
-      top: map-get($spacers, 3);
-      right: map-get($spacers, 3);
+      top: -#{$spacer * 4};
+
+      .as3-avatar {
+        position: relative;
+
+        .as3-button {
+          visibility: hidden;
+          position: absolute;
+          left: 38%;
+          top: 38%;
+        }
+
+        &:hover {
+          .as3-button {
+            visibility: visible;
+          }
+        }
+      }
     }
   }
 

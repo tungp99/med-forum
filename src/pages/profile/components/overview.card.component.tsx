@@ -8,8 +8,7 @@ import {
 
 import { Profile } from 'system/types'
 import { AS3Avatar, AS3Button } from 'system/components'
-import { useMemo, useRef } from 'react'
-import { Toast } from 'system/store'
+import { useMemo } from 'react'
 
 type OverviewCardComponentProps = {
   data: Profile
@@ -18,7 +17,6 @@ type OverviewCardComponentProps = {
 export function OverviewCardComponent({
   data: { firstName, lastName, country, experience, education },
 }: OverviewCardComponentProps) {
-  const avatarInputRef = useRef<HTMLInputElement>(null)
   const { workplaces, occupations, schools } = useMemo(() => {
     let workplaces = []
     let occupations = []
@@ -48,9 +46,16 @@ export function OverviewCardComponent({
 
       <div className="introduction">
         <Card.Body>
-          <AS3Avatar
-            width={128}
-            height={128} />
+          <div className="avatar-wrapper">
+            <AS3Avatar
+              width={128}
+              height={128}>
+              <AS3Button
+                icon={mdiPencilOutline}
+                iconSize={1}
+                text />
+            </AS3Avatar>
+          </div>
 
           <Card.Title className="mt-2">
             {firstName} {lastName}
@@ -67,45 +72,27 @@ export function OverviewCardComponent({
         <ListGroup
           className="work"
           variant="flush">
-          <AS3Button
-            className="btn-edit"
-            icon={mdiPencilOutline}
-            iconSize={1}
-            text
-            onClick={() => {
-              avatarInputRef.current?.click()
-            }}
-          ></AS3Button>
-
-          <ListGroup.Item>
-            <Icon
-              className="me-2"
-              path={mdiHospitalBuilding}
-              size={1} />
-            {workplaces.join(' | ')}
-          </ListGroup.Item>
-          {schools.length !== 0 && (
-            <ListGroup.Item>
+          {workplaces.map((h, key) => (
+            <ListGroup.Item key={key}>
               <Icon
                 className="me-2"
-                path={mdiSchoolOutline}
+                path={mdiHospitalBuilding}
                 size={1} />
-              {schools.join(' | ')}
+              {h}
             </ListGroup.Item>
-          )}
+          ))}
+          {schools.length !== 0 &&
+            schools.map((h, key) => (
+              <ListGroup.Item key={key}>
+                <Icon
+                  className="me-2"
+                  path={mdiSchoolOutline}
+                  size={1} />
+                {h}
+              </ListGroup.Item>
+            ))}
         </ListGroup>
       </div>
-
-      <input
-        ref={avatarInputRef}
-        type="file"
-        className="d-none"
-        accept="image/*"
-        onChange={e => {
-          if (e.target.type.startsWith('image/')) console.log(e.target.files)
-          else Toast.error({ title: '', content: 'Inappropriate file type' })
-        }}
-      />
     </Card>
   )
 }

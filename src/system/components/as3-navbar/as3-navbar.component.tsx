@@ -11,11 +11,18 @@ import { useAuth } from 'system/auth'
 import { AS3Button, AS3Input, AS3Dropdown } from 'system/components'
 
 import './as3-navbar.style.scss'
+import { useSubscription } from '@apollo/client'
+import { ACCOUNT_LOGGED_IN_SUBSCRIPTION } from './gql'
+import { AccountLoggedIn } from 'system/generated/gql.types'
 
 export function AS3Navbar() {
+  const navigate = useNavigate()
   const { account, authenticated, openLoginPopup, openRegisterPopup, logout } =
     useAuth()
-  const navigate = useNavigate()
+
+  const { data: loginsData } = useSubscription<AccountLoggedIn>(
+    ACCOUNT_LOGGED_IN_SUBSCRIPTION
+  )
 
   return (
     <>
@@ -86,7 +93,9 @@ export function AS3Navbar() {
       </Navbar>
       <Navbar className="as3-navbar">
         <Container>
-          <div className="text-success w-100 text-center">0 Online</div>
+          <div className="text-success w-100 text-center">
+            {loginsData?.accountLoggedIn} Online
+          </div>
         </Container>
       </Navbar>
     </>
