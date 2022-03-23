@@ -1,6 +1,6 @@
 import { useLazyQuery, useQuery } from '@apollo/client'
 import Icon from '@mdi/react'
-import { mdiMenuDown, mdiMinus, mdiPostOutline } from '@mdi/js'
+import { mdiMenuDown, mdiMinus, mdiPlus, mdiPostOutline } from '@mdi/js'
 
 import { useAuth } from 'system/auth'
 import { Toast, useDispatch, useSelector } from 'system/store'
@@ -89,14 +89,24 @@ export default function ManageUsersPage() {
         onCreated={() => {
           filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
-      ></AS3CreateUser>
+      />
       <DeleteUser
         id={deleteId}
         onDeleted={() => {
           filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
-      ></DeleteUser>
+      />
       <div className="filter__container">
+        <button
+          className="createUser__btn mb-3"
+          onClick={() => {
+            dispatch({ type: 'OPEN_CREATE_USER_POPUP' })
+          }}
+        >
+          <Icon
+            path={mdiPlus}
+            size={1}></Icon>
+        </button>
         <AS3Input
           placeholder="Search"
           onChange={e => {

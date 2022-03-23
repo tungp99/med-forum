@@ -101,7 +101,7 @@ export interface FilterPosts {
 }
 
 export interface FilterPostsVariables {
-  timeFilter: string;
+  timeFilter: any;
 }
 
 /* tslint:disable */

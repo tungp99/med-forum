@@ -1,6 +1,6 @@
 .filter__container {
   display: grid;
-  grid-template-columns: 17fr 2fr;
+  grid-template-columns: 2fr 15fr 2fr;
 }
 
 .sort__btn {
@@ -54,4 +54,9 @@
   padding: 0.4rem 0 0.4rem 1rem;
   border-left: thin solid rgb(218, 212, 212);
   // font-size: 1.1rem;
+}
+
+.createUser__btn {
+  border: thin solid transparent;
+  background-color: transparent;
 }
