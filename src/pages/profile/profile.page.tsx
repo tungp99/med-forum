@@ -25,7 +25,7 @@ import {
 import { ProfessionPopupComponent } from './components/profession-popup.component'
 import { DeleteProfession } from './components/delete_profession_modal.component'
 import { QualificationCardComponent } from './components/qualification.card.component'
-import { QualificationPopup } from './components/qualification_popup.component'
+import { QualificationPopup } from './components/qualification.popup.component'
 
 export default function ProfilePage() {
   const { id } = useParams()

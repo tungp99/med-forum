@@ -12,16 +12,31 @@ import { AS3Button, AS3Input, AS3Dropdown } from 'system/components'
 
 import './as3-navbar.style.scss'
 import { useSubscription } from '@apollo/client'
-import { ACCOUNT_LOGGED_IN_SUBSCRIPTION } from './gql'
-import { AccountLoggedIn } from 'system/generated/gql.types'
+import {
+  ACCOUNT_CREATED_SUBSCRIPTION,
+  ACCOUNT_LOGGED_IN_SUBSCRIPTION,
+} from './gql'
+import {
+  AccountCreated,
+  AuthenticationStatistics,
+} from 'system/generated/gql.types'
 
 export function AS3Navbar() {
   const navigate = useNavigate()
   const { account, authenticated, openLoginPopup, openRegisterPopup, logout } =
     useAuth()
 
-  const { data: loginsData } = useSubscription<AccountLoggedIn>(
+  const { data: loginsData } = useSubscription<AuthenticationStatistics>(
     ACCOUNT_LOGGED_IN_SUBSCRIPTION
+  )
+
+  const { data: registrationsData } = useSubscription<AccountCreated>(
+    ACCOUNT_CREATED_SUBSCRIPTION,
+    {
+      onSubscriptionData({ subscriptionData }) {
+        console.log(subscriptionData)
+      },
+    }
   )
 
   return (
@@ -91,13 +106,19 @@ export function AS3Navbar() {
           </Stack>
         </Container>
       </Navbar>
-      <Navbar className="as3-navbar">
-        <Container>
-          <div className="text-success w-100 text-center">
-            {loginsData?.accountLoggedIn} Online
-          </div>
-        </Container>
-      </Navbar>
+
+      {authenticated && (
+        <Navbar className="as3-navbar">
+          <Container className="small text-center">
+            <div className="text-secondary w-100 ">
+              {registrationsData?.accountCreated ?? 0} Registered
+            </div>
+            <div className="text-success w-100">
+              {loginsData?.authenticationStatistics ?? 0} Online
+            </div>
+          </Container>
+        </Navbar>
+      )}
     </>
   )
 }

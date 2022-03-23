@@ -53,12 +53,11 @@ function CommentComponent({
         <span className="category ms-2">{creatorAccount?.username}</span>
         <span className="separator mx-1">•</span>
         <span className="publish">
-          {DateTime.fromISO(createdAt).toLocaleString(DateTime.DATETIME_SHORT)}
+          {DateTime.fromISO(createdAt).toRelative()}
         </span>
         <span className="separator mx-1">•</span>
         <span className="publish">
-          edited{' '}
-          {DateTime.fromISO(updatedAt).toLocaleString(DateTime.DATETIME_SHORT)}
+          edited {DateTime.fromISO(updatedAt).toRelative()}
         </span>
       </Card.Subtitle>
 

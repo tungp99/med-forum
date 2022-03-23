@@ -713,24 +713,11 @@ export interface GetMe {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL subscription operation: AccountLoggedIn
+// GraphQL subscription operation: AuthenticationStatistics
 // ====================================================
 
-export interface AccountLoggedIn {
-  accountLoggedIn: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL subscription operation: AccountLoggedOut
-// ====================================================
-
-export interface AccountLoggedOut {
-  accountLoggedOut: number;
+export interface AuthenticationStatistics {
+  authenticationStatistics: number;
 }
 
 /* tslint:disable */

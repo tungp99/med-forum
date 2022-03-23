@@ -127,9 +127,7 @@ export function AS3PostCard({
             <span className="separator mx-1">•</span>
             <span className="publish">
               posted by {creatorAccount?.username} &nbsp;
-              {DateTime.fromISO(createdAt).toLocaleString(
-                DateTime.DATETIME_SHORT
-              )}
+              {DateTime.fromISO(createdAt).toRelative()}
             </span>
 
             <AS3Spacer />

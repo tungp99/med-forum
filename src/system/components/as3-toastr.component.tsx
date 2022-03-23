@@ -1,6 +1,4 @@
 import { Toast, ToastContainer } from 'react-bootstrap'
-import { DateTime } from 'luxon'
-
 import { useDispatch, useSelector } from 'system/store'
 
 export function AS3Toastr() {
@@ -17,9 +15,7 @@ export function AS3Toastr() {
         >
           <Toast.Header>
             <strong className="me-auto">{s.title}</strong>
-            <small className="text-muted">
-              {s.id.toLocaleString(DateTime.TIME_SIMPLE)}
-            </small>
+            <small className="text-muted">{s.id.toRelative()}</small>
           </Toast.Header>
           <Toast.Body>{s.content}</Toast.Body>
         </Toast>

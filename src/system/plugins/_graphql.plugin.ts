@@ -1,7 +1,6 @@
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
-import { createClient } from 'graphql-ws'
+import { WebSocketLink } from '@apollo/client/link/ws'
 
 const link = split(
   ({ query }) => {
@@ -11,11 +10,10 @@ const link = split(
       definition.operation === 'subscription'
     )
   },
-  new GraphQLWsLink(
-    createClient({
-      url: `ws://${process.env.REACT_APP_SERVICE_HOST}`,
-    })
-  ),
+  new WebSocketLink({
+    uri: `ws://${process.env.REACT_APP_SERVICE_HOST}`,
+    options: { reconnect: true },
+  }),
   new HttpLink({
     uri: `http://${process.env.REACT_APP_SERVICE_HOST}`,
   })
