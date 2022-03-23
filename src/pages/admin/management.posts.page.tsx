@@ -3,19 +3,24 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
-import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
-import { FilterComponent } from '../components/filter.component'
+import {
+  AS3Button,
+  AS3Dropdown,
+  AS3LayoutWithSidebar,
+  AS3PostCard,
+} from 'system/components'
+import { FilterComponent } from '../management/components/filter.component'
 
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
-import { GetPosts, UpdatePostInput } from 'system/generated/gql.types'
-import { mdiSync } from '@mdi/js'
-import { SidebarComponent } from '../components/sidebar.component'
-import { GET_POSTS_ADMIN_QUERY } from '../gql'
+import { GetPostsAdmin, UpdatePostInput } from 'system/generated/gql.types'
+import { mdiMenuDown, mdiSync } from '@mdi/js'
+import { SidebarComponent } from '../management/components/sidebar.component'
+import { GET_POSTS_ADMIN_QUERY } from '../management/gql'
 
 export default function AdminManagementPage() {
   const { authenticated, gqlContext } = useAuth()
   const { fetchPublished } = useSelector(store => store.managementPage)
-  const { page } = useSelector(store => store.homePage)
+  const { page, posts } = useSelector(store => store.homePage)
   const dispatch = useDispatch()
 
   const fetchVariables = useMemo(
@@ -26,8 +31,11 @@ export default function AdminManagementPage() {
     [fetchPublished, page]
   )
 
-  const { refetch, loading, data } = useQuery<GetPosts>(GET_POSTS_ADMIN_QUERY, {
-    variables: { fetchVariables },
+  const { refetch, loading } = useQuery<GetPostsAdmin>(GET_POSTS_ADMIN_QUERY, {
+    variables: {
+      isPublished: fetchVariables.isPublished,
+      skip: fetchVariables.skip,
+    },
     onCompleted({ posts }) {
       if (posts?.items) {
         dispatch({
@@ -66,6 +74,25 @@ export default function AdminManagementPage() {
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
+      <AS3Dropdown
+        className="ms-4"
+        suffixIcon={mdiMenuDown}
+        align="start"
+        items={[
+          {
+            text: 'Published',
+            separate: true,
+            onClick: () => dispatch({ type: 'SET_POSTS_FILTER_PUBLISHED' }),
+          },
+          {
+            text: 'Drafts',
+            separate: true,
+            onClick: () => dispatch({ type: 'SET_POSTS_FILTER_DRAFTS' }),
+          },
+        ]}
+      >
+        <span>{'Published'}</span>
+      </AS3Dropdown>
       <FilterComponent />
 
       <div className="d-flex justify-content-center mb-3">
@@ -78,13 +105,13 @@ export default function AdminManagementPage() {
         />
       </div>
 
-      {data?.posts?.items?.map(post => (
+      {posts.map(post => (
         <AS3PostCard
           key={post.id}
           preview
-          data={{ ...post, comments: [] }}
+          data={post}
           editable={!waitingForUpdate}
-          afterEdit={data => updatePost({ variables: { input: data } })}
+          afterEdit={posts => updatePost({ variables: { input: posts } })}
         />
       ))}
     </AS3LayoutWithSidebar>

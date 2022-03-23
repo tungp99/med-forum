@@ -31,12 +31,7 @@ export function AS3Navbar() {
   )
 
   const { data: registrationsData } = useSubscription<AccountCreated>(
-    ACCOUNT_CREATED_SUBSCRIPTION,
-    {
-      onSubscriptionData({ subscriptionData }) {
-        console.log(subscriptionData)
-      },
-    }
+    ACCOUNT_CREATED_SUBSCRIPTION
   )
 
   return (

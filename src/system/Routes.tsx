@@ -9,7 +9,7 @@ import {
   PostsCreatePage,
   ProfilePage,
 } from 'pages'
-import AdminManagementPage from 'pages/management/admin_management_page/management.posts.page'
+import AdminManagementPage from 'pages/admin/management.posts.page'
 
 export function Routes() {
   return (
