@@ -8,13 +8,19 @@ import { mdiEarth } from '@mdi/js'
 import { Account } from 'system/types'
 import { useAuth } from 'system/auth'
 import { Toast } from 'system/store'
-import { AS3Button, AS3Input, AS3Spacer, AS3Switch } from 'system/components'
+import {
+  AS3Button,
+  AS3Input,
+  AS3Select,
+  AS3Spacer,
+  AS3Switch,
+} from 'system/components'
 import {
   UpdateAccountInput,
   UpdateProfileContact,
 } from 'system/generated/gql.types'
 import { UPDATE_PROFILE_CONTACT_MUTATION } from '../gql'
-// import { locales } from 'system/plugins/index'
+import { locales } from 'system/plugins/index'
 
 type NameFormComponentProps = {
   data: Account
@@ -41,11 +47,6 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
       },
     }
   )
-  // const arrayLocales = [] as { text: string; value: string }[]
-  // for (const [value, key] of Object.entries(locales)) {
-  //   const item = { text: key, value: value }
-  //   arrayLocales.push(item)
-  // }
 
   const formValues = useMemo<UpdateAccountInput>(() => {
     const { id, username, profile } = data
@@ -61,7 +62,7 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
         birthDate: profile.birthDate
           ? DateTime.fromISO(profile.birthDate).toISODate()
           : null,
-        country: profile.country,
+        countryCode: profile.countryCode,
       },
     }
   }, [data])
@@ -174,13 +175,20 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
         />
         <Controller
           control={control}
-          name="profile.country"
+          name="profile.countryCode"
           render={({ field: { onChange, value } }) => (
-            <AS3Input
+            <AS3Select
               label="Country"
               size="lg"
               onChange={onChange}
-              value={value ?? ''}
+              value={value?.toUpperCase() ?? ''}
+              items={[
+                { text: '-', value: '' },
+                ...Object.entries(locales).map(([value, text]) => ({
+                  text,
+                  value,
+                })),
+              ]}
             />
           )}
         />

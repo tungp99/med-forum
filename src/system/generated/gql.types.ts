@@ -509,6 +509,7 @@ export interface GetAccount_account_profile {
   lastName: string;
   birthDate: any | null;
   phoneNumber: string;
+  countryCode: string;
   qualifications: GetAccount_account_profile_qualifications[];
   experience: GetAccount_account_profile_experience[];
   education: GetAccount_account_profile_education[];
@@ -1068,7 +1069,7 @@ export interface ProfileInput {
   isPublic: boolean;
   firstName: string;
   lastName: string;
-  country?: string | null;
+  countryCode?: string | null;
   phoneNumber: string;
   birthDate?: any | null;
 }

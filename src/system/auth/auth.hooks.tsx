@@ -33,6 +33,7 @@ type AuthContextType = {
   account: Account
   setAccessToken: Dispatch<React.SetStateAction<string>>
   setRefreshToken: Dispatch<React.SetStateAction<string>>
+  // setAccount: Dispatch<React.SetStateAction<Account>>
   gqlContext: {
     context: {
       headers: {
@@ -45,6 +46,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   authenticated: false,
   account: {} as Account,
+  // setAccount: () => {},
   setAccessToken: () => {},
   setRefreshToken: () => {},
   gqlContext: {
@@ -102,9 +104,8 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     const refreshToken = localStorage.getItem('refresh_token')
     localStorage.clear()
 
-    if (refreshToken && accessToken) {
+    if (refreshToken && accessToken)
       sendRefreshToken({ variables: { input: { accessToken, refreshToken } } })
-    }
   }, [])
 
   useEffect(() => {
@@ -114,13 +115,15 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
       setAccount({} as Account)
       return
     }
-
-    sendFetchAccount(gqlContext)
   }, [accessToken])
 
   useEffect(() => {
     localStorage.setItem('refresh_token', refreshToken)
   }, [refreshToken])
+
+  useEffect(() => {
+    accessToken && sendFetchAccount(gqlContext)
+  }, [gqlContext])
 
   return (
     <AuthContext.Provider
