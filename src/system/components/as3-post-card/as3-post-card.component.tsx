@@ -28,6 +28,7 @@ import './as3-post-card.style.scss'
 import { useMutation } from '@apollo/client'
 import { Toast } from 'system/store'
 import { UPDATE_POST_RATE_MUTATION } from './gql'
+import { AS3Link } from '../as3-link/as3-link.component'
 
 type AS3PostCardProps = CardProps & {
   data: Post
@@ -126,7 +127,13 @@ export function AS3PostCard({
             <span className="category">as3/category</span>
             <span className="separator mx-1">•</span>
             <span className="publish">
-              posted by {creatorAccount?.username} &nbsp;
+              posted by{' '}
+              <AS3Link
+                onClick={() => navigate(`/profile/${creatorAccount?.id}`)}
+              >
+                {creatorAccount?.username}
+              </AS3Link>{' '}
+              &nbsp;
               {DateTime.fromISO(createdAt).toLocaleString(
                 DateTime.DATETIME_SHORT
               )}
