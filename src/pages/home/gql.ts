@@ -28,3 +28,34 @@ export const GET_POSTS_QUERY = gql`
     }
   }
 `
+export const FILTER_POST_QUERY = gql`
+  query FilterPosts($timeFilter: DateTime!) {
+    posts(
+      where: {
+        isPublished: { eq: true }
+        and: { createdAt: { gte: $timeFilter } }
+      }
+      skip: 0
+      take: 8
+      order: { score: DESC }
+    ) {
+      items {
+        score
+        id
+        title
+        markdownContent
+        isPublished
+        commentsCount
+        creatorAccount {
+          id
+          username
+        }
+        createdAt
+        updatedAt
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`

@@ -6,7 +6,6 @@ import { AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { GET_POST_QUERY } from './gql'
 import { GetPost } from 'system/generated/gql.types'
 import { useEffect } from 'react'
-import { DateTime } from 'luxon'
 
 export default function PostPage() {
   const { processor } = useSelector(store => store.post)

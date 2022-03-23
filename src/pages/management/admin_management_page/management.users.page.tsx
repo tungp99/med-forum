@@ -4,32 +4,29 @@ import { useLazyQuery, useQuery } from '@apollo/client'
 import Icon from '@mdi/react'
 import { mdiMenuDown, mdiMinus, mdiPlus, mdiPostOutline } from '@mdi/js'
 
-import { Toast, useDispatch, useSelector } from 'system/store'
+import { Account } from 'system/types'
 import { useAuth } from 'system/auth'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import {
   AS3Button,
   AS3Dropdown,
   AS3Input,
   AS3LayoutWithSidebar,
 } from 'system/components'
-import { SidebarComponent } from './components/sidebar.component'
-import { CreateUserPopupComponent } from './components/create-user.popup.component'
-import { DeleteUserPopup } from './components/delete-user.popup.component'
-import { Account } from 'system/types'
+import { SidebarComponent } from '../components/sidebar.component'
+import { CreateUserPopupComponent } from '../components/create-user.popup.component'
+import { DeleteUserPopup } from '../components/delete-user.popup.component'
 import './management.style.scss'
 
+import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from '../gql'
 import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
-import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from './gql'
 
 export default function ManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {
-    isPublic,
-    filterTitle: filter_title,
-    filterText: filter_text,
-    deleteId,
-  } = useSelector(store => store.managementPage)
+  const { isPublic, filterTitle, filterText, deleteId } = useSelector(
+    store => store.managementPage
+  )
   const { gqlContext } = useAuth()
 
   const [data, setData] = useState<Account[]>([])
@@ -38,16 +35,16 @@ export default function ManageUsersPage() {
     () => ({
       skip: 0,
       isPublic: isPublic,
-      search: filter_text,
+      search: filterText,
     }),
-    [isPublic, filter_text]
+    [isPublic, filterText]
   )
   const [getAccount_fetch] = useLazyQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
     ...gqlContext,
     variables: fetchAccountsVariables,
     onCompleted({ accounts: response }) {
       response?.items &&
-        filter_title !== 'All' &&
+        filterTitle !== 'All' &&
         setData(response.items.map(s => s as unknown as Account))
     },
     onError({ name, message }) {
@@ -58,9 +55,9 @@ export default function ManageUsersPage() {
   const fetchAllVariables = useMemo(
     () => ({
       skip: 0,
-      search: filter_text,
+      search: filterText,
     }),
-    [filter_text]
+    [filterText]
   )
   const { refetch: getAllAccount_refetch } = useQuery<GetAllAccounts>(
     GET_ALL_ACCOUNTS_QUERY,
@@ -69,7 +66,7 @@ export default function ManageUsersPage() {
       variables: fetchAllVariables,
       onCompleted({ accounts: response }) {
         response?.items &&
-          filter_title === 'All' &&
+          filterTitle === 'All' &&
           setData(response.items.map(s => s as unknown as Account))
       },
       onError({ name, message }) {
@@ -79,24 +76,24 @@ export default function ManageUsersPage() {
   )
 
   useEffect(() => {
-    if (filter_title === 'All') {
+    if (filterTitle === 'All') {
       getAllAccount_refetch()
     } else {
       getAccount_fetch()
     }
-  }, [filter_title, filter_text])
+  }, [filterTitle, filterText])
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
       <CreateUserPopupComponent
         onCreated={() => {
-          filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+          filterTitle === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
       />
       <DeleteUserPopup
         id={deleteId}
         onDeleted={() => {
-          filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+          filterTitle === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
       />
       <div className="filter__container">
@@ -141,7 +138,7 @@ export default function ManageUsersPage() {
             },
           ]}
         >
-          <span>{filter_title}</span>
+          <span>{filterTitle}</span>
         </AS3Dropdown>
       </div>
       {data.map(s => {

@@ -1,31 +1,29 @@
 import { Controller, useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input } from 'system/components'
-import { CreateAccount, CreateAccountInput } from 'system/generated/gql.types'
-import { useMutation } from '@apollo/client'
 import { CREATE_ACCOUNT_MUTATION } from '../gql'
-type CreateUserProps = { onCreated: () => void }
+import { CreateAccount, CreateAccountInput } from 'system/generated/gql.types'
 
-export function AS3CreateUser(props: CreateUserProps) {
+type CreateUserPopupComponentProps = { onCreated: () => void }
+
+export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
   const { gqlContext } = useAuth()
-  const [CreateAccount_fetch] = useMutation<CreateAccount>(
-    CREATE_ACCOUNT_MUTATION,
-    {
-      ...gqlContext,
-      onCompleted() {
-        props.onCreated()
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+  const [CreateAccount] = useMutation<CreateAccount>(CREATE_ACCOUNT_MUTATION, {
+    ...gqlContext,
+    onCompleted() {
+      props.onCreated()
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
   const { handleSubmit, control } = useForm<CreateAccountInput>({
     defaultValues: {
       username: '',
@@ -36,6 +34,7 @@ export function AS3CreateUser(props: CreateUserProps) {
         lastName: '',
         isPublic: true,
         phoneNumber: '',
+        country: '',
       },
     },
   })
@@ -108,6 +107,19 @@ export function AS3CreateUser(props: CreateUserProps) {
 
             <Controller
               control={control}
+              name="profile.country"
+              render={({ field: { onChange, value } }) => (
+                <AS3Input
+                  label="Country"
+                  size="lg"
+                  value={value || ''}
+                  onChange={onChange}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
               name="email"
               render={({ field: { onChange, value } }) => (
                 <AS3Input
@@ -140,7 +152,7 @@ export function AS3CreateUser(props: CreateUserProps) {
               onClick={handleSubmit(data => {
                 dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })
 
-                CreateAccount_fetch({
+                CreateAccount({
                   variables: {
                     input: data,
                   },

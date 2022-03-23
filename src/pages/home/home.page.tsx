@@ -1,4 +1,5 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useEffect, useMemo } from 'react'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
@@ -7,12 +8,18 @@ import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
 import { PicksComponent } from './components/picks.component'
 
-import { GET_POSTS_QUERY } from './gql'
+import { FILTER_POST_QUERY, GET_POSTS_QUERY } from './gql'
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
-import { GetPosts, UpdatePostInput } from 'system/generated/gql.types'
+import {
+  FilterPosts,
+  GetPosts,
+  UpdatePostInput,
+} from 'system/generated/gql.types'
 
 export default function HomePage() {
-  const { posts, page } = useSelector(store => store.homePage)
+  const { posts, page, filter_type, filter_time } = useSelector(
+    store => store.homePage
+  )
   const dispatch = useDispatch()
   const { gqlContext } = useAuth()
 
@@ -35,10 +42,44 @@ export default function HomePage() {
     },
   })
 
+  const fetchFilterVariables = useMemo(
+    () => ({
+      skip: page * 8,
+      timeFilter: filter_time,
+    }),
+    [filter_type]
+  )
+  const [filterPost_fetch] = useLazyQuery<FilterPosts>(FILTER_POST_QUERY, {
+    variables: fetchFilterVariables,
+    onCompleted({ posts }) {
+      if (posts?.items) {
+        dispatch({
+          type: 'SET_HOMEPAGE_POSTS',
+          payload: posts.items.map(s => ({ ...s, comments: [] })),
+        })
+        dispatch({
+          type: 'SET_HOMEPAGE_POSTS_PAGE',
+          payload: 0,
+        })
+      }
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
+
+  useEffect(() => {
+    if (filter_type === 'New') {
+      refetch()
+    } else {
+      filterPost_fetch()
+    }
+  }, [filter_type])
+
   const [updatePost] = useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
     ...gqlContext,
     onCompleted() {
-      refetch()
+      filter_type === 'New' ? refetch() : filterPost_fetch()
     },
     onError({ name, message }) {
       Toast.error({ title: name, content: message })
@@ -55,7 +96,9 @@ export default function HomePage() {
           loading={loading}
           disabled={loading}
           icon={mdiSync}
-          onClick={() => refetch()}
+          onClick={() =>
+            filter_type === 'New' ? refetch() : filterPost_fetch()
+          }
         />
       </div>
 

@@ -57,6 +57,59 @@ export interface GetPostsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FilterPosts
+// ====================================================
+
+export interface FilterPosts_posts_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface FilterPosts_posts_items {
+  __typename: "Post";
+  score: number;
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+  commentsCount: number;
+  creatorAccount: FilterPosts_posts_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface FilterPosts_posts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface FilterPosts_posts {
+  __typename: "PostCollectionSegment";
+  items: FilterPosts_posts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: FilterPosts_posts_pageInfo;
+}
+
+export interface FilterPosts {
+  posts: FilterPosts_posts | null;
+}
+
+export interface FilterPostsVariables {
+  timeFilter: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetMyPosts
 // ====================================================
 
@@ -254,6 +307,60 @@ export interface CreateAccount {
 
 export interface CreateAccountVariables {
   input: CreateAccountInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetPostsAdmin
+// ====================================================
+
+export interface GetPostsAdmin_posts_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetPostsAdmin_posts_items {
+  __typename: "Post";
+  score: number;
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+  commentsCount: number;
+  creatorAccount: GetPostsAdmin_posts_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetPostsAdmin_posts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetPostsAdmin_posts {
+  __typename: "PostCollectionSegment";
+  items: GetPostsAdmin_posts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetPostsAdmin_posts_pageInfo;
+}
+
+export interface GetPostsAdmin {
+  posts: GetPostsAdmin_posts | null;
+}
+
+export interface GetPostsAdminVariables {
+  isPublished: boolean;
+  skip: number;
 }
 
 /* tslint:disable */

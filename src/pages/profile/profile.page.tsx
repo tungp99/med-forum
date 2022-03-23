@@ -9,7 +9,12 @@ import { ProfessionCardComponent } from './components/profession.card.component'
 import { OverviewCardComponent } from './components/overview.card.component'
 import { NameFormComponent } from './components/name.form.component'
 import { SecurityFormComponent } from './components/security.form.component'
+import { ProfessionPopupComponent } from './components/profession-popup.component'
+import { DeleteProfessionPopupComponent } from './components/delete-profession.popup.component'
+import { QualificationCardComponent } from './components/qualification.card.component'
+import { QualificationPopup } from './components/qualification.popup.component'
 import './profile.style.scss'
+
 import {
   ADD_EDUCATION_MUTATION,
   ADD_EXPERIENCE_MUTATION,
@@ -22,10 +27,6 @@ import {
   GetAccount,
   updateQualification,
 } from 'system/generated/gql.types'
-import { ProfessionPopupComponent } from './components/profession-popup.component'
-import { DeleteProfession } from './components/delete_profession_modal.component'
-import { QualificationCardComponent } from './components/qualification.card.component'
-import { QualificationPopup } from './components/qualification.popup.component'
 
 export default function ProfilePage() {
   const { id } = useParams()
@@ -100,9 +101,11 @@ export default function ProfilePage() {
             sm={12}
             md={8}>
             <OverviewCardComponent data={data.account.profile} />
+
             <QualificationCardComponent
               data={data.account.profile.qualifications}
-            ></QualificationCardComponent>
+            />
+
             <ProfessionCardComponent
               title="Experience"
               data={data.account.profile.experience}
@@ -152,6 +155,7 @@ export default function ProfilePage() {
           }
         }}
       />
+
       <QualificationPopup
         onSave={newQualification => {
           data?.account &&
@@ -159,12 +163,13 @@ export default function ProfilePage() {
               variables: { input: newQualification },
             })
         }}
-      ></QualificationPopup>
-      <DeleteProfession
+      />
+
+      <DeleteProfessionPopupComponent
         onDeleted={() => {
           fetchAccount(fetchAccountVariables)
         }}
-      ></DeleteProfession>
+      />
     </Container>
   )
 }

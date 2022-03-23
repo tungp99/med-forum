@@ -3,22 +3,22 @@ import { useNavigate } from 'react-router-dom'
 
 import { Card, Stack } from 'react-bootstrap'
 import {
-  mdiFinance,
   mdiFire,
   mdiPencilBoxOutline,
+  mdiStar,
   mdiWhiteBalanceSunny,
 } from '@mdi/js'
 
 import { useAuth } from 'system/auth'
 // import { GetPosts } from 'system/generated/gql.types'
-// import { Toast, useDispatch, useSelector } from 'system/store'
+import { useDispatch, useSelector } from 'system/store'
 import { AS3Chip, AS3Spacer } from 'system/components'
 // import { GET_POSTS_QUERY } from '../gql'
 
 export function FilterComponent() {
   const navigate = useNavigate()
-  // const dispatch = useDispatch()
-  // const { page } = useSelector(store => store.homePage)
+  const dispatch = useDispatch()
+  const {} = useSelector(store => store.homePage)
   const { authenticated } = useAuth()
 
   return (
@@ -29,9 +29,30 @@ export function FilterComponent() {
           <Stack
             direction="horizontal"
             gap={3}>
-            <AS3Chip icon={mdiFire}>Hot</AS3Chip>
-            <AS3Chip icon={mdiWhiteBalanceSunny}>New</AS3Chip>
-            <AS3Chip icon={mdiFinance}>Rising</AS3Chip>
+            <AS3Chip
+              icon={mdiStar}
+              onClick={() =>
+                dispatch({ type: 'FILTER_POST_UPDATE', payload: 'MostRating' })
+              }
+            >
+              Most Rating
+            </AS3Chip>
+            <AS3Chip
+              icon={mdiFire}
+              onClick={() =>
+                dispatch({ type: 'FILTER_POST_UPDATE', payload: 'Hot' })
+              }
+            >
+              Hot
+            </AS3Chip>
+            <AS3Chip
+              icon={mdiWhiteBalanceSunny}
+              onClick={() =>
+                dispatch({ type: 'FILTER_POST_UPDATE', payload: 'New' })
+              }
+            >
+              New
+            </AS3Chip>
 
             <AS3Spacer />
 

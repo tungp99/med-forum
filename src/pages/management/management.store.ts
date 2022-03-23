@@ -3,18 +3,18 @@ import { StoreAction } from 'system/store'
 type Store = {
   fetchPublished: boolean
   isPublic: boolean | undefined
-  filter_title: string
-  filter_text: string
+  filterTitle: string
+  filterText: string
   isCreateUserPopupActive: boolean
   isDeleteUserPopupActive: boolean
   deleteId?: string
 }
 
 const initialState: Store = {
-  fetchPublished: false,
+  fetchPublished: true,
   isPublic: undefined,
-  filter_title: 'All',
-  filter_text: '',
+  filterTitle: 'All',
+  filterText: '',
   isCreateUserPopupActive: false,
   isDeleteUserPopupActive: false,
 }
@@ -51,24 +51,24 @@ export const managementPageStore = (
       return {
         ...state,
         isPublic: true,
-        filter_title: 'Public',
+        filterTitle: 'Public',
       }
     case 'SET_ACCOUNT_FILTER_PRIVATE':
       return {
         ...state,
         isPublic: false,
-        filter_title: 'Private',
+        filterTitle: 'Private',
       }
     case 'SET_ACCOUNT_FILTER_ALL':
       return {
         ...state,
-        filter_title: 'All',
+        filterTitle: 'All',
       }
     case 'SET_ACCOUNT_UPDATE_FILTER':
       const filter_text = action.payload
       return {
         ...state,
-        filter_text: filter_text ?? '',
+        filterText: filter_text ?? '',
       }
     case 'OPEN_CREATE_USER_POPUP':
       return {

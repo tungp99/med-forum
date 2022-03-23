@@ -96,3 +96,31 @@ export const CREATE_ACCOUNT_MUTATION = gql`
     }
   }
 `
+export const GET_POSTS_ADMIN_QUERY = gql`
+  query GetPostsAdmin($isPublished: Boolean!, $skip: Int!) {
+    posts(
+      where: { and: { isPublished: { eq: $isPublished } } }
+      skip: $skip
+      take: 8
+      order: { createdAt: DESC }
+    ) {
+      items {
+        score
+        id
+        title
+        markdownContent
+        isPublished
+        commentsCount
+        creatorAccount {
+          id
+          username
+        }
+        createdAt
+        updatedAt
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`
