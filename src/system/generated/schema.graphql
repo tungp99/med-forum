@@ -91,6 +91,7 @@ type Mutation {
   login(input: LoginInput!): LoginPayload!
   refreshAccessToken(input: RefreshTokenInput!): RefreshTokenPayload!
   changePassword(input: ChangePasswordInput!): UpdateEntityPayload!
+  triggerLogout: Boolean!
   createAccount(input: CreateAccountInput!): Account!
   updateAccount(input: UpdateAccountInput!): UpdateEntityPayload!
   deleteAccount(id: String!): DeleteEntityPayload!
@@ -107,6 +108,12 @@ type Mutation {
   createComment(input: CreateCommentInput!): Comment!
   updateComment(input: UpdateCommentInput!): UpdateEntityPayload!
   deleteComment(id: String!): DeleteEntityPayload!
+}
+
+type Subscription {
+  accountLoggedIn: Int!
+  accountLoggedOut: Int!
+  accountCreated: Int!
 }
 
 enum ApplyPolicy {
@@ -383,6 +390,13 @@ input QualificationFilterInput {
   expireAt: ComparableDateTimeOperationFilterInput
 }
 
+input CreateAccountInput {
+  email: String!
+  username: String
+  password: String!
+  profile: ProfileInput!
+}
+
 input ChangePasswordInput {
   currentPassword: String!
   newPassword: String!
@@ -434,13 +448,6 @@ type Profile {
   experience: [Profession!]!
   education: [Profession!]!
   qualifications: [Qualification!]!
-}
-
-input CreateAccountInput {
-  email: String!
-  username: String
-  password: String!
-  profile: ProfileInput!
 }
 
 input UpdateAccountInput {

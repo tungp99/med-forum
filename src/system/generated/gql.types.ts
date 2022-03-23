@@ -713,6 +713,45 @@ export interface GetMe {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL subscription operation: AccountLoggedIn
+// ====================================================
+
+export interface AccountLoggedIn {
+  accountLoggedIn: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL subscription operation: AccountLoggedOut
+// ====================================================
+
+export interface AccountLoggedOut {
+  accountLoggedOut: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL subscription operation: AccountCreated
+// ====================================================
+
+export interface AccountCreated {
+  accountCreated: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetComments
 // ====================================================
 
