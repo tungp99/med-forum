@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
+import { useEffect, useMemo } from 'react'
+import { useMutation, useQuery } from '@apollo/client'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
@@ -9,7 +9,7 @@ import {
   AS3LayoutWithSidebar,
   AS3PostCard,
 } from 'system/components'
-import { FilterComponent } from '../management/components/filter.component'
+import { FilterComponent } from './components/filter.component'
 
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
 import { GetPostsAdmin, UpdatePostInput } from 'system/generated/gql.types'
@@ -21,20 +21,23 @@ export default function AdminManagementPage() {
   const { authenticated, gqlContext } = useAuth()
   const { fetchPublished } = useSelector(store => store.managementPage)
   const { page, posts } = useSelector(store => store.homePage)
+  const { filterTime } = useSelector(store => store.admin)
   const dispatch = useDispatch()
 
   const fetchVariables = useMemo(
     () => ({
       isPublished: fetchPublished,
       skip: page * 8,
+      timeFilter: filterTime,
     }),
-    [fetchPublished, page]
+    [fetchPublished, page, filterTime]
   )
 
   const { refetch, loading } = useQuery<GetPostsAdmin>(GET_POSTS_ADMIN_QUERY, {
     variables: {
       isPublished: fetchVariables.isPublished,
       skip: fetchVariables.skip,
+      timeFilter: filterTime,
     },
     onCompleted({ posts }) {
       if (posts?.items) {
@@ -73,27 +76,36 @@ export default function AdminManagementPage() {
   }, [authenticated])
 
   return (
-    <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
-      <AS3Dropdown
-        className="ms-4"
-        suffixIcon={mdiMenuDown}
-        align="start"
-        items={[
-          {
-            text: 'Published',
-            separate: true,
-            onClick: () => dispatch({ type: 'SET_POSTS_FILTER_PUBLISHED' }),
-          },
-          {
-            text: 'Drafts',
-            separate: true,
-            onClick: () => dispatch({ type: 'SET_POSTS_FILTER_DRAFTS' }),
-          },
-        ]}
-      >
-        <span>{'Published'}</span>
-      </AS3Dropdown>
-      <FilterComponent />
+    <AS3LayoutWithSidebar
+      sidebar={
+        <>
+          <h6 className="lh-lg">Navigation</h6>
+          <SidebarComponent />
+        </>
+      }
+    >
+      <div className="">
+        <AS3Dropdown
+          className="ms-4"
+          suffixIcon={mdiMenuDown}
+          align="start"
+          items={[
+            {
+              text: 'Published',
+              separate: true,
+              onClick: () => dispatch({ type: 'SET_POSTS_FILTER_PUBLISHED' }),
+            },
+            {
+              text: 'Drafts',
+              separate: true,
+              onClick: () => dispatch({ type: 'SET_POSTS_FILTER_DRAFTS' }),
+            },
+          ]}
+        >
+          <span>{'Published'}</span>
+        </AS3Dropdown>
+        <FilterComponent />
+      </div>
 
       <div className="d-flex justify-content-center mb-3">
         <AS3Button

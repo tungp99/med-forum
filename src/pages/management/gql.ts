@@ -97,9 +97,16 @@ export const CREATE_ACCOUNT_MUTATION = gql`
   }
 `
 export const GET_POSTS_ADMIN_QUERY = gql`
-  query GetPostsAdmin($isPublished: Boolean!, $skip: Int!) {
+  query GetPostsAdmin(
+    $isPublished: Boolean!
+    $skip: Int!
+    $timeFilter: DateTime!
+  ) {
     posts(
-      where: { and: { isPublished: { eq: $isPublished } } }
+      where: {
+        isPublished: { eq: $isPublished }
+        and: { createdAt: { gte: $timeFilter } }
+      }
       skip: $skip
       take: 8
       order: { createdAt: DESC }

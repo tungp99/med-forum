@@ -44,13 +44,14 @@ export const homePageStore = (
         page: state.page + 1,
       }
     case 'FILTER_POST_UPDATE':
-      let filter_time = '1111-11-11T11:11:11.111Z'
+      let filter_time = '1970-01-01T11:11:11.111Z'
       const filter_type = action.payload as string
-      filter_type === 'MostRating'
-        ? (filter_time = '1111-11-11T11:11:11.111Z')
-        : filter_type === 'Hot'
-        ? (filter_time = `${DateTime.now().startOf('week').toISO()}`)
-        : null
+      filter_time =
+        filter_type === 'MostRating'
+          ? '1111-11-11T11:11:11.111Z'
+          : filter_type === 'Hot'
+          ? `${DateTime.now().startOf('week').toISO()}`
+          : ''
       return {
         ...state,
         page: 0,
