@@ -9,7 +9,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint src --ext=ts,tsx",
     "codegen:gqlschema": "apollo client:download-schema --endpoint=http://192.168.0.100:8008 src/system/generated/schema.graphql",
-    "codegen:gqltypes": "apollo client:codegen --target=typescript --addTypename --outputFlat src/system/generated/gql.types.ts"
+    "codegen:gqltypes": "apollo client:codegen --target=typescript --outputFlat src/system/generated/gql.types.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",

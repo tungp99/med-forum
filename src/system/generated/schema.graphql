@@ -249,6 +249,7 @@ input ProfileFilterInput {
   isPublic: BooleanOperationFilterInput
   firstName: StringOperationFilterInput
   lastName: StringOperationFilterInput
+  countryCode: StringOperationFilterInput
   phoneNumber: StringOperationFilterInput
   birthDate: ComparableNullableOfDateTimeOperationFilterInput
   experience: ListFilterInputTypeOfProfessionFilterInput
@@ -270,6 +271,7 @@ input ProfileSortInput {
   isPublic: SortEnumType
   firstName: SortEnumType
   lastName: SortEnumType
+  countryCode: SortEnumType
   phoneNumber: SortEnumType
   birthDate: SortEnumType
 }
@@ -442,6 +444,7 @@ type Profile {
   isPublic: Boolean!
   firstName: String!
   lastName: String!
+  countryCode: String!
   phoneNumber: String!
   birthDate: DateTime
   experience: [Profession!]!
@@ -540,7 +543,7 @@ input ProfileInput {
   isPublic: Boolean!
   firstName: String!
   lastName: String!
-  country: String
+  countryCode: String
   phoneNumber: String!
   birthDate: DateTime
 }

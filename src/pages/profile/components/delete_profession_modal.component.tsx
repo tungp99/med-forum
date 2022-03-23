@@ -88,7 +88,6 @@ export function DeleteProfession(props: DeleteProfessionComponentProps) {
         <AS3Button
           className="fs-6 btn-danger me-4"
           onClick={() => {
-            console.log(state.DeleteInfo.title)
             state.DeleteInfo.title === 'Education'
               ? deleteEducation()
               : state.DeleteInfo.title === ''

@@ -29,9 +29,6 @@ export default function PostPage() {
     return <>fetching, wait for it</>
   }
 
-  console.log(DateTime.now().startOf('week').toJSDate())
-  console.log(DateTime.now().endOf('week').toJSDate())
-
   return (
     <AS3LayoutWithSidebar sidebar={<span>hello</span>}>
       <AS3PostCard

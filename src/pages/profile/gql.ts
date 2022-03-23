@@ -13,6 +13,7 @@ export const GET_ACCOUNT_QUERY = gql`
         lastName
         birthDate
         phoneNumber
+        countryCode
         qualifications {
           title
           issuedBy

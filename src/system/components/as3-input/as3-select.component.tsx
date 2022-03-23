@@ -1,5 +1,4 @@
 import Icon from '@mdi/react'
-import { useMemo } from 'react'
 import {
   FloatingLabel,
   Form,
@@ -39,18 +38,13 @@ export function AS3Select({
   const classList = ['as3-input']
   className && classList.push(className)
 
-  const options = useMemo(
-    () =>
-      items.map(({ text, value: optionValue }, i) => (
-        <option
-          key={i}
-          value={optionValue}
-          selected={optionValue === value}>
-          {text}
-        </option>
-      )),
-    [value]
-  )
+  const options = items.map(({ text, value }, i) => (
+    <option
+      key={i}
+      value={value}>
+      {text}
+    </option>
+  ))
 
   return (
     <Form.Group
@@ -69,6 +63,7 @@ export function AS3Select({
           <FloatingLabel label={label}>
             <Form.Select
               disabled={disabled}
+              value={value}
               onChange={onChange}
               onKeyUp={onKeyUp}
             >
@@ -78,6 +73,7 @@ export function AS3Select({
         ) : (
           <Form.Select
             disabled={disabled}
+            value={value}
             onChange={onChange}
             onKeyUp={onKeyUp}
           >
