@@ -1,9 +1,11 @@
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import Icon from '@mdi/react'
 import { mdiMenuDown, mdiMinus, mdiPlus, mdiPostOutline } from '@mdi/js'
 
-import { useAuth } from 'system/auth'
 import { Toast, useDispatch, useSelector } from 'system/store'
+import { useAuth } from 'system/auth'
 import {
   AS3Button,
   AS3Dropdown,
@@ -11,22 +13,23 @@ import {
   AS3LayoutWithSidebar,
 } from 'system/components'
 import { SidebarComponent } from './components/sidebar.component'
+import { CreateUserPopupComponent } from './components/create-user.popup.component'
+import { DeleteUserPopup } from './components/delete-user.popup.component'
+import { Account } from 'system/types'
+import './management.style.scss'
+
 import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
 import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from './gql'
-
-import './management.style.scss'
-import { useEffect, useMemo, useState } from 'react'
-import { Account } from 'system/types'
-import { useNavigate } from 'react-router'
-import { AS3CreateUser } from './components/create_user.component'
-import { DeleteUser } from './components/delete_modal.component'
 
 export default function ManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isPublic, filter_title, filter_text, deleteId } = useSelector(
-    store => store.managementPage
-  )
+  const {
+    isPublic,
+    filterTitle: filter_title,
+    filterText: filter_text,
+    deleteId,
+  } = useSelector(store => store.managementPage)
   const { gqlContext } = useAuth()
 
   const [data, setData] = useState<Account[]>([])
@@ -85,12 +88,12 @@ export default function ManageUsersPage() {
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
-      <AS3CreateUser
+      <CreateUserPopupComponent
         onCreated={() => {
           filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
       />
-      <DeleteUser
+      <DeleteUserPopup
         id={deleteId}
         onDeleted={() => {
           filter_title === 'All' ? getAllAccount_refetch() : getAccount_fetch()

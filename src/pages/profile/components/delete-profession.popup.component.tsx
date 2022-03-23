@@ -1,23 +1,26 @@
 import { useMutation } from '@apollo/client'
-import { mdiClose } from '@mdi/js'
 import { Modal } from 'react-bootstrap'
+import { mdiClose } from '@mdi/js'
+
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Spacer, AS3Button } from 'system/components'
-import {
-  RemoveEducation,
-  RemoveExperience,
-  RemoveQualification,
-} from 'system/generated/gql.types'
-import { Toast, useDispatch, useSelector } from 'system/store'
 import {
   REMOVE_EDUCATION_MUTATION,
   REMOVE_EXPERIENCE_MUTATION,
   REMOVE_QUALIFICATION_MUTATION,
 } from '../gql'
+import {
+  RemoveEducation,
+  RemoveExperience,
+  RemoveQualification,
+} from 'system/generated/gql.types'
 
-type DeleteProfessionComponentProps = { onDeleted: () => void }
+type DeleteProfessionPopupComponentProps = { onDeleted: () => void }
 
-export function DeleteProfession(props: DeleteProfessionComponentProps) {
+export function DeleteProfessionPopupComponent(
+  props: DeleteProfessionPopupComponentProps
+) {
   const { gqlContext } = useAuth()
   const state = useSelector(store => store.profilePage)
   const dispatch = useDispatch()

@@ -1,16 +1,17 @@
 import { Controller, useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input } from 'system/components'
-import { CreateAccount, CreateAccountInput } from 'system/generated/gql.types'
-import { useMutation } from '@apollo/client'
 import { CREATE_ACCOUNT_MUTATION } from '../gql'
-type CreateUserProps = { onCreated: () => void }
+import { CreateAccount, CreateAccountInput } from 'system/generated/gql.types'
 
-export function AS3CreateUser(props: CreateUserProps) {
+type CreateUserPopupComponentProps = { onCreated: () => void }
+
+export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
   const { gqlContext } = useAuth()

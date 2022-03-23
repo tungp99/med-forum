@@ -7,9 +7,9 @@ import { DeleteAccount } from 'system/generated/gql.types'
 import { DELETE_ACCOUNT_MUTATION } from '../gql'
 import { useAuth } from 'system/auth'
 
-type DeleteUserComponentProps = { id?: string; onDeleted: () => void }
+type DeleteUserPopupComponentProps = { id?: string; onDeleted: () => void }
 
-export function DeleteUser(props: DeleteUserComponentProps) {
+export function DeleteUserPopup(props: DeleteUserPopupComponentProps) {
   const { gqlContext } = useAuth()
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
