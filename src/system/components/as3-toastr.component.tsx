@@ -10,7 +10,7 @@ export function AS3Toastr() {
       {notifications.map(s => (
         <Toast
           key={s.id.toMillis()}
-          delay={5000}
+          delay={1500}
           onClose={() => dispatch({ type: 'UNTOAST', payload: { id: s.id } })}
         >
           <Toast.Header>

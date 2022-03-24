@@ -89,6 +89,7 @@ type Query {
 type Mutation {
   register(input: RegisterInput!): LoginPayload!
   login(input: LoginInput!): LoginPayload!
+  adminLogin(input: AdminLoginInput!): AdminLoginPayload!
   refreshAccessToken(input: RefreshTokenInput!): RefreshTokenPayload!
   changePassword(input: ChangePasswordInput!): UpdateEntityPayload!
   triggerLogout: Boolean!
@@ -562,4 +563,15 @@ input ProfileInput {
   countryCode: String
   phoneNumber: String!
   birthDate: DateTime
+}
+
+input AdminLoginInput {
+  input: LoginInput!
+}
+
+union AdminLoginError = AuthenticationError
+
+type AdminLoginPayload {
+  loginPayload: LoginPayload
+  errors: [AdminLoginError!]
 }

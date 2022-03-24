@@ -3,12 +3,12 @@ import { Route, Routes as RR } from 'react-router-dom'
 import { GuardedComponent } from 'system/auth'
 import {
   HomePage,
-  ManageUsersPage,
   ManagementPostsPage,
   PostPage,
   PostsCreatePage,
   ProfilePage,
-  AdminPage,
+  AdminManageUsersPage,
+  AdminManagePostsPage,
 } from 'pages'
 
 export function Routes() {
@@ -36,38 +36,40 @@ export function Routes() {
           }
         />
       </Route>
+
       <Route path="/admin">
         <Route
           index
           element={
-            <GuardedComponent>
-              <AdminPage />
+            <GuardedComponent requireGod>
+              <AdminManagePostsPage />
             </GuardedComponent>
           }
         />
-        <Route path="profile">
-          <Route
-            index
-            element={
-              <GuardedComponent>
-                <ProfilePage editable={true} />
-              </GuardedComponent>
-            }
-          />
-          <Route
-            path=":id"
-            element={
-              <GuardedComponent>
-                <ProfilePage editable={true} />
-              </GuardedComponent>
-            }
-          />
-        </Route>
+
+        <Route
+          path="profile/:id"
+          element={
+            <GuardedComponent requireGod>
+              <ProfilePage editable />
+            </GuardedComponent>
+          }
+        />
+
+        <Route
+          path="posts"
+          element={
+            <GuardedComponent requireGod>
+              <AdminManagePostsPage />
+            </GuardedComponent>
+          }
+        />
+
         <Route
           path="users"
           element={
-            <GuardedComponent>
-              <ManageUsersPage />
+            <GuardedComponent requireGod>
+              <AdminManageUsersPage />
             </GuardedComponent>
           }
         />
@@ -106,26 +108,7 @@ export function Routes() {
           path="users"
           element={
             <GuardedComponent>
-              <ManageUsersPage />
-            </GuardedComponent>
-          }
-        />
-      </Route>
-
-      <Route path="/posts">
-        <Route
-          index
-          element={<span>wrong way ;)</span>} />
-
-        <Route
-          path=":id"
-          element={<PostPage />} />
-
-        <Route
-          path="write"
-          element={
-            <GuardedComponent>
-              <PostsCreatePage />
+              <AdminManageUsersPage />
             </GuardedComponent>
           }
         />

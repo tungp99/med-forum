@@ -33,29 +33,17 @@ type AuthContextType = {
   account: Account
   setAccessToken: Dispatch<React.SetStateAction<string>>
   setRefreshToken: Dispatch<React.SetStateAction<string>>
-  // setAccount: Dispatch<React.SetStateAction<Account>>
-  gqlContext: {
-    context: {
-      headers: {
-        Authorization: string
-      }
-    }
-  }
+  gqlContext: any
+  accessToken: string
 }
 
 const AuthContext = createContext<AuthContextType>({
   authenticated: false,
   account: {} as Account,
-  // setAccount: () => {},
   setAccessToken: () => {},
   setRefreshToken: () => {},
-  gqlContext: {
-    context: {
-      headers: {
-        Authorization: '',
-      },
-    },
-  },
+  gqlContext: {},
+  accessToken: '',
 })
 
 export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
@@ -71,8 +59,7 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     [accessToken]
   )
 
-  const [sendFetchAccount, {}] = useLazyQuery<GetMe>(GET_ME, {
-    ...gqlContext,
+  const [fetchAccount] = useLazyQuery<GetMe>(GET_ME, {
     onCompleted({ me: response }) {
       if (response) {
         setAccount({ ...response } as unknown as Account)
@@ -84,25 +71,23 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
     },
   })
 
-  const [sendRefreshToken, {}] = useMutation<RefreshToken>(
-    REFRESH_TOKEN_MUTATION,
-    {
-      onCompleted: ({ refreshAccessToken: response }) => {
-        if (response.isSuccess) {
-          setAccessToken(response.accessToken)
-          setRefreshToken(response.refreshToken)
-        }
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+  const [sendRefreshToken] = useMutation<RefreshToken>(REFRESH_TOKEN_MUTATION, {
+    onCompleted: ({ refreshAccessToken: response }) => {
+      if (response.isSuccess) {
+        setAccessToken(response.accessToken)
+        setRefreshToken(response.refreshToken)
+      }
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token')
+    localStorage.removeItem('access_token')
     const refreshToken = localStorage.getItem('refresh_token')
-    localStorage.clear()
+    localStorage.removeItem('refresh_token')
 
     if (refreshToken && accessToken)
       sendRefreshToken({ variables: { input: { accessToken, refreshToken } } })
@@ -115,15 +100,13 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
       setAccount({} as Account)
       return
     }
+
+    fetchAccount()
   }, [accessToken])
 
   useEffect(() => {
     localStorage.setItem('refresh_token', refreshToken)
   }, [refreshToken])
-
-  useEffect(() => {
-    accessToken && sendFetchAccount(gqlContext)
-  }, [gqlContext])
 
   return (
     <AuthContext.Provider
@@ -133,6 +116,7 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
         setAccessToken,
         setRefreshToken,
         gqlContext,
+        accessToken,
       }}
     >
       {props.children}
@@ -147,6 +131,7 @@ export function useAuth() {
     setAccessToken,
     setRefreshToken,
     gqlContext,
+    accessToken,
   } = useContext(AuthContext)
   const dispatch = useDispatch()
 
@@ -194,5 +179,21 @@ export function useAuth() {
       setRefreshToken('')
     },
     gqlContext,
+    hasFullAccess() {
+      const base64Url = accessToken.split('.')[1]
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+      const jsonPayload = decodeURIComponent(
+        Buffer.from(base64, 'base64')
+          .toString()
+          .split('')
+          .map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+          })
+          .join('')
+      )
+
+      const claims = JSON.parse(jsonPayload)
+      return claims.permission && claims.permission === 'all:all'
+    },
   }
 }

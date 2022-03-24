@@ -1,7 +1,6 @@
 import { Card, ListGroup, Ratio } from 'react-bootstrap'
 import Icon from '@mdi/react'
 import {
-  mdiAccount,
   mdiCamera,
   mdiEmailMultipleOutline,
   mdiHospitalBuilding,
@@ -69,7 +68,7 @@ export function OverviewCardComponent({
             <AS3Avatar
               width={128}
               height={128}>
-              {editable ? (
+              {editable && (
                 <AS3Button
                   icon={mdiCamera}
                   iconSize={1.2}
@@ -79,8 +78,6 @@ export function OverviewCardComponent({
                     avatarInputRef.current?.click()
                   }}
                 />
-              ) : (
-                <></>
               )}
             </AS3Avatar>
           </div>
@@ -88,35 +85,34 @@ export function OverviewCardComponent({
           <Card.Title className="mt-2">
             {firstName} {lastName}
           </Card.Title>
-          {occupations.length ? (
-            <Card.Subtitle className="mb-2">
-              <Icon
-                path={mdiAccount}
-                size={0.8} /> {occupations.join(' | ')}
+
+          {occupations.length > 0 && (
+            <Card.Subtitle className="mb-2 d-flex align-items-center">
+              {occupations.join(' | ')}
             </Card.Subtitle>
-          ) : (
-            <></>
           )}
-          {username ? (
+
+          {username && (
             <Card.Subtitle className="mb-3">{`as3/${username}`}</Card.Subtitle>
-          ) : (
-            <></>
           )}
-          <Card.Subtitle className="mb-2">
+
+          <Card.Subtitle className="mb-2 d-flex align-items-center">
             <Icon
+              className="me-1"
               path={mdiEmailMultipleOutline}
-              size={0.7} /> {email}
+              size={0.8} />{' '}
+            {email}
           </Card.Subtitle>
-          {phoneNumber ? (
-            <Card.Subtitle className="mb-2">
+
+          {phoneNumber && (
+            <Card.Subtitle className="mb-2 d-flex align-items-center">
               <Icon
+                className="me-1"
                 path={mdiPhone}
-                size={0.7} /> {phoneNumber}
+                size={0.8} /> {phoneNumber}
             </Card.Subtitle>
-          ) : (
-            <></>
           )}
-          {schools.length !== 0 && (
+          {schools.length > 0 && (
             <Card.Subtitle className="mb-2">Student</Card.Subtitle>
           )}
           <Card.Subtitle className="location">{country}</Card.Subtitle>
@@ -126,7 +122,9 @@ export function OverviewCardComponent({
           className="work"
           variant="flush">
           {workplaces.map((h, key) => (
-            <ListGroup.Item key={key}>
+            <ListGroup.Item
+              className="border-0"
+              key={key}>
               <Icon
                 className="me-2"
                 path={mdiHospitalBuilding}
@@ -146,6 +144,7 @@ export function OverviewCardComponent({
             ))}
         </ListGroup>
       </div>
+
       <input
         ref={avatarInputRef}
         type="file"

@@ -5,8 +5,8 @@ import { Card, CardProps, Stack } from 'react-bootstrap'
 import {
   mdiArrowDownBoldOutline,
   mdiArrowUpBoldOutline,
+  mdiBookmark,
   mdiBookmarkOutline,
-  mdiFlagOutline,
   mdiMessageOutline,
   mdiPencilOutline,
 } from '@mdi/js'
@@ -29,6 +29,7 @@ import { useMutation } from '@apollo/client'
 import { Toast } from 'system/store'
 import { UPDATE_POST_RATE_MUTATION } from './gql'
 import { AS3Link } from '../as3-link/as3-link.component'
+import { useCollector } from 'system/plugins'
 
 type AS3PostCardProps = CardProps & {
   data: Post
@@ -58,6 +59,9 @@ export function AS3PostCard({
     score,
   } = data
 
+  const { isCollected, addPostId, deletePostId, collection } = useCollector()
+  const collected = useMemo(() => isCollected(id), [collection])
+
   const { account, gqlContext } = useAuth()
   const navigate = useNavigate()
   const isMine = useMemo(() => creatorAccount?.id === account.id, [account])
@@ -66,7 +70,7 @@ export function AS3PostCard({
     postRate: score,
   })
 
-  const [postRate_update] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
+  const [ratePost] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
     ...gqlContext,
     onCompleted(response) {
       if (response.ratePost.isSuccess)
@@ -98,7 +102,7 @@ export function AS3PostCard({
             iconSize={0.8}
             text
             onClick={() => {
-              postRate_update({
+              ratePost({
                 variables: {
                   input: { postId: id, quality: Quality.GOOD },
                 },
@@ -113,7 +117,7 @@ export function AS3PostCard({
             iconSize={0.8}
             text
             onClick={() => {
-              postRate_update({
+              ratePost({
                 variables: {
                   input: { postId: id, quality: Quality.BAD },
                 },
@@ -139,7 +143,9 @@ export function AS3PostCard({
               ) : (
                 '[deleted account]'
               )}
-              <span className="separator mx-1">•</span>
+            </span>
+            <span className="separator mx-1">•</span>
+            <span className="text-muted fw-normal">
               {DateTime.fromISO(createdAt).toRelative()}
             </span>
 
@@ -156,17 +162,6 @@ export function AS3PostCard({
                   icon={mdiPencilOutline}
                   onClick={() => setState({ ...state, editing: true })}
                 />
-              )}
-
-              {!isMine && (
-                <AS3Button
-                  className="action"
-                  text
-                  size="sm"
-                  icon={mdiFlagOutline}
-                >
-                  Report
-                </AS3Button>
               )}
             </Stack>
           </Card.Subtitle>
@@ -195,7 +190,8 @@ export function AS3PostCard({
               className="action"
               text
               size="sm"
-              icon={mdiBookmarkOutline}
+              icon={collected ? mdiBookmark : mdiBookmarkOutline}
+              onClick={() => (collected ? deletePostId(id) : addPostId(id))}
             >
               Collect
             </AS3Button>

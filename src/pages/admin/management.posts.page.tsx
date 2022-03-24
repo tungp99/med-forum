@@ -17,11 +17,13 @@ import { mdiMenuDown, mdiSync } from '@mdi/js'
 import { SidebarComponent } from '../management/components/sidebar.component'
 import { GET_POSTS_ADMIN_QUERY } from '../management/gql'
 
-export default function AdminManagementPage() {
+export default function AdminManagePostsPage() {
   const { authenticated, gqlContext } = useAuth()
-  const { fetchPublished } = useSelector(store => store.managementPage)
-  const { page, posts } = useSelector(store => store.homePage)
-  const { filterTime } = useSelector(store => store.admin)
+  const {
+    managementPage: { fetchPublished },
+    homePage: { page, posts },
+    admin: { filterTime },
+  } = useSelector(store => store)
   const dispatch = useDispatch()
 
   const fetchVariables = useMemo(

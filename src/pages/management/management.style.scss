@@ -12,7 +12,6 @@
 .vip__container {
   display: grid;
   grid-template-columns: 2fr 15fr 2fr;
-  // background-color: rgba(184, 170, 44, 0.589);
   background-image: linear-gradient(to top left, #ffae00bd, #ffcd03c2);
   cursor: pointer;
 }
@@ -27,18 +26,32 @@
 .__container:hover {
   background-image: linear-gradient(to top left, #979797e8, #dddddae8);
 }
+
 .vip__container:hover {
   background-image: linear-gradient(to top left, #ffaf03, #ffcd03);
+}
+
+.__container,
+.vip__container {
+  .as3-button {
+    visibility: hidden;
+  }
+
+  &:hover {
+    .as3-button {
+      visibility: visible;
+    }
+  }
 }
 
 .posts {
   padding-top: 1.1rem;
   text-align: center;
   font-weight: bold;
-}
 
-.post__number {
-  margin: 0;
+  &__number {
+    margin: 0;
+  }
 }
 
 .isPublic {

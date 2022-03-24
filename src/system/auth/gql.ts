@@ -28,6 +28,17 @@ export const LOGIN_MUTATION = gql`
   }
 `
 
+export const ADMIN_LOGIN_MUTATION = gql`
+  mutation AdminLogin($input: AdminLoginInput!) {
+    adminLogin(input: $input) {
+      loginPayload {
+        accessToken
+        refreshToken
+      }
+    }
+  }
+`
+
 export const TRIGGER_LOGOUT_MUTATION = gql`
   mutation TriggerLogout {
     triggerLogout

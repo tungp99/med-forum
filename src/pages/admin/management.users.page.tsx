@@ -21,7 +21,7 @@ import '../management/management.style.scss'
 import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from '../management/gql'
 import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
 
-export default function ManageUsersPage() {
+export default function AdminManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { isPublic, filterTitle, filterText, deleteId } = useSelector(
@@ -96,18 +96,18 @@ export default function ManageUsersPage() {
           filterTitle === 'All' ? getAllAccount_refetch() : getAccount_fetch()
         }}
       />
-      <div className="filter__container">
-        <button
-          className="createUser__btn mb-3"
+      <div className="filter__container pb-3">
+        <AS3Button
+          text
+          icon={mdiPlus}
+          iconSize={1}
           onClick={() => {
             dispatch({ type: 'OPEN_CREATE_USER_POPUP' })
           }}
-        >
-          <Icon
-            path={mdiPlus}
-            size={1}></Icon>
-        </button>
+        ></AS3Button>
+
         <AS3Input
+          className="mb-0"
           placeholder="Search"
           onChange={e => {
             dispatch({
@@ -115,7 +115,8 @@ export default function ManageUsersPage() {
               payload: e.target.value,
             })
           }}
-        ></AS3Input>
+        />
+
         <AS3Dropdown
           className="ms-4"
           suffixIcon={mdiMenuDown}
@@ -141,6 +142,7 @@ export default function ManageUsersPage() {
           <span>{filterTitle}</span>
         </AS3Dropdown>
       </div>
+
       {data.map(s => {
         let $container_class = '__container'
         let $isPublic_class = 'isPublic text-danger'
@@ -153,28 +155,27 @@ export default function ManageUsersPage() {
         return (
           <div
             key={s.id}
-            className={`${$container_class} mb-2`}
-            onClick={e => {
-              if (
-                e.target.toString() !== '[object SVGSVGElement]' &&
-                e.target.toString() !== '[object HTMLButtonElement]'
-              )
-                navigate(`/admin/profile/${s.id}`)
-            }}
-          >
+            className={`${$container_class} mb-2`}>
             <div className="posts">
-              <h4 className="post__number">{s.writtenPostsCount}</h4>
+              <span className="post__number fs-4 d-block">
+                {s.writtenPostsCount}
+              </span>
               <Icon
                 path={mdiPostOutline}
                 style={{ height: '1.5rem' }}></Icon>
             </div>
-            <div className="info__container">
+
+            <div
+              className="info__container"
+              onClick={() => navigate(`/admin/profile/${s.id}`)}
+            >
               <div className="usersInfo">Username: {s.username}</div>
               <div className="usersInfo">Email: {s.email}</div>
               <div className="usersInfo">
                 Name: {s.profile.firstName} {s.profile.lastName}
               </div>
             </div>
+
             <div className="text-end">
               <AS3Button
                 icon={mdiMinus}

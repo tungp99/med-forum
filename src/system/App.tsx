@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client'
 import { Provider } from 'react-redux'
 
-import { apollo } from './plugins'
+import { apollo, CollectionProvider } from './plugins'
 import { store } from './store'
 import { AuthProvider } from './auth'
 
@@ -20,7 +20,11 @@ export default function App() {
       <Provider store={store}>
         <AuthProvider>
           <AS3Navbar />
-          <Routes />
+
+          <CollectionProvider>
+            <Routes />
+          </CollectionProvider>
+
           <AS3AuthLogin />
           <AS3AuthRegister />
         </AuthProvider>

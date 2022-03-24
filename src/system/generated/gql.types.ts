@@ -791,6 +791,34 @@ export interface LoginVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: AdminLogin
+// ====================================================
+
+export interface AdminLogin_adminLogin_loginPayload {
+  __typename: "LoginPayload";
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface AdminLogin_adminLogin {
+  __typename: "AdminLoginPayload";
+  loginPayload: AdminLogin_adminLogin_loginPayload | null;
+}
+
+export interface AdminLogin {
+  adminLogin: AdminLogin_adminLogin;
+}
+
+export interface AdminLoginVariables {
+  input: AdminLoginInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: TriggerLogout
 // ====================================================
 
@@ -1050,6 +1078,10 @@ export interface UpdateCommentRateVariables {
 export enum Quality {
   BAD = "BAD",
   GOOD = "GOOD",
+}
+
+export interface AdminLoginInput {
+  input: LoginInput;
 }
 
 export interface ChangePasswordInput {
