@@ -98,7 +98,7 @@ export function OverviewCardComponent({
             <></>
           )}
           {username ? (
-            <Card.Subtitle className="mb-2">{`@${username}`}</Card.Subtitle>
+            <Card.Subtitle className="mb-3">{`as3/${username}`}</Card.Subtitle>
           ) : (
             <></>
           )}

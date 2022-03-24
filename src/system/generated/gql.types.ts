@@ -361,6 +361,7 @@ export interface GetPostsAdmin {
 export interface GetPostsAdminVariables {
   isPublished: boolean;
   skip: number;
+  timeFilter: any;
 }
 
 /* tslint:disable */
@@ -383,6 +384,7 @@ export interface GetPost_post_comments_items {
   id: string;
   markdownContent: string;
   repliesCount: number;
+  score: number;
   creatorAccount: GetPost_post_comments_items_creatorAccount | null;
   createdAt: any;
   updatedAt: any;
@@ -925,6 +927,7 @@ export interface GetReplies_replies_items {
   id: string;
   markdownContent: string;
   repliesCount: number;
+  score: number;
   creatorAccount: GetReplies_replies_items_creatorAccount | null;
   createdAt: any;
   updatedAt: any;
@@ -1009,6 +1012,30 @@ export interface PostRate {
 
 export interface PostRateVariables {
   input: RatePostInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateCommentRate
+// ====================================================
+
+export interface UpdateCommentRate_rateComment {
+  __typename: "RateCommentPayload";
+  quality: Quality;
+  isSuccess: boolean;
+}
+
+export interface UpdateCommentRate {
+  rateComment: UpdateCommentRate_rateComment;
+}
+
+export interface UpdateCommentRateVariables {
+  commentId: string;
+  quality: Quality;
 }
 
 /* tslint:disable */

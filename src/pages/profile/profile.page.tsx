@@ -89,7 +89,6 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
       Toast.error({ title: name, content: message })
     },
   })
-  console.log(data?.account)
   return (
     <Container
       as="main"

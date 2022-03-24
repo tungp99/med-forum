@@ -14,6 +14,7 @@ export const GET_POST_QUERY = gql`
           id
           markdownContent
           repliesCount
+          score
           creatorAccount {
             id
             username

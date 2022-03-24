@@ -108,6 +108,7 @@ type Mutation {
   createComment(input: CreateCommentInput!): Comment!
   updateComment(input: UpdateCommentInput!): UpdateEntityPayload!
   deleteComment(id: String!): DeleteEntityPayload!
+  rateComment(input: RateCommentInput!): RateCommentPayload!
 }
 
 type Subscription {
@@ -190,6 +191,7 @@ input CommentFilterInput {
   and: [CommentFilterInput!]
   or: [CommentFilterInput!]
   markdownContent: StringOperationFilterInput
+  score: ComparableInt32OperationFilterInput
   id: StringOperationFilterInput
   createdAt: ComparableDateTimeOperationFilterInput
   updatedAt: ComparableDateTimeOperationFilterInput
@@ -197,6 +199,7 @@ input CommentFilterInput {
 
 input CommentSortInput {
   markdownContent: SortEnumType
+  score: SortEnumType
   id: SortEnumType
   createdAt: SortEnumType
   updatedAt: SortEnumType
@@ -338,6 +341,7 @@ type Comment {
   creatorAccount: Account
   repliesCount: Int!
   markdownContent: String!
+  score: Int!
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -517,6 +521,18 @@ input CreateCommentInput {
 input UpdateCommentInput {
   id: String!
   markdownContent: String!
+}
+
+type RateCommentPayload {
+  commentId: String!
+  quality: Quality!
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input RateCommentInput {
+  commentId: String!
+  quality: Quality!
 }
 
 enum Quality {

@@ -33,6 +33,7 @@ export const GET_REPLIES_QUERY = gql`
         id
         markdownContent
         repliesCount
+        score
         creatorAccount {
           id
           username
@@ -67,6 +68,14 @@ export const UPDATE_POST_RATE_MUTATION = gql`
       isSuccess
       affectedRecords
       quality
+    }
+  }
+`
+export const UPDATE_COMMENT_RATE_MUTATION = gql`
+  mutation UpdateCommentRate($commentId: String!, $quality: Quality!) {
+    rateComment(input: { commentId: $commentId, quality: $quality }) {
+      quality
+      isSuccess
     }
   }
 `

@@ -38,6 +38,7 @@ export type Comment = Entity & {
   markdownContent: string
   repliesCount: number
   creatorAccount: Partial<Account> | null
+  score: number
 }
 
 export type Post = Entity & {
