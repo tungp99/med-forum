@@ -8,8 +8,8 @@ import {
   PostPage,
   PostsCreatePage,
   ProfilePage,
+  AdminPage,
 } from 'pages'
-import AdminManagementPage from 'pages/admin/management.posts.page'
 
 export function Routes() {
   return (
@@ -23,7 +23,7 @@ export function Routes() {
           index
           element={
             <GuardedComponent>
-              <ProfilePage />
+              <ProfilePage editable={true} />
             </GuardedComponent>
           }
         />
@@ -31,7 +31,7 @@ export function Routes() {
           path=":id"
           element={
             <GuardedComponent>
-              <ProfilePage />
+              <ProfilePage editable={false} />
             </GuardedComponent>
           }
         />
@@ -41,10 +41,28 @@ export function Routes() {
           index
           element={
             <GuardedComponent>
-              <AdminManagementPage />
+              <AdminPage />
             </GuardedComponent>
           }
         />
+        <Route path="profile">
+          <Route
+            index
+            element={
+              <GuardedComponent>
+                <ProfilePage editable={true} />
+              </GuardedComponent>
+            }
+          />
+          <Route
+            path=":id"
+            element={
+              <GuardedComponent>
+                <ProfilePage editable={true} />
+              </GuardedComponent>
+            }
+          />
+        </Route>
         <Route
           path="users"
           element={

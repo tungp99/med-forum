@@ -102,7 +102,7 @@ export default function AdminManagementPage() {
             },
           ]}
         >
-          <span>{'Published'}</span>
+          <span>{fetchPublished ? 'Published' : 'Drafts'}</span>
         </AS3Dropdown>
         <FilterComponent />
       </div>

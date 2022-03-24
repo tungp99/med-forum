@@ -1,17 +1,38 @@
 import { Card, ListGroup, Ratio } from 'react-bootstrap'
 import Icon from '@mdi/react'
-import { mdiCamera, mdiHospitalBuilding, mdiSchoolOutline } from '@mdi/js'
+import {
+  mdiAccount,
+  mdiCamera,
+  mdiEmailMultipleOutline,
+  mdiHospitalBuilding,
+  mdiPhone,
+  mdiSchoolOutline,
+} from '@mdi/js'
 
 import { Profile } from 'system/types'
 import { AS3Avatar, AS3Button } from 'system/components'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
+import { Toast } from 'system/store'
 
 type OverviewCardComponentProps = {
-  data: Profile
+  data: { profile: Profile; username: string | null; email: string | null }
+  editable: boolean
 }
 
 export function OverviewCardComponent({
-  data: { firstName, lastName, country, experience, education },
+  data: {
+    profile: {
+      firstName,
+      lastName,
+      country,
+      experience,
+      education,
+      phoneNumber,
+    },
+    username,
+    email,
+  },
+  editable,
 }: OverviewCardComponentProps) {
   const { workplaces, occupations, schools } = useMemo(() => {
     let workplaces = []
@@ -32,6 +53,8 @@ export function OverviewCardComponent({
     return { workplaces, occupations, schools }
   }, [experience, education])
 
+  const avatarInputRef = useRef<HTMLInputElement>(null)
+
   return (
     <Card className="overview">
       <Ratio aspectRatio={20}>
@@ -46,21 +69,53 @@ export function OverviewCardComponent({
             <AS3Avatar
               width={128}
               height={128}>
-              <AS3Button
-                icon={mdiCamera}
-                iconSize={1.2}
-                text
-                iconColor="#666"
-              />
+              {editable ? (
+                <AS3Button
+                  icon={mdiCamera}
+                  iconSize={1.2}
+                  text
+                  iconColor="#666"
+                  onClick={() => {
+                    avatarInputRef.current?.click()
+                  }}
+                />
+              ) : (
+                <></>
+              )}
             </AS3Avatar>
           </div>
 
           <Card.Title className="mt-2">
             {firstName} {lastName}
           </Card.Title>
+          {occupations.length ? (
+            <Card.Subtitle className="mb-2">
+              <Icon
+                path={mdiAccount}
+                size={0.8} /> {occupations.join(' | ')}
+            </Card.Subtitle>
+          ) : (
+            <></>
+          )}
+          {username ? (
+            <Card.Subtitle className="mb-2">{`@${username}`}</Card.Subtitle>
+          ) : (
+            <></>
+          )}
           <Card.Subtitle className="mb-2">
-            {occupations.join(' | ')}
+            <Icon
+              path={mdiEmailMultipleOutline}
+              size={0.7} /> {email}
           </Card.Subtitle>
+          {phoneNumber ? (
+            <Card.Subtitle className="mb-2">
+              <Icon
+                path={mdiPhone}
+                size={0.7} /> {phoneNumber}
+            </Card.Subtitle>
+          ) : (
+            <></>
+          )}
           {schools.length !== 0 && (
             <Card.Subtitle className="mb-2">Student</Card.Subtitle>
           )}
@@ -91,6 +146,16 @@ export function OverviewCardComponent({
             ))}
         </ListGroup>
       </div>
+      <input
+        ref={avatarInputRef}
+        type="file"
+        className="d-none"
+        accept="image/*"
+        onChange={e => {
+          if (e.target.type.startsWith('image/')) console.log(e.target.files)
+          else Toast.error({ title: '', content: 'Inappropriate file type' })
+        }}
+      />
     </Card>
   )
 }

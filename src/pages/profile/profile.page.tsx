@@ -28,7 +28,9 @@ import {
   updateQualification,
 } from 'system/generated/gql.types'
 
-export default function ProfilePage() {
+type ProfilePageProps = { editable: boolean }
+
+export default function ProfilePage({ editable }: ProfilePageProps) {
   const { id } = useParams()
   const dispatch = useDispatch()
   const { account: currentAccount, gqlContext } = useAuth()
@@ -87,7 +89,7 @@ export default function ProfilePage() {
       Toast.error({ title: name, content: message })
     },
   })
-
+  console.log(data?.account)
   return (
     <Container
       as="main"
@@ -97,36 +99,53 @@ export default function ProfilePage() {
 
       {data?.account && (
         <Row>
+          {editable ? <></> : <Col sm={1}></Col>}
           <Col
             sm={12}
-            md={8}>
-            <OverviewCardComponent data={data.account.profile} />
+            md={editable ? 8 : 10}>
+            <OverviewCardComponent
+              editable={editable}
+              data={{
+                profile: data.account.profile,
+                username: data.account.username,
+                email: data.account.email,
+              }}
+            />
 
             <QualificationCardComponent
+              editable={editable}
               data={data.account.profile.qualifications}
+              accountId={fetchAccountVariables.variables.id}
             />
 
             <ProfessionCardComponent
+              editable={editable}
               title="Experience"
               data={data.account.profile.experience}
+              accountId={fetchAccountVariables.variables.id}
             />
 
             <ProfessionCardComponent
+              editable={editable}
               title="Education"
               data={data.account.profile.education}
+              accountId={fetchAccountVariables.variables.id}
             />
           </Col>
 
-          <Col
-            sm={12}
-            md={4}>
-            <NameFormComponent
-              data={data.account}
-              onSave={() => fetchAccount(fetchAccountVariables)}
-            />
-
-            <SecurityFormComponent />
-          </Col>
+          {editable ? (
+            <Col
+              sm={12}
+              md={4}>
+              <NameFormComponent
+                data={data.account}
+                onSave={() => fetchAccount(fetchAccountVariables)}
+              />
+              <SecurityFormComponent />
+            </Col>
+          ) : (
+            <></>
+          )}
         </Row>
       )}
 
@@ -160,7 +179,12 @@ export default function ProfilePage() {
         onSave={newQualification => {
           data?.account &&
             updateQualification({
-              variables: { input: newQualification },
+              variables: {
+                input: {
+                  ...newQualification,
+                  accountId: fetchAccountVariables.variables.id,
+                },
+              },
             })
         }}
       />

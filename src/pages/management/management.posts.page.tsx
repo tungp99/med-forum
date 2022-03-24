@@ -3,14 +3,13 @@ import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { Toast, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
-import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
+import { AS3Button, AS3Layout, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
 
 import { GET_MY_POSTS_QUERY } from './gql'
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
 import { GetPosts, UpdatePostInput } from 'system/generated/gql.types'
 import { mdiSync } from '@mdi/js'
-import { SidebarComponent } from './components/sidebar.component'
 
 export default function ManagementPage() {
   const { account, authenticated, gqlContext } = useAuth()
@@ -56,7 +55,7 @@ export default function ManagementPage() {
   }, [authenticated])
 
   return (
-    <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
+    <AS3Layout className="w-70 mt-3">
       <FilterComponent />
 
       <div className="d-flex justify-content-center mb-3">
@@ -78,6 +77,6 @@ export default function ManagementPage() {
           afterEdit={data => updatePost({ variables: { input: data } })}
         />
       ))}
-    </AS3LayoutWithSidebar>
+    </AS3Layout>
   )
 }

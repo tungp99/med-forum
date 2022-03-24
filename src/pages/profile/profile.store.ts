@@ -6,7 +6,11 @@ type Store = {
   isProfessionPopupOpen: boolean
   isSecurityPopupOpen: boolean
   isDeleteProfessionPopupOpen: boolean
-  DeleteInfo: { data: Profession | Qualification; title: string }
+  DeleteInfo: {
+    data: Profession | Qualification
+    title: string
+    accountId: string
+  }
   isQualificationPopupOpen: boolean
 }
 
@@ -20,6 +24,7 @@ const initialState: Store = {
       start: '',
     },
     title: '',
+    accountId: '',
   },
   title: '',
   isProfessionPopupOpen: false,
@@ -60,6 +65,7 @@ export const profilePageStore = (
         DeleteInfo: action.payload as {
           data: Profession | Qualification
           title: string
+          accountId: string
         },
       }
     case 'CLOSE_DELETE_PROFESSION_POPUP':

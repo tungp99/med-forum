@@ -132,7 +132,9 @@ export function AS3PostCard({
                 <AS3Link
                   onClick={() => navigate(`/profile/${creatorAccount?.id}`)}
                 >
-                  {creatorAccount?.username}
+                  {creatorAccount?.username
+                    ? creatorAccount.username
+                    : 'Unknown User'}
                 </AS3Link>
               ) : (
                 '[deleted account]'
