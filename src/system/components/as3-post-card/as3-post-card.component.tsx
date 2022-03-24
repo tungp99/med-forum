@@ -62,7 +62,7 @@ export function AS3PostCard({
   const { isCollected, addPostId, deletePostId, collection } = useCollector()
   const collected = useMemo(() => isCollected(id), [collection])
 
-  const { account, gqlContext } = useAuth()
+  const { account } = useAuth()
   const navigate = useNavigate()
   const isMine = useMemo(() => creatorAccount?.id === account.id, [account])
   const [state, setState] = useState({
@@ -71,7 +71,6 @@ export function AS3PostCard({
   })
 
   const [ratePost] = useMutation<PostRate>(UPDATE_POST_RATE_MUTATION, {
-    ...gqlContext,
     onCompleted(response) {
       if (response.ratePost.isSuccess)
         response.ratePost.quality === Quality.GOOD

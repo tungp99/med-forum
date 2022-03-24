@@ -21,13 +21,12 @@ type DeleteProfessionPopupComponentProps = { onDeleted: () => void }
 export function DeleteProfessionPopupComponent(
   props: DeleteProfessionPopupComponentProps
 ) {
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const state = useSelector(store => store.profilePage)
   const dispatch = useDispatch()
   const [deleteExperience] = useMutation<RemoveExperience>(
     REMOVE_EXPERIENCE_MUTATION,
     {
-      ...gqlContext,
       variables: {
         input: {
           ...state.DeleteInfo.data,
@@ -46,7 +45,6 @@ export function DeleteProfessionPopupComponent(
   const [deleteEducation] = useMutation<RemoveEducation>(
     REMOVE_EDUCATION_MUTATION,
     {
-      ...gqlContext,
       variables: {
         input: {
           ...state.DeleteInfo.data,
@@ -65,7 +63,6 @@ export function DeleteProfessionPopupComponent(
   const [deleteQualification] = useMutation<RemoveQualification>(
     REMOVE_QUALIFICATION_MUTATION,
     {
-      ...gqlContext,
       variables: {
         input: {
           ...state.DeleteInfo.data,

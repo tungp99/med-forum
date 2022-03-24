@@ -30,7 +30,7 @@ export default function ManageUsersPage() {
     filterText: filter_text,
     deleteId,
   } = useSelector(store => store.managementPage)
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
 
   const [data, setData] = useState<Account[]>([])
 
@@ -43,7 +43,6 @@ export default function ManageUsersPage() {
     [isPublic, filter_text]
   )
   const [getAccount_fetch] = useLazyQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
-    ...gqlContext,
     variables: fetchAccountsVariables,
     onCompleted({ accounts: response }) {
       response?.items &&
@@ -65,7 +64,6 @@ export default function ManageUsersPage() {
   const { refetch: getAllAccount_refetch } = useQuery<GetAllAccounts>(
     GET_ALL_ACCOUNTS_QUERY,
     {
-      ...gqlContext,
       variables: fetchAllVariables,
       onCompleted({ accounts: response }) {
         response?.items &&

@@ -38,7 +38,7 @@ function CommentComponent({
   },
 }: CommentComponentProps) {
   const [state, setState] = useState({ replying: false, commentRate: score })
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const [fetchReplies, { data, loading }] = useLazyQuery<GetReplies>(
     GET_REPLIES_QUERY,
     {
@@ -54,7 +54,6 @@ function CommentComponent({
   const [updateCommentRate] = useMutation<UpdateCommentRate>(
     UPDATE_COMMENT_RATE_MUTATION,
     {
-      ...gqlContext,
       onCompleted(response) {
         response.rateComment.isSuccess === true &&
         response.rateComment.quality === Quality.GOOD

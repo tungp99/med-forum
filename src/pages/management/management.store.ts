@@ -1,7 +1,7 @@
 import { StoreAction } from 'system/store'
 
 type Store = {
-  fetchPublished: boolean
+  fetchPosts: boolean | null
   isPublic: boolean | undefined
   filterTitle: string
   filterText: string
@@ -11,7 +11,7 @@ type Store = {
 }
 
 const initialState: Store = {
-  fetchPublished: true,
+  fetchPosts: true,
   isPublic: undefined,
   filterTitle: 'All',
   filterText: '',
@@ -28,6 +28,7 @@ export const managementPageStore = (
     | 'SET_ACCOUNT_FILTER_PRIVATE'
     | 'SET_ACCOUNT_FILTER_ALL'
     | 'SET_ACCOUNT_UPDATE_FILTER'
+    | 'SET_POSTS_FILTER_COLLECTED'
     | 'OPEN_CREATE_USER_POPUP'
     | 'CLOSE_CREATE_USER_POPUP'
     | 'OPEN_DELETE_USER_POPUP'
@@ -40,12 +41,17 @@ export const managementPageStore = (
     case 'SET_POSTS_FILTER_PUBLISHED':
       return {
         ...state,
-        fetchPublished: true,
+        fetchPosts: true,
       }
     case 'SET_POSTS_FILTER_DRAFTS':
       return {
         ...state,
-        fetchPublished: false,
+        fetchPosts: false,
+      }
+    case 'SET_POSTS_FILTER_COLLECTED':
+      return {
+        ...state,
+        fetchPosts: null,
       }
     case 'SET_ACCOUNT_FILTER_PUBLIC':
       return {

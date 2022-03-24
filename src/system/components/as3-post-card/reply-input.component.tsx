@@ -16,7 +16,7 @@ export function ReplyInputComponent({
 }: ReplyInputComponentProps) {
   const { id: postId } = useSelector(store => store.post)
   const dispatch = useDispatch()
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
 
   const { control, handleSubmit } = useForm<CreateCommentInput>({
     defaultValues: {
@@ -26,7 +26,6 @@ export function ReplyInputComponent({
   })
 
   const [create] = useMutation<CreateComment>(CREATE_COMMENT_MUTATION, {
-    ...gqlContext,
     onCompleted() {
       dispatch({ type: 'REFRESH_POST' })
     },

@@ -14,9 +14,8 @@ type CreateUserPopupComponentProps = { onCreated: () => void }
 export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const [CreateAccount] = useMutation<CreateAccount>(CREATE_ACCOUNT_MUTATION, {
-    ...gqlContext,
     onCompleted() {
       props.onCreated()
     },

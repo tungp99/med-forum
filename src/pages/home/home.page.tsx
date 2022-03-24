@@ -3,7 +3,7 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { mdiSync } from '@mdi/js'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
-import { useAuth } from 'system/auth'
+
 import { AS3Button, AS3LayoutWithSidebar, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
 import { PicksComponent } from './components/picks.component'
@@ -21,7 +21,6 @@ export default function HomePage() {
     store => store.homePage
   )
   const dispatch = useDispatch()
-  const { gqlContext } = useAuth()
 
   const { refetch, loading } = useQuery<GetPosts>(GET_POSTS_QUERY, {
     variables: { skip: page * 8 },
@@ -77,7 +76,6 @@ export default function HomePage() {
   }, [filter_type])
 
   const [updatePost] = useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
-    ...gqlContext,
     onCompleted() {
       filter_type === 'New' ? refetch() : filterPost_fetch()
     },
