@@ -127,12 +127,19 @@ export function AS3PostCard({
             <span className="category">as3/category</span>
             <span className="separator mx-1">•</span>
             <span className="publish">
-              posted by
-              <AS3Link
-                onClick={() => navigate(`/profile/${creatorAccount?.id}`)}
-              >
-                {creatorAccount?.username}
-              </AS3Link>
+              posted by &nbsp;
+              {creatorAccount ? (
+                <AS3Link
+                  onClick={() => navigate(`/profile/${creatorAccount?.id}`)}
+                >
+                  {creatorAccount?.username
+                    ? creatorAccount.username
+                    : 'Unknown User'}
+                </AS3Link>
+              ) : (
+                '[deleted account]'
+              )}
+              <span className="separator mx-1">•</span>
               {DateTime.fromISO(createdAt).toRelative()}
             </span>
 

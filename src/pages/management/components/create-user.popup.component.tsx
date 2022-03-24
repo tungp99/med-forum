@@ -34,7 +34,6 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
         lastName: '',
         isPublic: true,
         phoneNumber: '',
-        country: '',
       },
     },
   })
@@ -100,19 +99,6 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
                   label="Last Name"
                   size="lg"
                   value={value}
-                  onChange={onChange}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="profile.country"
-              render={({ field: { onChange, value } }) => (
-                <AS3Input
-                  label="Country"
-                  size="lg"
-                  value={value || ''}
                   onChange={onChange}
                 />
               )}

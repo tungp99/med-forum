@@ -10,6 +10,7 @@ import { authStore } from './auth.store'
 import { notificationsStore } from './notification.store'
 import { postStore } from './post.store'
 import { homePageStore, managementPageStore, profilePageStore } from 'pages'
+import { adminStore } from 'pages/admin/admin.store'
 
 export const store = createStore(
   combineReducers({
@@ -19,6 +20,7 @@ export const store = createStore(
     profilePage: profilePageStore,
     homePage: homePageStore,
     managementPage: managementPageStore,
+    admin: adminStore,
   })
 )
 

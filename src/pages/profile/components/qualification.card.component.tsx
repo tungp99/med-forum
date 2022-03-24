@@ -5,10 +5,16 @@ import { AS3Spacer, AS3Button, AS3Avatar } from 'system/components'
 import { useDispatch } from 'system/store'
 import { Qualification } from 'system/types'
 
-type QualificationCardComponentProps = { data: Qualification[] }
+type QualificationCardComponentProps = {
+  data: Qualification[]
+  editable: boolean
+  accountId: string
+}
 
 export function QualificationCardComponent({
   data,
+  editable,
+  accountId,
 }: QualificationCardComponentProps) {
   const dispatch = useDispatch()
   return (
@@ -20,13 +26,17 @@ export function QualificationCardComponent({
           <Stack
             direction="horizontal"
             gap={2}>
-            <AS3Button
-              className="btn-edit"
-              icon={mdiPlus}
-              iconSize={1}
-              text
-              onClick={() => dispatch({ type: 'OPEN_QUALIFICATION_POPUP' })}
-            />
+            {editable ? (
+              <AS3Button
+                className="btn-edit"
+                icon={mdiPlus}
+                iconSize={1}
+                text
+                onClick={() => dispatch({ type: 'OPEN_QUALIFICATION_POPUP' })}
+              />
+            ) : (
+              <></>
+            )}
           </Stack>
         </Card.Title>
 
@@ -58,19 +68,27 @@ export function QualificationCardComponent({
                 </span>
               </p>
               <div className="text-end">
-                <AS3Button
-                  icon={mdiMinus}
-                  text
-                  size="sm"
-                  iconSize={1}
-                  className="delete__icon"
-                  onClick={() => {
-                    dispatch({
-                      type: 'OPEN_DELETE_PROFESSION_POPUP',
-                      payload: { data: item, title: '' },
-                    })
-                  }}
-                ></AS3Button>
+                {editable ? (
+                  <AS3Button
+                    icon={mdiMinus}
+                    text
+                    size="sm"
+                    iconSize={1}
+                    className="delete__icon"
+                    onClick={() => {
+                      dispatch({
+                        type: 'OPEN_DELETE_PROFESSION_POPUP',
+                        payload: {
+                          data: item,
+                          title: '',
+                          accountId: accountId,
+                        },
+                      })
+                    }}
+                  ></AS3Button>
+                ) : (
+                  <></>
+                )}
               </div>
             </ListGroup.Item>
           ))}

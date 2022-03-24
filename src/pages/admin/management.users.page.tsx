@@ -13,12 +13,12 @@ import {
   AS3Input,
   AS3LayoutWithSidebar,
 } from 'system/components'
-import { SidebarComponent } from '../components/sidebar.component'
-import { CreateUserPopupComponent } from '../components/create-user.popup.component'
-import { DeleteUserPopup } from '../components/delete-user.popup.component'
-import './management.style.scss'
+import { SidebarComponent } from '../management/components/sidebar.component'
+import { CreateUserPopupComponent } from '../management/components/create-user.popup.component'
+import { DeleteUserPopup } from '../management/components/delete-user.popup.component'
+import '../management/management.style.scss'
 
-import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from '../gql'
+import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from '../management/gql'
 import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
 
 export default function ManageUsersPage() {
@@ -159,7 +159,7 @@ export default function ManageUsersPage() {
                 e.target.toString() !== '[object SVGSVGElement]' &&
                 e.target.toString() !== '[object HTMLButtonElement]'
               )
-                navigate(`/profile/${s.id}`)
+                navigate(`/admin/profile/${s.id}`)
             }}
           >
             <div className="posts">

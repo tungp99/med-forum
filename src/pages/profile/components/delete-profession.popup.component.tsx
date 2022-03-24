@@ -28,7 +28,13 @@ export function DeleteProfessionPopupComponent(
     REMOVE_EXPERIENCE_MUTATION,
     {
       ...gqlContext,
-      variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
+      variables: {
+        input: {
+          ...state.DeleteInfo.data,
+          accountId: state.DeleteInfo.accountId,
+          __typename: undefined,
+        },
+      },
       onCompleted() {
         props.onDeleted()
       },
@@ -41,7 +47,13 @@ export function DeleteProfessionPopupComponent(
     REMOVE_EDUCATION_MUTATION,
     {
       ...gqlContext,
-      variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
+      variables: {
+        input: {
+          ...state.DeleteInfo.data,
+          accountId: state.DeleteInfo.accountId,
+          __typename: undefined,
+        },
+      },
       onCompleted() {
         props.onDeleted()
       },
@@ -54,7 +66,13 @@ export function DeleteProfessionPopupComponent(
     REMOVE_QUALIFICATION_MUTATION,
     {
       ...gqlContext,
-      variables: { input: { ...state.DeleteInfo.data, __typename: undefined } },
+      variables: {
+        input: {
+          ...state.DeleteInfo.data,
+          accountId: state.DeleteInfo.accountId,
+          __typename: undefined,
+        },
+      },
       onCompleted() {
         props.onDeleted()
       },

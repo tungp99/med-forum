@@ -8,5 +8,6 @@ export { default as PostsCreatePage } from './posts/posts.create.page'
 export { default as PostPage } from './posts/post.page'
 
 export { managementPageStore } from './management/management.store'
-export { default as ManageUsersPage } from './management/management.users.page'
+export { default as ManageUsersPage } from './admin/management.users.page'
 export { default as ManagementPostsPage } from './management/management.posts.page'
+export { default as AdminPage } from './admin/management.posts.page'
