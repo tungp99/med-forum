@@ -1,7 +1,8 @@
-import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
+import { ApolloClient, InMemoryCache, split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { setContext } from '@apollo/client/link/context'
+import { createUploadLink } from 'apollo-upload-client'
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -28,9 +29,7 @@ const link = split(
     options: { reconnect: true },
   }),
   authLink.concat(
-    new HttpLink({
-      uri: `http://${process.env.REACT_APP_SERVICE_HOST}`,
-    })
+    createUploadLink({ uri: `http://${process.env.REACT_APP_SERVICE_HOST}` })
   )
 )
 
