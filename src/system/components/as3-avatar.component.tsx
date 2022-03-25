@@ -1,4 +1,5 @@
-import { Figure, ImageProps } from 'react-bootstrap'
+import { ImageProps } from 'react-bootstrap'
+import './as3-avatar.style.scss'
 
 type AS3AvatarProps = ImageProps
 
@@ -7,14 +8,22 @@ export function AS3Avatar(props: AS3AvatarProps) {
   props.className && classList.push(props.className)
 
   return (
-    <Figure className={classList.join(' ')}>
-      <Figure.Image
-        width={props.width ?? 32}
-        height={props.height ?? 32}
-        className="rounded-circle mb-0"
-        src={props.src ?? 'https://via.placeholder.com/128.jpg'}
-      />
+    <div
+      className={classList.join(' ')}
+      style={{
+        width: props.width ?? 32,
+        height: props.height ?? 32,
+      }}
+    >
+      <div
+        className="as3-avatar-img rounded-circle"
+        style={{
+          backgroundImage: `url(${
+            props.src ?? 'https://via.placeholder.com/128.jpg'
+          })`,
+        }}
+      ></div>
       {props.children}
-    </Figure>
+    </div>
   )
 }

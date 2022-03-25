@@ -98,8 +98,9 @@ export function OverviewCardComponent({
             })
           } else {
             Toast.error({ title: '', content: 'Inappropriate file type' })
-            e.target.value = ''
           }
+
+          e.target.value = ''
         }}
       />
 
