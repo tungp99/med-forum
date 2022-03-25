@@ -558,6 +558,7 @@ export interface GetAccount_account_profile_education {
 
 export interface GetAccount_account_profile {
   __typename: "Profile";
+  avatarUrl: string | null;
   isPublic: boolean;
   country: string;
   firstName: string;
@@ -766,6 +767,30 @@ export interface RemoveQualification {
 
 export interface RemoveQualificationVariables {
   input: QualificationInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateAvatar
+// ====================================================
+
+export interface UpdateAvatar_updateAvatar {
+  __typename: "UpdateAvatarPayload";
+  avatarUrl: string | null;
+  isSuccess: boolean;
+  affectedRecords: number;
+}
+
+export interface UpdateAvatar {
+  updateAvatar: UpdateAvatar_updateAvatar;
+}
+
+export interface UpdateAvatarVariables {
+  input: UpdateAvatarInput;
 }
 
 /* tslint:disable */
@@ -1216,6 +1241,11 @@ export interface UpdateAccountInput {
   id: string;
   username?: string | null;
   profile: ProfileInput;
+}
+
+export interface UpdateAvatarInput {
+  accountId: string;
+  file: any;
 }
 
 export interface UpdatePostInput {

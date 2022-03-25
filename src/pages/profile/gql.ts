@@ -7,6 +7,7 @@ export const GET_ACCOUNT_QUERY = gql`
       email
       username
       profile {
+        avatarUrl
         isPublic
         country
         firstName
@@ -49,6 +50,7 @@ export const UPDATE_PROFILE_CONTACT_MUTATION = gql`
     }
   }
 `
+
 export const UPDATE_QUALIFICATION_MUTATION = gql`
   mutation updateQualification($input: QualificationInput!) {
     addQualification(input: $input) {
@@ -56,6 +58,7 @@ export const UPDATE_QUALIFICATION_MUTATION = gql`
     }
   }
 `
+
 export const ADD_EXPERIENCE_MUTATION = gql`
   mutation AddExperience($input: ProfessionInput!) {
     addExperience(input: $input) {
@@ -73,6 +76,7 @@ export const ADD_EDUCATION_MUTATION = gql`
     }
   }
 `
+
 export const CHANGE_PASSWORD_MUTATION = gql`
   mutation ChangePassword($input: ChangePasswordInput!) {
     changePassword(input: $input) {
@@ -81,6 +85,7 @@ export const CHANGE_PASSWORD_MUTATION = gql`
     }
   }
 `
+
 export const REMOVE_EXPERIENCE_MUTATION = gql`
   mutation RemoveExperience($input: ProfessionInput!) {
     removeExperience(input: $input) {
@@ -88,6 +93,7 @@ export const REMOVE_EXPERIENCE_MUTATION = gql`
     }
   }
 `
+
 export const REMOVE_EDUCATION_MUTATION = gql`
   mutation RemoveEducation($input: ProfessionInput!) {
     removeEducation(input: $input) {
@@ -95,10 +101,21 @@ export const REMOVE_EDUCATION_MUTATION = gql`
     }
   }
 `
+
 export const REMOVE_QUALIFICATION_MUTATION = gql`
   mutation RemoveQualification($input: QualificationInput!) {
     removeQualification(input: $input) {
       isSuccess
+    }
+  }
+`
+
+export const UPDATE_AVATAR_MUTATION = gql`
+  mutation UpdateAvatar($input: UpdateAvatarInput!) {
+    updateAvatar(input: $input) {
+      avatarUrl
+      isSuccess
+      affectedRecords
     }
   }
 `

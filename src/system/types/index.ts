@@ -16,6 +16,7 @@ export type Profession = {
 
 export type Profile = {
   isPublic: boolean
+  avatarUrl: string | null
   firstName: string
   lastName: string
   phoneNumber: string

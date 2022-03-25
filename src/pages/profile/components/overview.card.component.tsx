@@ -12,6 +12,9 @@ import { Profile } from 'system/types'
 import { AS3Avatar, AS3Button } from 'system/components'
 import { useMemo, useRef } from 'react'
 import { Toast } from 'system/store'
+import { useMutation } from '@apollo/client'
+import { UPDATE_AVATAR_MUTATION } from '../gql'
+import { UpdateAvatar } from 'system/generated/gql.types'
 
 type OverviewCardComponentProps = {
   data: { profile: Profile; username: string | null; email: string | null }
@@ -21,6 +24,7 @@ type OverviewCardComponentProps = {
 export function OverviewCardComponent({
   data: {
     profile: {
+      avatarUrl,
       firstName,
       lastName,
       country,
@@ -33,6 +37,7 @@ export function OverviewCardComponent({
   },
   editable,
 }: OverviewCardComponentProps) {
+  const avatarInputRef = useRef<HTMLInputElement>(null)
   const { workplaces, occupations, schools } = useMemo(() => {
     let workplaces = []
     let occupations = []
@@ -52,22 +57,57 @@ export function OverviewCardComponent({
     return { workplaces, occupations, schools }
   }, [experience, education])
 
-  const avatarInputRef = useRef<HTMLInputElement>(null)
+  const [updateAvatar, { data: avatarMutationResponse }] =
+    useMutation<UpdateAvatar>(UPDATE_AVATAR_MUTATION, {
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    })
 
   return (
     <Card className="overview">
+      <input
+        ref={avatarInputRef}
+        type="file"
+        className="d-none"
+        accept="image/*"
+        onChange={e => {
+          const file = e.target.files?.item(0)
+          if (file && file.type.startsWith('image/')) {
+            updateAvatar({
+              variables: {
+                input: {
+                  // accountId = null means current user's id
+                  file,
+                },
+              },
+            })
+          } else {
+            Toast.error({ title: '', content: 'Inappropriate file type' })
+            e.target.value = ''
+          }
+        }}
+      />
+
       <Ratio aspectRatio={20}>
         <Card.Img
           variant="top"
-          src="https://via.placeholder.com/600x150.jpg" />
+          src={'https://via.placeholder.com/600x150.jpg'}
+        />
       </Ratio>
 
       <div className="introduction">
         <Card.Body>
           <div className="avatar-wrapper">
             <AS3Avatar
+              src={
+                avatarMutationResponse?.updateAvatar.avatarUrl ??
+                avatarUrl ??
+                undefined
+              }
               width={128}
-              height={128}>
+              height={128}
+            >
               {editable && (
                 <AS3Button
                   icon={mdiCamera}
@@ -144,17 +184,6 @@ export function OverviewCardComponent({
             ))}
         </ListGroup>
       </div>
-
-      <input
-        ref={avatarInputRef}
-        type="file"
-        className="d-none"
-        accept="image/*"
-        onChange={e => {
-          if (e.target.type.startsWith('image/')) console.log(e.target.files)
-          else Toast.error({ title: '', content: 'Inappropriate file type' })
-        }}
-      />
     </Card>
   )
 }

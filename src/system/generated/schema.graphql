@@ -102,6 +102,7 @@ type Mutation {
   removeEducation(input: ProfessionInput!): UpdateEntityPayload!
   addQualification(input: QualificationInput!): UpdateEntityPayload!
   removeQualification(input: QualificationInput!): UpdateEntityPayload!
+  updateAvatar(input: UpdateAvatarInput!): UpdateAvatarPayload!
   createPost(input: CreatePostInput!): Post!
   updatePost(input: UpdatePostInput!): UpdateEntityPayload!
   deletePost(id: String!): DeleteEntityPayload!
@@ -116,6 +117,9 @@ type Subscription {
   authenticationStatistics: Int!
   accountCreated: Int!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 enum ApplyPolicy {
   BEFORE_RESOLVER
@@ -251,6 +255,7 @@ input ProfileFilterInput {
   and: [ProfileFilterInput!]
   or: [ProfileFilterInput!]
   isPublic: BooleanOperationFilterInput
+  avatarUrl: StringOperationFilterInput
   firstName: StringOperationFilterInput
   lastName: StringOperationFilterInput
   countryCode: StringOperationFilterInput
@@ -273,6 +278,7 @@ enum SortEnumType {
 
 input ProfileSortInput {
   isPublic: SortEnumType
+  avatarUrl: SortEnumType
   firstName: SortEnumType
   lastName: SortEnumType
   countryCode: SortEnumType
@@ -447,6 +453,7 @@ type LoginPayload {
 type Profile {
   country: String!
   isPublic: Boolean!
+  avatarUrl: String
   firstName: String!
   lastName: String!
   countryCode: String!
@@ -483,6 +490,17 @@ input QualificationInput {
   issuedBy: String!
   issuedAt: DateTime!
   expireAt: DateTime!
+}
+
+type UpdateAvatarPayload {
+  avatarUrl: String
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input UpdateAvatarInput {
+  accountId: String!
+  file: Upload!
 }
 
 """The `DateTime` scalar represents an ISO-8601 compliant date time type."""
