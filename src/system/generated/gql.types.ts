@@ -370,6 +370,59 @@ export interface GetPostsAdminVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetCollectedPosts
+// ====================================================
+
+export interface GetCollectedPosts_posts_items_creatorAccount {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+}
+
+export interface GetCollectedPosts_posts_items {
+  __typename: "Post";
+  score: number;
+  id: string;
+  title: string;
+  markdownContent: string;
+  isPublished: boolean;
+  commentsCount: number;
+  creatorAccount: GetCollectedPosts_posts_items_creatorAccount | null;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface GetCollectedPosts_posts_pageInfo {
+  __typename: "CollectionSegmentInfo";
+  /**
+   * Indicates whether more items exist following the set defined by the clients arguments.
+   */
+  hasNextPage: boolean;
+}
+
+export interface GetCollectedPosts_posts {
+  __typename: "PostCollectionSegment";
+  items: GetCollectedPosts_posts_items[] | null;
+  /**
+   * Information to aid in pagination.
+   */
+  pageInfo: GetCollectedPosts_posts_pageInfo;
+}
+
+export interface GetCollectedPosts {
+  posts: GetCollectedPosts_posts | null;
+}
+
+export interface GetCollectedPostsVariables {
+  skip: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetPost
 // ====================================================
 

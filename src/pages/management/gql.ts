@@ -4,7 +4,7 @@ export const GET_MY_POSTS_QUERY = gql`
   query GetMyPosts($accountId: String!, $isPublished: Boolean!, $skip: Int!) {
     posts(
       accountId: $accountId
-      where: { and: { isPublished: { eq: $isPublished } } }
+      where: { isPublished: { eq: $isPublished } }
       skip: $skip
       take: 8
       order: { createdAt: DESC }
@@ -107,6 +107,34 @@ export const GET_POSTS_ADMIN_QUERY = gql`
         isPublished: { eq: $isPublished }
         and: { createdAt: { gte: $timeFilter } }
       }
+      skip: $skip
+      take: 8
+      order: { createdAt: DESC }
+    ) {
+      items {
+        score
+        id
+        title
+        markdownContent
+        isPublished
+        commentsCount
+        creatorAccount {
+          id
+          username
+        }
+        createdAt
+        updatedAt
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`
+export const GET_COLLECTOR_QUERY = gql`
+  query GetCollectedPosts($skip: Int!, $collection: [String]!) {
+    posts(
+      where: { id: { in: $collection } }
       skip: $skip
       take: 8
       order: { createdAt: DESC }

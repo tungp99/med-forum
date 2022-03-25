@@ -5,7 +5,6 @@ import {
   Dispatch,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
@@ -33,7 +32,6 @@ type AuthContextType = {
   account: Account
   setAccessToken: Dispatch<React.SetStateAction<string>>
   setRefreshToken: Dispatch<React.SetStateAction<string>>
-  gqlContext: any
   accessToken: string
 }
 
@@ -42,7 +40,6 @@ const AuthContext = createContext<AuthContextType>({
   account: {} as Account,
   setAccessToken: () => {},
   setRefreshToken: () => {},
-  gqlContext: {},
   accessToken: '',
 })
 
@@ -51,13 +48,6 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
   const [account, setAccount] = useState<Account>({} as Account)
   const [accessToken, setAccessToken] = useState('')
   const [refreshToken, setRefreshToken] = useState('')
-
-  const gqlContext = useMemo(
-    () => ({
-      context: { headers: { Authorization: `Bearer ${accessToken}` } },
-    }),
-    [accessToken]
-  )
 
   const [fetchAccount] = useLazyQuery<GetMe>(GET_ME, {
     onCompleted({ me: response }) {
@@ -115,7 +105,6 @@ export function AuthProvider(props: ComponentPropsWithoutRef<'div'>) {
         account,
         setAccessToken,
         setRefreshToken,
-        gqlContext,
         accessToken,
       }}
     >
@@ -130,7 +119,6 @@ export function useAuth() {
     account,
     setAccessToken,
     setRefreshToken,
-    gqlContext,
     accessToken,
   } = useContext(AuthContext)
   const dispatch = useDispatch()
@@ -178,13 +166,13 @@ export function useAuth() {
       setAccessToken('')
       setRefreshToken('')
     },
-    gqlContext,
     hasFullAccess() {
+      if (!accessToken) return false
+
       const base64Url = accessToken.split('.')[1]
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
       const jsonPayload = decodeURIComponent(
-        Buffer.from(base64, 'base64')
-          .toString()
+        atob(base64)
           .split('')
           .map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)

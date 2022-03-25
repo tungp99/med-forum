@@ -9,6 +9,7 @@ import { LoginInput } from 'system/generated/gql.types'
 
 export function AS3AuthLogin() {
   const state = useSelector(store => store.auth)
+
   const dispatch = useDispatch()
   const { login } = useAuth()
   const { handleSubmit, control } = useForm<LoginInput>({

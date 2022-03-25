@@ -19,14 +19,13 @@ import { CreatePost, CreatePostInput } from 'system/generated/gql.types'
 
 export default function PostsCreatePage() {
   const navigate = useNavigate()
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const { handleSubmit, setValue, control } = useForm<CreatePostInput>({
     defaultValues: { title: '', markdownContent: '', isPublished: false },
   })
   const [createPost, { loading }] = useMutation<CreatePost>(
     CREATE_POST_MUTATION,
     {
-      ...gqlContext,
       onCompleted() {
         navigate('/manage')
       },

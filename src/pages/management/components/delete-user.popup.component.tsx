@@ -10,13 +10,12 @@ import { useAuth } from 'system/auth'
 type DeleteUserPopupComponentProps = { id?: string; onDeleted: () => void }
 
 export function DeleteUserPopup(props: DeleteUserPopupComponentProps) {
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
   const [deleteAccount_fetch] = useMutation<DeleteAccount>(
     DELETE_ACCOUNT_MUTATION,
     {
-      ...gqlContext,
       onCompleted() {
         props.onDeleted()
       },

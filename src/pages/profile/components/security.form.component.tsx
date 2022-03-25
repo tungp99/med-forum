@@ -16,11 +16,10 @@ export function SecurityFormComponent() {
       newPassword: '',
     },
   })
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const [changePassword] = useMutation<ChangePassword>(
     CHANGE_PASSWORD_MUTATION,
     {
-      ...gqlContext,
       onCompleted({ changePassword: response }) {
         if (response.isSuccess) {
           Toast.success({ title: '', content: 'Password changed!' })

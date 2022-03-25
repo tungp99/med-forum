@@ -18,9 +18,9 @@ import { SidebarComponent } from '../management/components/sidebar.component'
 import { GET_POSTS_ADMIN_QUERY } from '../management/gql'
 
 export default function AdminManagePostsPage() {
-  const { authenticated, gqlContext } = useAuth()
+  const { authenticated } = useAuth()
   const {
-    managementPage: { fetchPublished },
+    managementPage: { fetchPosts: fetchPublished },
     homePage: { page, posts },
     admin: { filterTime },
   } = useSelector(store => store)
@@ -64,7 +64,6 @@ export default function AdminManagePostsPage() {
 
   const [updatePost, { loading: waitingForUpdate }] =
     useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
-      ...gqlContext,
       onCompleted() {
         refetch()
       },

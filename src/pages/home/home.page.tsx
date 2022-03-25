@@ -73,6 +73,7 @@ export default function HomePage() {
     fetchPosts()
   }, [page])
 
+
   // useEffect(() => {
   //   if (filter_type === 'New') {
   //     refetch()

@@ -1,4 +1,4 @@
-import { Container, Image, Navbar, Stack } from 'react-bootstrap'
+import { Container, Navbar, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import {
   mdiAccountCircle,
@@ -34,18 +34,22 @@ export function AS3Navbar() {
     ACCOUNT_CREATED_SUBSCRIPTION
   )
 
+  const { hasFullAccess } = useAuth()
+
   return (
     <>
       <Navbar className={['as3-navbar', 'py-0'].join(' ')}>
         <Container
           fluid
           className="py-1 justify-content-between">
-          <Image
-            className="me-5"
-            src="https://via.placeholder.com/80x36.jpg"
-            fluid
-            onClick={() => navigate('/')}
-          />
+          <div
+            onClick={() =>
+              hasFullAccess() ? navigate('/admin') : navigate('/')
+            }
+            className="supremeIcon fs-4 ms-1"
+          >
+            AS3
+          </div>
 
           <AS3Input
             className="as3-navbar-search"

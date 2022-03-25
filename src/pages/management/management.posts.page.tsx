@@ -6,28 +6,39 @@ import { useAuth } from 'system/auth'
 import { AS3Button, AS3Layout, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
 
-import { GET_MY_POSTS_QUERY } from './gql'
+import { GET_COLLECTOR_QUERY, GET_MY_POSTS_QUERY } from './gql'
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
-import { GetPosts, UpdatePostInput } from 'system/generated/gql.types'
+import {
+  GetCollectedPosts,
+  GetPosts,
+  UpdatePostInput,
+} from 'system/generated/gql.types'
 import { mdiSync } from '@mdi/js'
+import { useCollector } from 'system/plugins'
 
 export default function ManagementPage() {
-  const { account, authenticated, gqlContext } = useAuth()
-  const { fetchPublished } = useSelector(store => store.managementPage)
-  const [state] = useState({ page: 0 })
+  const { account, authenticated } = useAuth()
+  const { fetchPosts } = useSelector(store => store.managementPage)
+  const [state, setState] = useState({
+    page: 0,
+    data: {} as GetPosts | GetCollectedPosts,
+  })
+  const { collection } = useCollector()
 
   const fetchVariables = useMemo(
     () => ({
-      isPublished: fetchPublished,
+      isPublished: fetchPosts === null ? true : fetchPosts,
       skip: state.page * 8,
       accountId: account.id,
     }),
-    [state, account, fetchPublished]
+    [state.page, fetchPosts, account]
   )
-  const [fetch, { data, loading, refetch }] = useLazyQuery<GetPosts>(
+  const [fetch, { loading, refetch }] = useLazyQuery<GetPosts>(
     GET_MY_POSTS_QUERY,
     {
-      ...gqlContext,
+      onCompleted(response) {
+        fetchPosts !== null && setState({ ...state, data: response })
+      },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
@@ -35,13 +46,26 @@ export default function ManagementPage() {
     }
   )
 
+  const [fetchCollector, { loading: coLoading }] =
+    useLazyQuery<GetCollectedPosts>(GET_COLLECTOR_QUERY, {
+      onCompleted(response) {
+        fetchPosts === null && setState({ ...state, data: response })
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+      variables: {
+        skip: state.page * 8,
+        collection: collection,
+      },
+    })
+
   useEffect(() => {
-    fetch()
-  }, [fetchVariables])
+    fetchPosts !== null ? fetch() : fetchCollector()
+  }, [fetchVariables, fetchPosts])
 
   const [updatePost, { loading: waitingForUpdate }] =
     useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
-      ...gqlContext,
       onCompleted() {
         refetch()
       },
@@ -61,14 +85,14 @@ export default function ManagementPage() {
       <div className="d-flex justify-content-center mb-3">
         <AS3Button
           text
-          loading={loading}
+          loading={fetchPosts === null ? coLoading : loading}
           disabled={loading}
           icon={mdiSync}
-          onClick={() => refetch()}
+          onClick={() => (fetchPosts !== null ? fetch() : fetchCollector())}
         />
       </div>
 
-      {data?.posts?.items?.map(post => (
+      {state.data?.posts?.items?.map(post => (
         <AS3PostCard
           key={post.id}
           preview

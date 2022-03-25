@@ -33,7 +33,7 @@ type ProfilePageProps = { editable: boolean }
 export default function ProfilePage({ editable }: ProfilePageProps) {
   const { id } = useParams()
   const dispatch = useDispatch()
-  const { account: currentAccount, gqlContext } = useAuth()
+  const { account: currentAccount } = useAuth()
   const { title } = useSelector(store => store.profilePage)
 
   const fetchAccountVariables = useMemo(
@@ -43,7 +43,6 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
   const [fetchAccount, { data, loading }] = useLazyQuery<GetAccount>(
     GET_ACCOUNT_QUERY,
     {
-      ...gqlContext,
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
@@ -57,7 +56,6 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
   const [updateQualification] = useMutation<updateQualification>(
     UPDATE_QUALIFICATION_MUTATION,
     {
-      ...gqlContext,
       onCompleted() {
         dispatch({ type: 'CLOSE_QUALIFICATION_POPUP' })
         fetchAccount(fetchAccountVariables)
@@ -69,7 +67,6 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
   )
 
   const [addExperience] = useMutation<AddExperience>(ADD_EXPERIENCE_MUTATION, {
-    ...gqlContext,
     onCompleted({ addExperience: response }) {
       dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
       response.affectedRecords && fetchAccount(fetchAccountVariables)
@@ -80,7 +77,6 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
   })
 
   const [addEducation] = useMutation<AddEducation>(ADD_EDUCATION_MUTATION, {
-    ...gqlContext,
     onCompleted({ addEducation: response }) {
       dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
       response.affectedRecords && fetchAccount(fetchAccountVariables)
@@ -108,7 +104,9 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
                 profile: data.account.profile,
                 username: data.account.username,
                 email: data.account.email,
+                id: data.account.id,
               }}
+              isProfile
             />
 
             <QualificationCardComponent

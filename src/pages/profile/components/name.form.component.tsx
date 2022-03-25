@@ -28,11 +28,10 @@ type NameFormComponentProps = {
 }
 
 export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
-  const { gqlContext } = useAuth()
+  const {} = useAuth()
   const [save, { loading }] = useMutation<UpdateProfileContact>(
     UPDATE_PROFILE_CONTACT_MUTATION,
     {
-      ...gqlContext,
       onCompleted({ updateAccount: response }) {
         if (response.affectedRecords === 1) {
           Toast.success({
