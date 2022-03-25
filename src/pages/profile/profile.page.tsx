@@ -104,7 +104,9 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
                 profile: data.account.profile,
                 username: data.account.username,
                 email: data.account.email,
+                id: data.account.id,
               }}
+              isProfile
             />
 
             <QualificationCardComponent

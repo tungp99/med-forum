@@ -34,6 +34,8 @@ export function AS3Navbar() {
     ACCOUNT_CREATED_SUBSCRIPTION
   )
 
+  const { hasFullAccess } = useAuth()
+
   return (
     <>
       <Navbar className={['as3-navbar', 'py-0'].join(' ')}>
@@ -41,8 +43,11 @@ export function AS3Navbar() {
           fluid
           className="py-1 justify-content-between">
           <div
-            onClick={() => navigate('/')}
-            className="supremeIcon fs-4 ms-1">
+            onClick={() =>
+              hasFullAccess() ? navigate('/admin') : navigate('/')
+            }
+            className="supremeIcon fs-4 ms-1"
+          >
             AS3
           </div>
 

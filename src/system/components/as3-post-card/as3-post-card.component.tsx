@@ -35,6 +35,7 @@ type AS3PostCardProps = CardProps & {
   data: Post
   preview?: boolean
   editable?: boolean
+
   afterEdit?: (data: CreatePostInput | UpdatePostInput) => void
 }
 
@@ -43,6 +44,7 @@ export function AS3PostCard({
   data,
   preview,
   editable,
+
   afterEdit,
 }: AS3PostCardProps) {
   const classList = ['as3-post-card']

@@ -25,6 +25,7 @@ export type Profile = {
   education: Profession[]
   country: string
   countryCode: string
+  qualifications: Qualification[]
 }
 
 export type Account = Entity & {

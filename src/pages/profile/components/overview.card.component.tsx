@@ -15,10 +15,17 @@ import { Toast } from 'system/store'
 import { useMutation } from '@apollo/client'
 import { UPDATE_AVATAR_MUTATION } from '../gql'
 import { UpdateAvatar } from 'system/generated/gql.types'
+import { useNavigate } from 'react-router-dom'
 
 type OverviewCardComponentProps = {
-  data: { profile: Profile; username: string | null; email: string | null }
+  data: {
+    profile: Profile
+    username: string | null
+    email: string | null
+    id: string
+  }
   editable: boolean
+  isProfile?: boolean
 }
 
 export function OverviewCardComponent({
@@ -31,14 +38,17 @@ export function OverviewCardComponent({
       experience,
       education,
       phoneNumber,
+      qualifications,
     },
     username,
     email,
+    id,
   },
+  isProfile,
   editable,
 }: OverviewCardComponentProps) {
   const avatarInputRef = useRef<HTMLInputElement>(null)
-  const { workplaces, occupations, schools } = useMemo(() => {
+  const { workplaces, occupations, schools, departments } = useMemo(() => {
     let workplaces = []
     let occupations = []
     for (const item of experience) {
@@ -49,12 +59,15 @@ export function OverviewCardComponent({
     occupations = Array.from(new Set(occupations))
 
     let schools = []
+    let departments = []
     for (const item of education) {
-      item.isWorking === true && schools.push(item.organization)
+      item.isWorking === true && schools.push(item.organization),
+        departments.push(item.position)
     }
     schools = Array.from(new Set(schools))
+    departments = Array.from(new Set(departments))
 
-    return { workplaces, occupations, schools }
+    return { workplaces, occupations, schools, departments }
   }, [experience, education])
 
   const [updateAvatar, { data: avatarMutationResponse }] =
@@ -63,6 +76,7 @@ export function OverviewCardComponent({
         Toast.error({ title: name, content: message })
       },
     })
+  const navigate = useNavigate()
 
   return (
     <Card className="overview">
@@ -89,7 +103,7 @@ export function OverviewCardComponent({
         }}
       />
 
-      <Ratio aspectRatio={20}>
+      <Ratio aspectRatio={isProfile ? 20 : 15}>
         <Card.Img
           variant="top"
           src={'https://via.placeholder.com/600x150.jpg'}
@@ -105,8 +119,8 @@ export function OverviewCardComponent({
                 avatarUrl ??
                 undefined
               }
-              width={128}
-              height={128}
+              width={isProfile ? 128 : 64}
+              height={isProfile ? 128 : 64}
             >
               {editable && (
                 <AS3Button
@@ -122,67 +136,108 @@ export function OverviewCardComponent({
             </AS3Avatar>
           </div>
 
-          <Card.Title className="mt-2">
+          <Card.Title
+            className={isProfile ? 'mt-2' : 'mt-2 cursor'}
+            onClick={() => (isProfile ? null : navigate(`/profile/${id}`))}
+          >
             {firstName} {lastName}
           </Card.Title>
 
-          {occupations.length > 0 && (
-            <Card.Subtitle className="mb-2 d-flex align-items-center">
-              {occupations.join(' | ')}
-            </Card.Subtitle>
-          )}
+          {isProfile ? (
+            <>
+              {username && (
+                <Card.Subtitle className="mb-3">{`as3/${username}`}</Card.Subtitle>
+              )}
 
-          {username && (
-            <Card.Subtitle className="mb-3">{`as3/${username}`}</Card.Subtitle>
-          )}
+              {occupations.length > 0 && (
+                <Card.Subtitle className="mb-2 d-flex align-items-center">
+                  {occupations.join(' | ')}
+                </Card.Subtitle>
+              )}
 
-          <Card.Subtitle className="mb-2 d-flex align-items-center">
-            <Icon
-              className="me-1"
-              path={mdiEmailMultipleOutline}
-              size={0.8} />{' '}
-            {email}
-          </Card.Subtitle>
+              <Card.Subtitle className="mb-2 d-flex align-items-center">
+                <Icon
+                  className="me-1"
+                  path={mdiEmailMultipleOutline}
+                  size={0.8}
+                />{' '}
+                {email}
+              </Card.Subtitle>
 
-          {phoneNumber && (
-            <Card.Subtitle className="mb-2 d-flex align-items-center">
-              <Icon
-                className="me-1"
-                path={mdiPhone}
-                size={0.8} /> {phoneNumber}
-            </Card.Subtitle>
+              {phoneNumber && (
+                <Card.Subtitle className="mb-2 d-flex align-items-center">
+                  <Icon
+                    className="me-1"
+                    path={mdiPhone}
+                    size={0.8} />{' '}
+                  {phoneNumber}
+                </Card.Subtitle>
+              )}
+              {schools.length > 0 && (
+                <Card.Subtitle className="mb-2">Student</Card.Subtitle>
+              )}
+
+              <Card.Subtitle className="location fw-light">
+                {country}
+              </Card.Subtitle>
+            </>
+          ) : (
+            <>
+              {username && (
+                <Card.Subtitle className="mb-2">{`as3/${username}`}</Card.Subtitle>
+              )}
+              <Card.Subtitle className="location fw-light mb-3">
+                {country}
+              </Card.Subtitle>
+
+              {occupations.length > 0 && (
+                <Card.Subtitle className="mb-2 d-flex align-items-center">
+                  {`Working as ${occupations[0]} at ${workplaces[0]}`}
+                </Card.Subtitle>
+              )}
+
+              {occupations.length === 0 && schools.length > 0 && (
+                <Card.Subtitle className="mb-2 d-flex align-items-center">
+                  {`Learning ${departments[0]} at ${schools[0]}`}
+                </Card.Subtitle>
+              )}
+
+              {qualifications.length > 0 && (
+                <Card.Subtitle className="mb-2 d-flex align-items-center fw-bold">
+                  {`Achived ${qualifications[0].title} issued by ${qualifications[0].issuedBy}`}
+                </Card.Subtitle>
+              )}
+            </>
           )}
-          {schools.length > 0 && (
-            <Card.Subtitle className="mb-2">Student</Card.Subtitle>
-          )}
-          <Card.Subtitle className="location">{country}</Card.Subtitle>
         </Card.Body>
 
-        <ListGroup
-          className="work"
-          variant="flush">
-          {workplaces.map((h, key) => (
-            <ListGroup.Item
-              className="border-0"
-              key={key}>
-              <Icon
-                className="me-2"
-                path={mdiHospitalBuilding}
-                size={1} />
-              {h}
-            </ListGroup.Item>
-          ))}
-          {schools.length !== 0 &&
-            schools.map((h, key) => (
-              <ListGroup.Item key={key}>
+        {isProfile && (
+          <ListGroup
+            className="work"
+            variant="flush">
+            {workplaces.map((h, key) => (
+              <ListGroup.Item
+                className="border-0"
+                key={key}>
                 <Icon
                   className="me-2"
-                  path={mdiSchoolOutline}
+                  path={mdiHospitalBuilding}
                   size={1} />
                 {h}
               </ListGroup.Item>
             ))}
-        </ListGroup>
+            {schools.length !== 0 &&
+              schools.map((h, key) => (
+                <ListGroup.Item key={key}>
+                  <Icon
+                    className="me-2"
+                    path={mdiSchoolOutline}
+                    size={1} />
+                  {h}
+                </ListGroup.Item>
+              ))}
+          </ListGroup>
+        )}
       </div>
     </Card>
   )
