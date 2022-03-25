@@ -17,3 +17,4 @@ export { AS3Select } from './as3-input/as3-select.component'
 export { AS3Dropdown } from './as3-dropdown/as3-dropdown.component'
 //
 export { AS3PostCard } from './as3-post-card/as3-post-card.component'
+export { AS3InfiniteScroller } from './as3-infinite-scroller.component'
