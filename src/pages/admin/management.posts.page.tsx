@@ -1,11 +1,10 @@
-import { useEffect, useMemo } from 'react'
-import { useMutation, useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
-import { useAuth } from 'system/auth'
 import {
-  AS3Button,
   AS3Dropdown,
+  AS3InfiniteScroller,
   AS3LayoutWithSidebar,
   AS3PostCard,
 } from 'system/components'
@@ -13,68 +12,59 @@ import { FilterComponent } from './components/filter.component'
 
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
 import { GetPostsAdmin, UpdatePostInput } from 'system/generated/gql.types'
-import { mdiMenuDown, mdiSync } from '@mdi/js'
+import { mdiMenuDown } from '@mdi/js'
 import { SidebarComponent } from '../management/components/sidebar.component'
 import { GET_POSTS_ADMIN_QUERY } from '../management/gql'
 
 export default function AdminManagePostsPage() {
-  const { authenticated } = useAuth()
   const {
-    managementPage: { fetchPosts: fetchPublished },
-    homePage: { page, posts },
-    admin: { filterTime },
+    managementPage: { fetchPosts },
+    homePage: { posts },
+    admin: { filterTime, page },
   } = useSelector(store => store)
   const dispatch = useDispatch()
 
-  const fetchVariables = useMemo(
-    () => ({
-      isPublished: fetchPublished,
-      skip: page * 8,
-      timeFilter: filterTime,
-    }),
-    [fetchPublished, page, filterTime]
+  const [hasNextPage, setHasNextPage] = useState(true)
+  const [fetch, { loading }] = useLazyQuery<GetPostsAdmin>(
+    GET_POSTS_ADMIN_QUERY,
+    {
+      onCompleted({ posts: response }) {
+        if (response && response?.items) {
+          dispatch({
+            type: 'ADD_HOMEPAGE_POSTS',
+            payload: response.items.map(s => ({ ...s, comments: [] })),
+          })
+
+          setHasNextPage(response.pageInfo.hasNextPage)
+        }
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
   )
 
-  const { refetch, loading } = useQuery<GetPostsAdmin>(GET_POSTS_ADMIN_QUERY, {
-    variables: {
-      isPublished: fetchVariables.isPublished,
-      skip: fetchVariables.skip,
-      timeFilter: filterTime,
-    },
-    onCompleted({ posts }) {
-      if (posts?.items) {
-        dispatch({
-          type: 'SET_HOMEPAGE_POSTS',
-          payload: posts.items.map(s => ({ ...s, comments: [] })),
-        })
-        dispatch({
-          type: 'SET_HOMEPAGE_POSTS_PAGE',
-          payload: 0,
-        })
-      }
-    },
-    onError({ name, message }) {
-      Toast.error({ title: name, content: message })
-    },
-  })
-
   useEffect(() => {
-    refetch()
-  }, [fetchVariables])
+    console.log(page)
+
+    fetch({
+      variables: {
+        isPublished: fetchPosts,
+        skip: page * 8,
+        timeFilter: filterTime,
+      },
+    })
+  }, [page, fetchPosts, filterTime])
 
   const [updatePost, { loading: waitingForUpdate }] =
     useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
       onCompleted() {
-        refetch()
+        fetch()
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
     })
-
-  useEffect(() => {
-    if (authenticated) refetch()
-  }, [authenticated])
 
   return (
     <AS3LayoutWithSidebar
@@ -103,30 +93,34 @@ export default function AdminManagePostsPage() {
             },
           ]}
         >
-          <span>{fetchPublished ? 'Published' : 'Drafts'}</span>
+          <span>{fetchPosts ? 'Published' : 'Drafts'}</span>
         </AS3Dropdown>
         <FilterComponent />
       </div>
 
-      <div className="d-flex justify-content-center mb-3">
-        <AS3Button
-          text
-          loading={loading}
-          disabled={loading}
-          icon={mdiSync}
-          onClick={() => refetch()}
-        />
-      </div>
-
-      {posts.map(post => (
-        <AS3PostCard
-          key={post.id}
-          preview
-          data={post}
-          editable={!waitingForUpdate}
-          afterEdit={posts => updatePost({ variables: { input: posts } })}
-        />
-      ))}
+      <div className="d-flex justify-content-center mb-3"></div>
+      <AS3InfiniteScroller
+        callback={() => {
+          dispatch({
+            type: 'SET_ADMIN_POSTS_PAGE',
+            payload: page + 1,
+          })
+        }}
+        updateCallbackUsingDependencies={[page]}
+        allowScrollingWhen={hasNextPage && !loading}
+      >
+        <>
+          {posts.map(post => (
+            <AS3PostCard
+              key={post.id}
+              preview
+              data={post}
+              editable={!waitingForUpdate}
+              afterEdit={posts => updatePost({ variables: { input: posts } })}
+            />
+          ))}
+        </>
+      </AS3InfiniteScroller>
     </AS3LayoutWithSidebar>
   )
 }

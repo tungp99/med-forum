@@ -31,25 +31,49 @@ export function FilterComponent() {
             gap={3}>
             <AS3Chip
               icon={mdiStar}
-              onClick={() =>
+              onClick={() => {
+                dispatch({
+                  type: 'SET_HOMEPAGE_POSTS_PAGE',
+                  payload: 0,
+                })
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'MostRating' })
-              }
+                dispatch({
+                  type: 'SET_HOMEPAGE_POSTS',
+                  payload: [],
+                })
+              }}
             >
               Most Rating
             </AS3Chip>
             <AS3Chip
               icon={mdiFire}
-              onClick={() =>
+              onClick={() => {
+                dispatch({
+                  type: 'SET_HOMEPAGE_POSTS_PAGE',
+                  payload: 0,
+                })
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'Hot' })
-              }
+                dispatch({
+                  type: 'SET_HOMEPAGE_POSTS',
+                  payload: [],
+                })
+              }}
             >
               Hot
             </AS3Chip>
             <AS3Chip
               icon={mdiWhiteBalanceSunny}
-              onClick={() =>
+              onClick={() => {
+                dispatch({
+                  type: 'SET_HOMEPAGE_POSTS_PAGE',
+                  payload: 0,
+                })
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'New' })
-              }
+                dispatch({
+                  type: 'SET_HOMEPAGE_POSTS',
+                  payload: [],
+                })
+              }}
             >
               New
             </AS3Chip>

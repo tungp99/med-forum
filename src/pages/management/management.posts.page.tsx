@@ -1,9 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 
-import { Toast, useSelector } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
-import { AS3Button, AS3Layout, AS3PostCard } from 'system/components'
+import {
+  AS3Button,
+  AS3InfiniteScroller,
+  AS3Layout,
+  AS3PostCard,
+} from 'system/components'
 import { FilterComponent } from './components/filter.component'
 
 import { GET_COLLECTOR_QUERY, GET_MY_POSTS_QUERY } from './gql'
@@ -17,52 +22,65 @@ import { mdiSync } from '@mdi/js'
 import { useCollector } from 'system/plugins'
 
 export default function ManagementPage() {
-  const { account, authenticated } = useAuth()
-  const { fetchPosts } = useSelector(store => store.managementPage)
-  const [state, setState] = useState({
-    page: 0,
-    data: {} as GetPosts | GetCollectedPosts,
-  })
-  const { collection } = useCollector()
+  const { account } = useAuth()
+  const { fetchPosts, page, posts } = useSelector(store => store.managementPage)
 
-  const fetchVariables = useMemo(
-    () => ({
-      isPublished: fetchPosts === null ? true : fetchPosts,
-      skip: state.page * 8,
-      accountId: account.id,
-    }),
-    [state.page, fetchPosts, account]
-  )
+  const { collection } = useCollector()
+  const dispatch = useDispatch()
+  const [hasNextPage, setHasNextPage] = useState(true)
+
   const [fetch, { loading, refetch }] = useLazyQuery<GetPosts>(
     GET_MY_POSTS_QUERY,
     {
       onCompleted(response) {
-        fetchPosts !== null && setState({ ...state, data: response })
+        if (response.posts?.items) {
+          fetchPosts !== null &&
+            dispatch({
+              type: 'ADD_MANAGEMENT_POSTS',
+              payload: posts.concat(response.posts.items),
+            })
+          setHasNextPage(response.posts?.pageInfo.hasNextPage)
+        }
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: fetchVariables,
     }
   )
 
   const [fetchCollector, { loading: coLoading }] =
     useLazyQuery<GetCollectedPosts>(GET_COLLECTOR_QUERY, {
       onCompleted(response) {
-        fetchPosts === null && setState({ ...state, data: response })
+        if (response.posts?.items) {
+          fetchPosts !== null &&
+            dispatch({
+              type: 'ADD_MANAGEMENT_POSTS',
+              payload: posts.concat(response.posts.items),
+            })
+          setHasNextPage(response.posts?.pageInfo.hasNextPage)
+        }
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: {
-        skip: state.page * 8,
-        collection: collection,
-      },
     })
 
   useEffect(() => {
-    fetchPosts !== null ? fetch() : fetchCollector()
-  }, [fetchVariables, fetchPosts])
+    fetchPosts !== null
+      ? fetch({
+          variables: {
+            isPublished: fetchPosts === null ? true : fetchPosts,
+            skip: page * 8,
+            accountId: account.id,
+          },
+        })
+      : fetchCollector({
+          variables: {
+            skip: page * 8,
+            collection: collection,
+          },
+        })
+  }, [page, account, fetchPosts, collection])
 
   const [updatePost, { loading: waitingForUpdate }] =
     useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
@@ -74,10 +92,6 @@ export default function ManagementPage() {
       },
     })
 
-  useEffect(() => {
-    if (authenticated) fetch()
-  }, [authenticated])
-
   return (
     <AS3Layout className="w-70 mt-3">
       <FilterComponent />
@@ -88,19 +102,47 @@ export default function ManagementPage() {
           loading={fetchPosts === null ? coLoading : loading}
           disabled={loading}
           icon={mdiSync}
-          onClick={() => (fetchPosts !== null ? fetch() : fetchCollector())}
+          onClick={() =>
+            fetchPosts !== null
+              ? fetch({
+                  variables: {
+                    isPublished: fetchPosts === null ? true : fetchPosts,
+                    skip: page * 8,
+                    accountId: account.id,
+                  },
+                })
+              : fetchCollector({
+                  variables: {
+                    skip: page * 8,
+                    collection: collection,
+                  },
+                })
+          }
         />
       </div>
 
-      {state.data?.posts?.items?.map(post => (
-        <AS3PostCard
-          key={post.id}
-          preview
-          data={{ ...post, comments: [] }}
-          editable={!waitingForUpdate}
-          afterEdit={data => updatePost({ variables: { input: data } })}
-        />
-      ))}
+      <AS3InfiniteScroller
+        callback={() => {
+          dispatch({
+            type: 'SET_MANAGEMENT_PAGE',
+            payload: page + 1,
+          })
+        }}
+        updateCallbackUsingDependencies={[page]}
+        allowScrollingWhen={hasNextPage && !loading && !coLoading}
+      >
+        <>
+          {posts.map(post => (
+            <AS3PostCard
+              key={post.id}
+              preview
+              data={{ ...post, comments: [] }}
+              editable={!waitingForUpdate}
+              afterEdit={data => updatePost({ variables: { input: data } })}
+            />
+          ))}
+        </>
+      </AS3InfiniteScroller>
     </AS3Layout>
   )
 }

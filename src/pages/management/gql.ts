@@ -34,7 +34,7 @@ export const GET_ACCOUNTS_QUERY = gql`
   query GetAccounts($skip: Int!, $isPublic: Boolean!, $search: String!) {
     accounts(
       skip: $skip
-      take: 8
+      take: 12
       where: {
         profile: { isPublic: { eq: $isPublic } }
         and: { email: { contains: $search } }
@@ -61,7 +61,7 @@ export const GET_ACCOUNTS_QUERY = gql`
 `
 export const GET_ALL_ACCOUNTS_QUERY = gql`
   query GetAllAccounts($skip: Int!, $search: String!) {
-    accounts(skip: $skip, take: 8, where: { email: { contains: $search } }) {
+    accounts(skip: $skip, take: 12, where: { email: { contains: $search } }) {
       items {
         writtenPostsCount
         id

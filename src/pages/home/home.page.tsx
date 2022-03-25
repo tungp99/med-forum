@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
@@ -26,84 +26,79 @@ export default function HomePage() {
 
   const [hasNextPage, setHasNextPage] = useState(true)
 
-  const [fetchPosts, { loading }] = useLazyQuery<GetPosts>(GET_POSTS_QUERY, {
-    variables: { skip: page * 8 },
-    onCompleted({ posts: response }) {
-      if (response && response.items) {
-        dispatch({
-          type: 'ADD_HOMEPAGE_POSTS',
-          payload: response.items.map(s => ({ ...s, comments: [] })),
-        })
+  const [fetchPosts, { loading: defaultFetching }] = useLazyQuery<GetPosts>(
+    GET_POSTS_QUERY,
+    {
+      onCompleted({ posts: response }) {
+        if (response && response.items) {
+          dispatch({
+            type: 'ADD_HOMEPAGE_POSTS',
+            payload: response.items.map(s => ({ ...s, comments: [] })),
+          })
 
-        setHasNextPage(response.pageInfo.hasNextPage)
-      }
+          setHasNextPage(response.pageInfo.hasNextPage)
+        }
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+
+  const [filterPosts, { loading: filtering }] = useLazyQuery<FilterPosts>(
+    FILTER_POST_QUERY,
+    {
+      onCompleted({ posts: response }) {
+        if (response && response.items) {
+          dispatch({
+            type: 'ADD_HOMEPAGE_POSTS',
+            payload: response.items.map(s => ({ ...s, comments: [] })),
+          })
+
+          setHasNextPage(response.pageInfo.hasNextPage)
+        }
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    }
+  )
+
+  useEffect(() => {
+    if (filter_type === 'New') {
+      fetchPosts({ variables: { skip: page * 8 } })
+    } else {
+      filterPosts({
+        variables: {
+          skip: page * 8,
+          timeFilter: filter_time,
+        },
+      })
+    }
+  }, [filter_type, page])
+
+  const [updatePost] = useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
+    onCompleted() {
+      filter_type === 'New' ? fetchPosts() : filterPosts()
     },
     onError({ name, message }) {
       Toast.error({ title: name, content: message })
     },
   })
 
-  // const fetchFilterVariables = useMemo(
-  //   () => ({
-  //     skip: page * 8,
-  //     timeFilter: filter_time,
-  //   }),
-  //   [filter_type]
-  // )
-  // const [filterPosts] = useLazyQuery<FilterPosts>(FILTER_POST_QUERY, {
-  //   variables: fetchFilterVariables,
-  //   onCompleted({ posts }) {
-  //     if (posts?.items) {
-  //       dispatch({
-  //         type: 'SET_HOMEPAGE_POSTS',
-  //         payload: posts.items.map(s => ({ ...s, comments: [] })),
-  //       })
-  //       dispatch({
-  //         type: 'SET_HOMEPAGE_POSTS_PAGE',
-  //         payload: 0,
-  //       })
-  //     }
-  //   },
-  //   onError({ name, message }) {
-  //     Toast.error({ title: name, content: message })
-  //   },
-  // })
-
-  useEffect(() => {
-    fetchPosts()
-  }, [page])
-
-
-  // useEffect(() => {
-  //   if (filter_type === 'New') {
-  //     refetch()
-  //   } else {
-  //     filterPosts()
-  //   }
-  // }, [filter_type])
-
-  // const [updatePost] = useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
-  //   onCompleted() {
-  //     // filter_type === 'New' ? refetch() : filterPosts()
-  //   },
-  //   onError({ name, message }) {
-  //     Toast.error({ title: name, content: message })
-  //   },
-  // })
-
   return (
     <AS3LayoutWithSidebar sidebar={<PicksComponent />}>
       <FilterComponent />
 
       <AS3InfiniteScroller
-        callback={() =>
+        callback={() => {
           dispatch({
             type: 'SET_HOMEPAGE_POSTS_PAGE',
             payload: page + 1,
           })
-        }
+        }}
         updateCallbackUsingDependencies={[page]}
-        allowScrollingWhen={hasNextPage && !loading}
+        allowScrollingWhen={hasNextPage && !defaultFetching && !filtering}
       >
         <>
           {posts.map(post => (
@@ -112,7 +107,7 @@ export default function HomePage() {
               className="navigation-enabled"
               preview
               data={{ ...post }}
-              // afterEdit={data => updatePost({ variables: { input: data } })}
+              afterEdit={data => updatePost({ variables: { input: data } })}
             />
           ))}
         </>

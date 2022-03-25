@@ -22,7 +22,6 @@ export const homePageStore = (
     | 'SET_HOMEPAGE_POSTS'
     | 'ADD_HOMEPAGE_POSTS'
     | 'SET_HOMEPAGE_POSTS_PAGE'
-    | 'RESET_HOMEPAGE_POSTS_PAGE'
     | 'FILTER_POST_UPDATE',
     Post[] | number | string
   >
