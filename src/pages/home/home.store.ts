@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { StoreAction } from 'system/store'
 import { Post } from 'system/types'
+import { StoreAction } from 'system/store'
 
 type State = {
   posts: Post[]
@@ -20,8 +20,9 @@ export const homePageStore = (
   state = initialState,
   action: StoreAction<
     | 'SET_HOMEPAGE_POSTS'
+    | 'ADD_HOMEPAGE_POSTS'
     | 'SET_HOMEPAGE_POSTS_PAGE'
-    | 'INCREASE_HOMEPAGE_POSTS_PAGE'
+    | 'RESET_HOMEPAGE_POSTS_PAGE'
     | 'FILTER_POST_UPDATE',
     Post[] | number | string
   >
@@ -31,6 +32,7 @@ export const homePageStore = (
   switch (action.type) {
     case 'SET_HOMEPAGE_POSTS':
       return { ...state, posts: action.payload as Post[] }
+
     case 'SET_HOMEPAGE_POSTS_PAGE': {
       const page = action.payload as number
       return {
@@ -38,11 +40,14 @@ export const homePageStore = (
         page: page ?? 0,
       }
     }
-    case 'INCREASE_HOMEPAGE_POSTS_PAGE':
+
+    case 'ADD_HOMEPAGE_POSTS': {
       return {
         ...state,
-        page: state.page + 1,
+        posts: [...state.posts, ...(action.payload as Post[])],
       }
+    }
+
     case 'FILTER_POST_UPDATE':
       let filter_time = '1970-01-01T11:11:11.111Z'
       const filter_type = action.payload as string
