@@ -31,6 +31,7 @@ export function AS3Chip({
   children,
   className,
   active,
+  disabled,
   size,
   variant,
   icon,
@@ -44,6 +45,7 @@ export function AS3Chip({
     <Button
       className={classList.join(' ')}
       active={active}
+      disabled={disabled}
       size={size}
       variant={variant ?? 'light'}
       onClick={onClick}

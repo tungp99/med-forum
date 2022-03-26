@@ -22,10 +22,6 @@ export function FilterComponent() {
           <AS3Chip
             active={filterType === 'Today'}
             onClick={() => {
-              dispatch({
-                type: 'SET_HOMEPAGE_POSTS',
-                payload: [],
-              })
               dispatch({ type: 'ADMIN_FILTER_POSTS_UPDATE', payload: 'Today' })
             }}
           >
@@ -35,10 +31,6 @@ export function FilterComponent() {
           <AS3Chip
             active={filterType === 'This week'}
             onClick={() => {
-              dispatch({
-                type: 'SET_HOMEPAGE_POSTS',
-                payload: [],
-              })
               dispatch({
                 type: 'ADMIN_FILTER_POSTS_UPDATE',
                 payload: 'This week',
@@ -51,10 +43,6 @@ export function FilterComponent() {
             active={filterType === 'This month'}
             onClick={() => {
               dispatch({
-                type: 'SET_HOMEPAGE_POSTS',
-                payload: [],
-              })
-              dispatch({
                 type: 'ADMIN_FILTER_POSTS_UPDATE',
                 payload: 'This month',
               })
@@ -65,10 +53,6 @@ export function FilterComponent() {
           <AS3Chip
             active={filterType === 'All'}
             onClick={() => {
-              dispatch({
-                type: 'SET_HOMEPAGE_POSTS',
-                payload: [],
-              })
               dispatch({ type: 'ADMIN_FILTER_POSTS_UPDATE', payload: 'All' })
             }}
           >

@@ -32,15 +32,7 @@ export function FilterComponent() {
             <AS3Chip
               icon={mdiStar}
               onClick={() => {
-                dispatch({
-                  type: 'SET_HOMEPAGE_POSTS_PAGE',
-                  payload: 0,
-                })
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'MostRating' })
-                dispatch({
-                  type: 'SET_HOMEPAGE_POSTS',
-                  payload: [],
-                })
               }}
             >
               Most Rating
@@ -48,15 +40,7 @@ export function FilterComponent() {
             <AS3Chip
               icon={mdiFire}
               onClick={() => {
-                dispatch({
-                  type: 'SET_HOMEPAGE_POSTS_PAGE',
-                  payload: 0,
-                })
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'Hot' })
-                dispatch({
-                  type: 'SET_HOMEPAGE_POSTS',
-                  payload: [],
-                })
               }}
             >
               Hot
@@ -64,15 +48,7 @@ export function FilterComponent() {
             <AS3Chip
               icon={mdiWhiteBalanceSunny}
               onClick={() => {
-                dispatch({
-                  type: 'SET_HOMEPAGE_POSTS_PAGE',
-                  payload: 0,
-                })
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'New' })
-                dispatch({
-                  type: 'SET_HOMEPAGE_POSTS',
-                  payload: [],
-                })
               }}
             >
               New

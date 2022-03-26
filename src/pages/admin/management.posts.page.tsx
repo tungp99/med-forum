@@ -3,8 +3,8 @@ import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { Toast, useDispatch, useSelector } from 'system/store'
 import {
+  AS3Button,
   AS3Dropdown,
-  AS3InfiniteScroller,
   AS3LayoutWithSidebar,
   AS3PostCard,
 } from 'system/components'
@@ -20,20 +20,36 @@ export default function AdminManagePostsPage() {
   const {
     managementPage: { fetchPosts },
     homePage: { posts },
-    admin: { filterTime, page },
+    admin: { filterTime },
   } = useSelector(store => store)
   const dispatch = useDispatch()
 
+  const resetPage = () => {
+    page === 0 &&
+      fetch({
+        variables: {
+          isPublished: fetchPosts,
+          skip: page * 8,
+          timeFilter: filterTime,
+        },
+      })
+  }
+  const [page, setPage] = useState(0)
   const [hasNextPage, setHasNextPage] = useState(true)
-  const [fetch, { loading }] = useLazyQuery<GetPostsAdmin>(
+  const [fetch, { loading, called, refetch }] = useLazyQuery<GetPostsAdmin>(
     GET_POSTS_ADMIN_QUERY,
     {
       onCompleted({ posts: response }) {
         if (response && response?.items) {
-          dispatch({
-            type: 'ADD_HOMEPAGE_POSTS',
-            payload: response.items.map(s => ({ ...s, comments: [] })),
-          })
+          page === 0
+            ? dispatch({
+                type: 'SET_HOMEPAGE_POSTS',
+                payload: response.items.map(s => ({ ...s, comments: [] })),
+              })
+            : dispatch({
+                type: 'ADD_HOMEPAGE_POSTS',
+                payload: response.items.map(s => ({ ...s, comments: [] })),
+              })
 
           setHasNextPage(response.pageInfo.hasNextPage)
         }
@@ -45,21 +61,31 @@ export default function AdminManagePostsPage() {
   )
 
   useEffect(() => {
-    console.log(page)
+    resetPage()
+    setPage(0)
+  }, [fetchPosts, filterTime])
 
-    fetch({
-      variables: {
-        isPublished: fetchPosts,
-        skip: page * 8,
-        timeFilter: filterTime,
-      },
-    })
-  }, [page, fetchPosts, filterTime])
+  useEffect(() => {
+    called
+      ? refetch({
+          isPublished: fetchPosts,
+          skip: page * 8,
+          timeFilter: filterTime,
+        })
+      : fetch({
+          variables: {
+            isPublished: fetchPosts,
+            skip: page * 8,
+            timeFilter: filterTime,
+          },
+        })
+  }, [page])
 
   const [updatePost, { loading: waitingForUpdate }] =
     useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
       onCompleted() {
-        fetch()
+        resetPage()
+        setPage(0)
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
@@ -99,28 +125,30 @@ export default function AdminManagePostsPage() {
       </div>
 
       <div className="d-flex justify-content-center mb-3"></div>
-      <AS3InfiniteScroller
-        callback={() => {
-          dispatch({
-            type: 'SET_ADMIN_POSTS_PAGE',
-            payload: page + 1,
-          })
-        }}
-        updateCallbackUsingDependencies={[page]}
-        allowScrollingWhen={hasNextPage && !loading}
-      >
-        <>
-          {posts.map(post => (
-            <AS3PostCard
-              key={post.id}
-              preview
-              data={post}
-              editable={!waitingForUpdate}
-              afterEdit={posts => updatePost({ variables: { input: posts } })}
-            />
-          ))}
-        </>
-      </AS3InfiniteScroller>
+
+      {posts.map(post => (
+        <AS3PostCard
+          key={post.id}
+          preview
+          data={post}
+          editable={!waitingForUpdate}
+          afterEdit={posts => updatePost({ variables: { input: posts } })}
+        />
+      ))}
+
+      {hasNextPage && (
+        <div className="text-center">
+          <AS3Button
+            loading={loading || waitingForUpdate}
+            text
+            onClick={() => {
+              setPage(page + 1)
+            }}
+          >
+            Load more...
+          </AS3Button>
+        </div>
+      )}
     </AS3LayoutWithSidebar>
   )
 }

@@ -102,6 +102,7 @@ export interface FilterPosts {
 
 export interface FilterPostsVariables {
   timeFilter: any;
+  skip: number;
 }
 
 /* tslint:disable */
@@ -415,6 +416,7 @@ export interface GetCollectedPosts {
 
 export interface GetCollectedPostsVariables {
   skip: number;
+  collection: (string | null)[];
 }
 
 /* tslint:disable */

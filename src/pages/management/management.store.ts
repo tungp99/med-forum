@@ -1,5 +1,5 @@
-import { GetPosts_posts_items } from 'system/generated/gql.types'
 import { StoreAction } from 'system/store'
+import { Post } from 'system/types'
 
 type Store = {
   fetchPosts: boolean | null
@@ -10,7 +10,8 @@ type Store = {
   isDeleteUserPopupActive: boolean
   deleteId?: string
   page: number
-  posts: GetPosts_posts_items[]
+  posts: Post[]
+  status: number
 }
 
 const initialState: Store = {
@@ -22,6 +23,7 @@ const initialState: Store = {
   isDeleteUserPopupActive: false,
   page: 0,
   posts: [],
+  status: 0,
 }
 
 export const managementPageStore = (
@@ -39,9 +41,9 @@ export const managementPageStore = (
     | 'OPEN_DELETE_USER_POPUP'
     | 'CLOSE_DELETE_USER_POPUP'
     | 'SET_MANAGEMENT_PAGE'
-    | 'ADD_MANAGEMENT_POSTS'
+    | 'SET_MANAGEMENT_POSTS'
     | 'DELETE_ID',
-    string | number | GetPosts_posts_items[]
+    string | number | Post[]
   >
 ): Store => {
   switch (action.type) {
@@ -101,6 +103,7 @@ export const managementPageStore = (
       return {
         ...state,
         isCreateUserPopupActive: false,
+        status: state.status + 1,
       }
     case 'OPEN_DELETE_USER_POPUP':
       return {
@@ -111,6 +114,7 @@ export const managementPageStore = (
       return {
         ...state,
         isDeleteUserPopupActive: false,
+        status: state.status + 1,
       }
     case 'DELETE_ID':
       return {
@@ -118,17 +122,17 @@ export const managementPageStore = (
         deleteId: action.payload as string,
       }
     case 'SET_MANAGEMENT_PAGE':
-      const page = action.payload as number
+      const page = (action.payload as number) ?? 0
       return {
         ...state,
-        page: page ?? 0,
+        page,
       }
-    case 'ADD_MANAGEMENT_POSTS': {
+
+    case 'SET_MANAGEMENT_POSTS':
       return {
         ...state,
-        posts: state.posts.concat(action.payload as GetPosts_posts_items[]),
+        posts: action.payload as Post[],
       }
-    }
     default:
       return state
   }
