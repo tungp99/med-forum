@@ -42,7 +42,8 @@ export const managementPageStore = (
     | 'CLOSE_DELETE_USER_POPUP'
     | 'SET_MANAGEMENT_PAGE'
     | 'SET_MANAGEMENT_POSTS'
-    | 'DELETE_ID',
+    | 'DELETE_ID'
+    | 'UPDATE_STATUS',
     string | number | Post[]
   >
 ): Store => {
@@ -103,7 +104,6 @@ export const managementPageStore = (
       return {
         ...state,
         isCreateUserPopupActive: false,
-        status: state.status + 1,
       }
     case 'OPEN_DELETE_USER_POPUP':
       return {
@@ -114,7 +114,6 @@ export const managementPageStore = (
       return {
         ...state,
         isDeleteUserPopupActive: false,
-        status: state.status + 1,
       }
     case 'DELETE_ID':
       return {
@@ -132,6 +131,13 @@ export const managementPageStore = (
       return {
         ...state,
         posts: action.payload as Post[],
+      }
+
+    case 'UPDATE_STATUS':
+      return {
+        ...state,
+        status: state.status + 1,
+        posts: [],
       }
     default:
       return state

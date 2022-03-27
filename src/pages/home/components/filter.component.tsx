@@ -35,7 +35,7 @@ export function FilterComponent() {
                 dispatch({ type: 'FILTER_POST_UPDATE', payload: 'MostRating' })
               }}
             >
-              Most Rating
+              Highest Rating
             </AS3Chip>
             <AS3Chip
               icon={mdiFire}

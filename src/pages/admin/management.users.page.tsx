@@ -27,7 +27,7 @@ import {
 export default function AdminManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isPublic, filterTitle, filterText, deleteId } = useSelector(
+  const { isPublic, filterTitle, filterText, deleteId, status } = useSelector(
     store => store.managementPage
   )
 
@@ -43,7 +43,6 @@ export default function AdminManageUsersPage() {
         : getAccount_fetch({ variables })
   }
   const [page, setPage] = useState(0)
-  const [status, setStatus] = useState(0)
   const [hasNextPage, setHasNextPage] = useState(true)
   const variables = {
     skip: page * 12,
@@ -82,9 +81,10 @@ export default function AdminManageUsersPage() {
   })
 
   useEffect(() => {
+    console.log(page)
     resetPage()
     setPage(0)
-  }, [filterTitle, filterText, isPublic])
+  }, [filterTitle, filterText, isPublic, status])
 
   useEffect(() => {
     if (filterTitle === 'All') {
@@ -98,13 +98,15 @@ export default function AdminManageUsersPage() {
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
       <CreateUserPopupComponent
         onCreated={() => {
-          setStatus(status + 1)
+          setData([])
+          dispatch({ type: 'UPDATE_STATUS' })
         }}
       />
       <DeleteUserPopup
         id={deleteId}
         onDeleted={() => {
-          setStatus(status + 1)
+          setData([])
+          dispatch({ type: 'UPDATE_STATUS' })
         }}
       />
       <div className="filter__container pb-3">
