@@ -81,7 +81,6 @@ export default function AdminManageUsersPage() {
   })
 
   useEffect(() => {
-    console.log(page)
     resetPage()
     setPage(0)
   }, [filterTitle, filterText, isPublic, status])
@@ -123,6 +122,7 @@ export default function AdminManageUsersPage() {
           className="mb-0"
           placeholder="Search"
           onChange={e => {
+            setData([])
             dispatch({
               type: 'SET_ACCOUNT_UPDATE_FILTER',
               payload: e.target.value,

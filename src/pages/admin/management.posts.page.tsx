@@ -11,7 +11,11 @@ import {
 import { FilterComponent } from './components/filter.component'
 
 import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
-import { GetPostsAdmin, UpdatePostInput } from 'system/generated/gql.types'
+import {
+  GetPostsAdmin,
+  GetPostsAdmin_posts_items,
+  UpdatePostInput,
+} from 'system/generated/gql.types'
 import { mdiMenuDown } from '@mdi/js'
 import { SidebarComponent } from '../management/components/sidebar.component'
 import { GET_POSTS_ADMIN_QUERY } from '../management/gql'
@@ -24,6 +28,17 @@ export default function AdminManagePostsPage() {
   } = useSelector(store => store)
   const dispatch = useDispatch()
 
+  const createPage = (items: GetPostsAdmin_posts_items[]) => {
+    page === 0
+      ? dispatch({
+          type: 'SET_HOMEPAGE_POSTS',
+          payload: items.map(s => ({ ...s, comments: [] })),
+        })
+      : dispatch({
+          type: 'ADD_HOMEPAGE_POSTS',
+          payload: items.map(s => ({ ...s, comments: [] })),
+        })
+  }
   const resetPage = () => {
     page === 0 &&
       fetch({
@@ -41,15 +56,7 @@ export default function AdminManagePostsPage() {
     {
       onCompleted({ posts: response }) {
         if (response && response?.items) {
-          page === 0
-            ? dispatch({
-                type: 'SET_HOMEPAGE_POSTS',
-                payload: response.items.map(s => ({ ...s, comments: [] })),
-              })
-            : dispatch({
-                type: 'ADD_HOMEPAGE_POSTS',
-                payload: response.items.map(s => ({ ...s, comments: [] })),
-              })
+          createPage(response.items)
 
           setHasNextPage(response.pageInfo.hasNextPage)
         }

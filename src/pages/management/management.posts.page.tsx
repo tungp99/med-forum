@@ -12,6 +12,7 @@ import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
 import {
   GetCollectedPosts,
   GetPosts,
+  GetPosts_posts_items,
   UpdatePost,
 } from 'system/generated/gql.types'
 
@@ -40,23 +41,24 @@ export default function ManagementPage() {
             },
           })
   }
+  const createPage = (items: GetPosts_posts_items[]) => {
+    page === 0
+      ? dispatch({
+          type: 'SET_MANAGEMENT_POSTS',
+          payload: items.map(s => ({ ...s, comments: [] })),
+        })
+      : dispatch({
+          type: 'SET_MANAGEMENT_POSTS',
+          payload: posts.concat(items.map(s => ({ ...s, comments: [] }))),
+        })
+  }
 
   const [fetch, { refetch, loading, called }] = useLazyQuery<GetPosts>(
     GET_MY_POSTS_QUERY,
     {
       onCompleted({ posts: response }) {
-        if (response?.items) {
-          page === 0
-            ? dispatch({
-                type: 'SET_MANAGEMENT_POSTS',
-                payload: response.items.map(s => ({ ...s, comments: [] })),
-              })
-            : dispatch({
-                type: 'SET_MANAGEMENT_POSTS',
-                payload: posts.concat(
-                  response.items.map(s => ({ ...s, comments: [] }))
-                ),
-              })
+        if (response?.items && response && fetchPosts !== null) {
+          createPage(response.items)
           setHasNextPage(response.pageInfo.hasNextPage)
         }
       },
@@ -75,18 +77,8 @@ export default function ManagementPage() {
     },
   ] = useLazyQuery<GetCollectedPosts>(GET_COLLECTOR_QUERY, {
     onCompleted({ posts: response }) {
-      if (response?.items) {
-        page === 0
-          ? dispatch({
-              type: 'SET_MANAGEMENT_POSTS',
-              payload: response.items.map(s => ({ ...s, comments: [] })),
-            })
-          : dispatch({
-              type: 'SET_MANAGEMENT_POSTS',
-              payload: posts.concat(
-                response.items.map(s => ({ ...s, comments: [] }))
-              ),
-            })
+      if (response?.items && response && fetchPosts === null) {
+        createPage(response.items)
         setHasNextPage(response.pageInfo.hasNextPage)
       }
     },

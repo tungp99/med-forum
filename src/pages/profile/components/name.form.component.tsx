@@ -59,7 +59,7 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
         lastName: profile.lastName,
         phoneNumber: profile.phoneNumber,
         birthDate: profile.birthDate
-          ? DateTime.fromISO(profile.birthDate).toISODate()
+          ? DateTime.fromISO(profile.birthDate).toISO()
           : null,
         countryCode: profile.countryCode,
       },
@@ -138,25 +138,29 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
           )}
         />
 
-        {data.profile.birthDate ? (
+        {!data.profile.birthDate ? (
           <Controller
             control={control}
             name="profile.birthDate"
-            render={({ field: { onChange, value } }) => (
-              <AS3Input
-                type="date"
-                label="Birthday"
-                size="lg"
-                value={value}
-                onChange={onChange}
-              />
-            )}
+            render={({ field: { onChange, value } }) => {
+              console.log(value)
+              return (
+                <AS3Input
+                  type="date"
+                  label="Birthday"
+                  size="lg"
+                  value={value ?? ''}
+                  onChange={onChange}
+                />
+              )
+            }}
           />
         ) : (
           <AS3Input
             type="date"
             label="Birthday"
-            size="lg" />
+            size="lg"
+            readOnly />
         )}
 
         <Controller

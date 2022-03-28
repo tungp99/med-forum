@@ -49,7 +49,7 @@ export default function HomePage() {
   const [fetchPosts, { refetch, loading: defaultFetching, called }] =
     useLazyQuery<GetPosts>(GET_POSTS_QUERY, {
       onCompleted({ posts: response }) {
-        if (response && response.items) {
+        if (response && response.items && filter_type === 'New') {
           createPage(response.items)
 
           setHasNextPage(response.pageInfo.hasNextPage)
@@ -65,7 +65,7 @@ export default function HomePage() {
     { refetch: filter_refetch, loading: filtering, called: filCalled },
   ] = useLazyQuery<FilterPosts>(FILTER_POST_QUERY, {
     onCompleted({ posts: response }) {
-      if (response && response.items) {
+      if (response && response.items && filter_type !== 'New') {
         createPage(response.items)
 
         setHasNextPage(response.pageInfo.hasNextPage)
