@@ -92,7 +92,7 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
       fluid="sm">
       {loading && 'pls wait ;)'}
 
-      {data?.account && (
+      {data?.account ? (
         <Row>
           {editable ? <></> : <Col sm={1}></Col>}
           <Col
@@ -144,6 +144,8 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
             <></>
           )}
         </Row>
+      ) : (
+        !loading && <span>This profile is private or not existed</span>
       )}
 
       <ProfessionPopupComponent

@@ -4,9 +4,9 @@ export const GET_POSTS_QUERY = gql`
   query GetPosts($skip: Int!) {
     posts(
       where: { isPublished: { eq: true } }
+      order: { createdAt: DESC }
       skip: $skip
       take: 8
-      order: { createdAt: DESC }
     ) {
       items {
         score
@@ -29,15 +29,15 @@ export const GET_POSTS_QUERY = gql`
   }
 `
 export const FILTER_POST_QUERY = gql`
-  query FilterPosts($timeFilter: DateTime!) {
+  query FilterPosts($timeFilter: DateTime!, $skip: Int!) {
     posts(
       where: {
         isPublished: { eq: true }
         and: { createdAt: { gte: $timeFilter } }
       }
-      skip: 0
+      order: { score: DESC, createdAt: DESC }
+      skip: $skip
       take: 8
-      order: { score: DESC }
     ) {
       items {
         score

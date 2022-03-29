@@ -18,7 +18,7 @@ import { AS3Chip, AS3Spacer } from 'system/components'
 export function FilterComponent() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {} = useSelector(store => store.homePage)
+  const { filter_type } = useSelector(store => store.homePage)
   const { authenticated } = useAuth()
 
   return (
@@ -31,25 +31,31 @@ export function FilterComponent() {
             gap={3}>
             <AS3Chip
               icon={mdiStar}
-              onClick={() =>
-                dispatch({ type: 'FILTER_POST_UPDATE', payload: 'MostRating' })
-              }
+              onClick={() => {
+                filter_type !== 'MostRating' &&
+                  dispatch({
+                    type: 'FILTER_POST_UPDATE',
+                    payload: 'MostRating',
+                  })
+              }}
             >
-              Most Rating
+              Highest Rating
             </AS3Chip>
             <AS3Chip
               icon={mdiFire}
-              onClick={() =>
-                dispatch({ type: 'FILTER_POST_UPDATE', payload: 'Hot' })
-              }
+              onClick={() => {
+                filter_type !== 'Hot' &&
+                  dispatch({ type: 'FILTER_POST_UPDATE', payload: 'Hot' })
+              }}
             >
               Hot
             </AS3Chip>
             <AS3Chip
               icon={mdiWhiteBalanceSunny}
-              onClick={() =>
-                dispatch({ type: 'FILTER_POST_UPDATE', payload: 'New' })
-              }
+              onClick={() => {
+                filter_type !== 'New' &&
+                  dispatch({ type: 'FILTER_POST_UPDATE', payload: 'New' })
+              }}
             >
               New
             </AS3Chip>

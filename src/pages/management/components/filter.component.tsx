@@ -22,6 +22,7 @@ export function FilterComponent() {
           gap={3}>
           <AS3Chip
             active={fetchPublished === true}
+            disabled={fetchPublished === true}
             icon={mdiEarth}
             onClick={() => dispatch({ type: 'SET_POSTS_FILTER_PUBLISHED' })}
           >
@@ -30,6 +31,7 @@ export function FilterComponent() {
 
           <AS3Chip
             active={fetchPublished === false}
+            disabled={fetchPublished === false}
             icon={mdiFile}
             onClick={() => dispatch({ type: 'SET_POSTS_FILTER_DRAFTS' })}
           >
@@ -38,6 +40,7 @@ export function FilterComponent() {
 
           <AS3Chip
             active={fetchPublished === null}
+            disabled={fetchPublished === null}
             icon={mdiBookmark}
             onClick={() => dispatch({ type: 'SET_POSTS_FILTER_COLLECTED' })}
           >

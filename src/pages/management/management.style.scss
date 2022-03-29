@@ -12,19 +12,19 @@
 .vip__container {
   display: grid;
   grid-template-columns: 2fr 15fr 2fr;
-  background-image: linear-gradient(to top left, #ffae00bd, #ffcd03c2);
+  background-image: linear-gradient(to top left, #ffae00d8, #ffcd03d8);
   cursor: pointer;
 }
 
 .__container {
   display: grid;
   grid-template-columns: 2fr 15fr 2fr;
-  background-image: linear-gradient(to top left, #979797bd, #dddddac2);
+  background-image: linear-gradient(to top left, #979797de, #dddddade);
   cursor: pointer;
 }
 
 .__container:hover {
-  background-image: linear-gradient(to top left, #979797e8, #dddddae8);
+  background-image: linear-gradient(to top left, #979797, #ddddda);
 }
 
 .vip__container:hover {

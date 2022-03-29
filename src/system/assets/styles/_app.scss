@@ -16,3 +16,8 @@ body {
 .btn {
   @include no-focus-shadow;
 }
+
+#root {
+  background-image: url(https://wallpaperaccess.com/full/2103034.jpg);
+  background-size: contain;
+}

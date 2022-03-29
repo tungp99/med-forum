@@ -3,6 +3,7 @@ import {
   ComponentPropsWithoutRef,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from 'react'
 import { Toast } from 'system/store'
@@ -23,6 +24,13 @@ const CollectionContext = createContext<CollectionContextType>({
 
 export function CollectionProvider(props: ComponentPropsWithoutRef<'div'>) {
   const [collection, setCollection] = useState<string[]>([])
+
+  useEffect(() => {
+    const collectionString = localStorage.getItem('collection')
+    if (collectionString) {
+      setCollection(JSON.parse(collectionString) as string[])
+    }
+  }, [])
 
   const addPostId = (id: string) => {
     const collectionString = localStorage.getItem('collection')

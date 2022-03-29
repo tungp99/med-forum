@@ -1,4 +1,10 @@
-import { DependencyList, ReactElement, useCallback, useEffect } from 'react'
+import {
+  DependencyList,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 
 type AS3InfiniteScrollerProps = {
   children: ReactElement
@@ -13,17 +19,21 @@ export function AS3InfiniteScroller({
   updateCallbackUsingDependencies,
   allowScrollingWhen,
 }: AS3InfiniteScrollerProps) {
-  const handleScroll = useCallback(() => {
-    if (!allowScrollingWhen) return
+  const [scrolling, setScrolling] = useState(false)
 
-    console.log(window.innerHeight + window.scrollY, document.body.offsetHeight)
+  const handleScroll = useCallback(() => {
+    if (!allowScrollingWhen) {
+      setScrolling(false)
+      return
+    }
 
     const percentage =
       (window.innerHeight + window.scrollY / document.body.offsetHeight) * 100
-    if (percentage >= 80) {
-      callback()
+    if (percentage >= 70) {
+      !scrolling && callback()
+      setScrolling(true)
     }
-  }, [...updateCallbackUsingDependencies, allowScrollingWhen])
+  }, [...updateCallbackUsingDependencies, allowScrollingWhen, scrolling])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)

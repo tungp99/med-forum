@@ -1,4 +1,5 @@
 import { StoreAction } from 'system/store'
+import { Post } from 'system/types'
 
 type Store = {
   fetchPosts: boolean | null
@@ -8,6 +9,9 @@ type Store = {
   isCreateUserPopupActive: boolean
   isDeleteUserPopupActive: boolean
   deleteId?: string
+  page: number
+  posts: Post[]
+  status: number
 }
 
 const initialState: Store = {
@@ -17,6 +21,9 @@ const initialState: Store = {
   filterText: '',
   isCreateUserPopupActive: false,
   isDeleteUserPopupActive: false,
+  page: 0,
+  posts: [],
+  status: 0,
 }
 
 export const managementPageStore = (
@@ -33,48 +40,60 @@ export const managementPageStore = (
     | 'CLOSE_CREATE_USER_POPUP'
     | 'OPEN_DELETE_USER_POPUP'
     | 'CLOSE_DELETE_USER_POPUP'
-    | 'DELETE_ID',
-    string
+    | 'SET_MANAGEMENT_PAGE'
+    | 'SET_MANAGEMENT_POSTS'
+    | 'DELETE_ID'
+    | 'UPDATE_STATUS',
+    string | number | Post[]
   >
 ): Store => {
   switch (action.type) {
     case 'SET_POSTS_FILTER_PUBLISHED':
       return {
         ...state,
+        page: 0,
+        posts: [],
         fetchPosts: true,
       }
     case 'SET_POSTS_FILTER_DRAFTS':
       return {
         ...state,
+        page: 0,
+        posts: [],
         fetchPosts: false,
       }
     case 'SET_POSTS_FILTER_COLLECTED':
       return {
         ...state,
+        page: 0,
+        posts: [],
         fetchPosts: null,
       }
     case 'SET_ACCOUNT_FILTER_PUBLIC':
       return {
         ...state,
+        page: 0,
         isPublic: true,
         filterTitle: 'Public',
       }
     case 'SET_ACCOUNT_FILTER_PRIVATE':
       return {
         ...state,
+        page: 0,
         isPublic: false,
         filterTitle: 'Private',
       }
     case 'SET_ACCOUNT_FILTER_ALL':
       return {
         ...state,
+        page: 0,
         filterTitle: 'All',
       }
     case 'SET_ACCOUNT_UPDATE_FILTER':
       const filter_text = action.payload
       return {
         ...state,
-        filterText: filter_text ?? '',
+        filterText: (filter_text as string) ?? '',
       }
     case 'OPEN_CREATE_USER_POPUP':
       return {
@@ -99,7 +118,26 @@ export const managementPageStore = (
     case 'DELETE_ID':
       return {
         ...state,
-        deleteId: action.payload,
+        deleteId: action.payload as string,
+      }
+    case 'SET_MANAGEMENT_PAGE':
+      const page = (action.payload as number) ?? 0
+      return {
+        ...state,
+        page,
+      }
+
+    case 'SET_MANAGEMENT_POSTS':
+      return {
+        ...state,
+        posts: action.payload as Post[],
+      }
+
+    case 'UPDATE_STATUS':
+      return {
+        ...state,
+        status: state.status + 1,
+        posts: [],
       }
     default:
       return state

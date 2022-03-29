@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import Icon from '@mdi/react'
 import { mdiMenuDown, mdiMinus, mdiPlus, mdiPostOutline } from '@mdi/js'
 
 import { Account } from 'system/types'
-import { useAuth } from 'system/auth'
 import { Toast, useDispatch, useSelector } from 'system/store'
 import {
   AS3Button,
@@ -19,79 +18,94 @@ import { DeleteUserPopup } from '../management/components/delete-user.popup.comp
 import '../management/management.style.scss'
 
 import { GET_ACCOUNTS_QUERY, GET_ALL_ACCOUNTS_QUERY } from '../management/gql'
-import { GetAccounts, GetAllAccounts } from 'system/generated/gql.types'
+import {
+  GetAccounts,
+  GetAccounts_accounts_items,
+  GetAllAccounts,
+} from 'system/generated/gql.types'
 
 export default function AdminManageUsersPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isPublic, filterTitle, filterText, deleteId } = useSelector(
+  const { isPublic, filterTitle, filterText, deleteId, status } = useSelector(
     store => store.managementPage
   )
-  const {} = useAuth()
+
+  const createPage = (items: GetAccounts_accounts_items[]) => {
+    page === 0
+      ? setData(data.concat(items.map(s => s as unknown as Account)))
+      : setData(data.concat(items.map(s => s as unknown as Account)))
+  }
+  const resetPage = () => {
+    if (page === 0)
+      filterTitle === 'All'
+        ? getAllAccount_fetch({ variables })
+        : getAccount_fetch({ variables })
+  }
+  const [page, setPage] = useState(0)
+  const [hasNextPage, setHasNextPage] = useState(true)
+  const variables = {
+    skip: page * 12,
+    isPublic: isPublic,
+    search: filterText,
+  }
 
   const [data, setData] = useState<Account[]>([])
 
-  const fetchAccountsVariables = useMemo(
-    () => ({
-      skip: 0,
-      isPublic: isPublic,
-      search: filterText,
-    }),
-    [isPublic, filterText]
-  )
-  const [getAccount_fetch] = useLazyQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
-    variables: fetchAccountsVariables,
+  const [getAccount_fetch, { loading, refetch, called }] =
+    useLazyQuery<GetAccounts>(GET_ACCOUNTS_QUERY, {
+      onCompleted({ accounts: response }) {
+        if (response && response?.items && filterTitle !== 'All') {
+          createPage(response.items)
+          setHasNextPage(response?.pageInfo.hasNextPage)
+        }
+      },
+      onError({ name, message }) {
+        Toast.error({ title: name, content: message })
+      },
+    })
+
+  const [
+    getAllAccount_fetch,
+    { loading: coLoading, refetch: refetchAll, called: coCalled },
+  ] = useLazyQuery<GetAllAccounts>(GET_ALL_ACCOUNTS_QUERY, {
     onCompleted({ accounts: response }) {
-      response?.items &&
-        filterTitle !== 'All' &&
-        setData(response.items.map(s => s as unknown as Account))
+      if (response && response?.items && filterTitle === 'All') {
+        createPage(response.items)
+        setHasNextPage(response?.pageInfo.hasNextPage)
+      }
     },
     onError({ name, message }) {
       Toast.error({ title: name, content: message })
     },
   })
 
-  const fetchAllVariables = useMemo(
-    () => ({
-      skip: 0,
-      search: filterText,
-    }),
-    [filterText]
-  )
-  const { refetch: getAllAccount_refetch } = useQuery<GetAllAccounts>(
-    GET_ALL_ACCOUNTS_QUERY,
-    {
-      variables: fetchAllVariables,
-      onCompleted({ accounts: response }) {
-        response?.items &&
-          filterTitle === 'All' &&
-          setData(response.items.map(s => s as unknown as Account))
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+  useEffect(() => {
+    resetPage()
+    setPage(0)
+  }, [filterTitle, filterText, isPublic, status])
 
   useEffect(() => {
     if (filterTitle === 'All') {
-      getAllAccount_refetch()
+      coCalled ? refetchAll(variables) : getAllAccount_fetch({ variables })
     } else {
-      getAccount_fetch()
+      called ? refetch(variables) : getAccount_fetch({ variables })
     }
-  }, [filterTitle, filterText])
+  }, [page])
 
   return (
     <AS3LayoutWithSidebar sidebar={<SidebarComponent />}>
       <CreateUserPopupComponent
         onCreated={() => {
-          filterTitle === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+          setData([])
+          dispatch({ type: 'UPDATE_STATUS' })
         }}
       />
       <DeleteUserPopup
         id={deleteId}
         onDeleted={() => {
-          filterTitle === 'All' ? getAllAccount_refetch() : getAccount_fetch()
+          setData([])
+          dispatch({ type: 'UPDATE_STATUS' })
         }}
       />
       <div className="filter__container pb-3">
@@ -108,6 +122,7 @@ export default function AdminManageUsersPage() {
           className="mb-0"
           placeholder="Search"
           onChange={e => {
+            setData([])
             dispatch({
               type: 'SET_ACCOUNT_UPDATE_FILTER',
               payload: e.target.value,
@@ -123,17 +138,26 @@ export default function AdminManageUsersPage() {
             {
               text: 'All',
               separate: true,
-              onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_ALL' }),
+              onClick: () => {
+                setData([])
+                dispatch({ type: 'SET_ACCOUNT_FILTER_ALL' })
+              },
             },
             {
               text: 'Public',
               separate: true,
-              onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_PUBLIC' }),
+              onClick: () => {
+                setData([])
+                dispatch({ type: 'SET_ACCOUNT_FILTER_PUBLIC' })
+              },
             },
             {
               text: 'Private',
               separate: true,
-              onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_PRIVATE' }),
+              onClick: () => {
+                setData([])
+                dispatch({ type: 'SET_ACCOUNT_FILTER_PRIVATE' })
+              },
             },
           ]}
         >
@@ -191,6 +215,19 @@ export default function AdminManageUsersPage() {
           </div>
         )
       })}
+      {hasNextPage && (
+        <div className="text-center">
+          <AS3Button
+            loading={loading || coLoading}
+            text
+            onClick={() => {
+              setPage(page + 1)
+            }}
+          >
+            Load more...
+          </AS3Button>
+        </div>
+      )}
     </AS3LayoutWithSidebar>
   )
 }

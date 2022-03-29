@@ -21,34 +21,40 @@ export function FilterComponent() {
           gap={3}>
           <AS3Chip
             active={filterType === 'Today'}
-            onClick={() =>
-              dispatch({ type: 'FILTER_POSTS_UPDATE', payload: 'Today' })
-            }
+            onClick={() => {
+              dispatch({ type: 'ADMIN_FILTER_POSTS_UPDATE', payload: 'Today' })
+            }}
           >
             Today
           </AS3Chip>
 
           <AS3Chip
             active={filterType === 'This week'}
-            onClick={() =>
-              dispatch({ type: 'FILTER_POSTS_UPDATE', payload: 'This week' })
-            }
+            onClick={() => {
+              dispatch({
+                type: 'ADMIN_FILTER_POSTS_UPDATE',
+                payload: 'This week',
+              })
+            }}
           >
             This week
           </AS3Chip>
           <AS3Chip
             active={filterType === 'This month'}
-            onClick={() =>
-              dispatch({ type: 'FILTER_POSTS_UPDATE', payload: 'This month' })
-            }
+            onClick={() => {
+              dispatch({
+                type: 'ADMIN_FILTER_POSTS_UPDATE',
+                payload: 'This month',
+              })
+            }}
           >
             This month
           </AS3Chip>
           <AS3Chip
             active={filterType === 'All'}
-            onClick={() =>
-              dispatch({ type: 'FILTER_POSTS_UPDATE', payload: 'All' })
-            }
+            onClick={() => {
+              dispatch({ type: 'ADMIN_FILTER_POSTS_UPDATE', payload: 'All' })
+            }}
           >
             All
           </AS3Chip>

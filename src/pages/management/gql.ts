@@ -5,9 +5,9 @@ export const GET_MY_POSTS_QUERY = gql`
     posts(
       accountId: $accountId
       where: { isPublished: { eq: $isPublished } }
+      order: { createdAt: DESC }
       skip: $skip
       take: 8
-      order: { createdAt: DESC }
     ) {
       items {
         score
@@ -33,12 +33,12 @@ export const GET_MY_POSTS_QUERY = gql`
 export const GET_ACCOUNTS_QUERY = gql`
   query GetAccounts($skip: Int!, $isPublic: Boolean!, $search: String!) {
     accounts(
-      skip: $skip
-      take: 8
       where: {
         profile: { isPublic: { eq: $isPublic } }
         and: { email: { contains: $search } }
       }
+      skip: $skip
+      take: 12
     ) {
       items {
         writtenPostsCount
@@ -61,7 +61,7 @@ export const GET_ACCOUNTS_QUERY = gql`
 `
 export const GET_ALL_ACCOUNTS_QUERY = gql`
   query GetAllAccounts($skip: Int!, $search: String!) {
-    accounts(skip: $skip, take: 8, where: { email: { contains: $search } }) {
+    accounts(skip: $skip, take: 12, where: { email: { contains: $search } }) {
       items {
         writtenPostsCount
         id
@@ -107,9 +107,9 @@ export const GET_POSTS_ADMIN_QUERY = gql`
         isPublished: { eq: $isPublished }
         and: { createdAt: { gte: $timeFilter } }
       }
+      order: { createdAt: DESC }
       skip: $skip
       take: 8
-      order: { createdAt: DESC }
     ) {
       items {
         score
@@ -135,9 +135,9 @@ export const GET_COLLECTOR_QUERY = gql`
   query GetCollectedPosts($skip: Int!, $collection: [String]!) {
     posts(
       where: { id: { in: $collection } }
+      order: { createdAt: DESC }
       skip: $skip
       take: 8
-      order: { createdAt: DESC }
     ) {
       items {
         score

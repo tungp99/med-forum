@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 
-import { Toast, useSelector } from 'system/store'
+import { Toast, useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
+import { useCollector } from 'system/plugins'
 import { AS3Button, AS3Layout, AS3PostCard } from 'system/components'
 import { FilterComponent } from './components/filter.component'
 
@@ -11,88 +12,126 @@ import { UPDATE_POST_MUTATION } from 'pages/posts/gql'
 import {
   GetCollectedPosts,
   GetPosts,
-  UpdatePostInput,
+  GetPosts_posts_items,
+  UpdatePost,
 } from 'system/generated/gql.types'
-import { mdiSync } from '@mdi/js'
-import { useCollector } from 'system/plugins'
 
 export default function ManagementPage() {
-  const { account, authenticated } = useAuth()
-  const { fetchPosts } = useSelector(store => store.managementPage)
-  const [state, setState] = useState({
-    page: 0,
-    data: {} as GetPosts | GetCollectedPosts,
-  })
-  const { collection } = useCollector()
+  const { account } = useAuth()
+  const { fetchPosts, posts } = useSelector(store => store.managementPage)
 
-  const fetchVariables = useMemo(
-    () => ({
-      isPublished: fetchPosts === null ? true : fetchPosts,
-      skip: state.page * 8,
-      accountId: account.id,
-    }),
-    [state.page, fetchPosts, account]
-  )
-  const [fetch, { loading, refetch }] = useLazyQuery<GetPosts>(
+  const { collection } = useCollector()
+  const dispatch = useDispatch()
+  const [hasNextPage, setHasNextPage] = useState(true)
+  const [page, setPage] = useState(0)
+  const resetPage = () => {
+    if (page == 0)
+      fetchPosts !== null
+        ? fetch({
+            variables: {
+              isPublished: fetchPosts === null ? true : fetchPosts,
+              skip: page * 8,
+              accountId: account.id,
+            },
+          })
+        : fetchCollection({
+            variables: {
+              skip: page * 8,
+              collection,
+            },
+          })
+  }
+  const createPage = (items: GetPosts_posts_items[]) => {
+    page === 0
+      ? dispatch({
+          type: 'SET_MANAGEMENT_POSTS',
+          payload: items.map(s => ({ ...s, comments: [] })),
+        })
+      : dispatch({
+          type: 'SET_MANAGEMENT_POSTS',
+          payload: posts.concat(items.map(s => ({ ...s, comments: [] }))),
+        })
+  }
+
+  const [fetch, { refetch, loading, called }] = useLazyQuery<GetPosts>(
     GET_MY_POSTS_QUERY,
     {
-      onCompleted(response) {
-        fetchPosts !== null && setState({ ...state, data: response })
+      onCompleted({ posts: response }) {
+        if (response?.items && response && fetchPosts !== null) {
+          createPage(response.items)
+          setHasNextPage(response.pageInfo.hasNextPage)
+        }
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: fetchVariables,
     }
   )
 
-  const [fetchCollector, { loading: coLoading }] =
-    useLazyQuery<GetCollectedPosts>(GET_COLLECTOR_QUERY, {
-      onCompleted(response) {
-        fetchPosts === null && setState({ ...state, data: response })
+  const [
+    fetchCollection,
+    {
+      refetch: refetchCollection,
+      loading: fetchingCollection,
+      called: coCalled,
+    },
+  ] = useLazyQuery<GetCollectedPosts>(GET_COLLECTOR_QUERY, {
+    onCompleted({ posts: response }) {
+      if (response?.items && response && fetchPosts === null) {
+        createPage(response.items)
+        setHasNextPage(response.pageInfo.hasNextPage)
+      }
+    },
+    onError({ name, message }) {
+      Toast.error({ title: name, content: message })
+    },
+  })
+
+  const [updatePost, { loading: waitingForUpdate }] = useMutation<UpdatePost>(
+    UPDATE_POST_MUTATION,
+    {
+      onCompleted({ updatePost: response }) {
+        if (response.isSuccess) {
+          resetPage()
+          setPage(0)
+        }
       },
       onError({ name, message }) {
         Toast.error({ title: name, content: message })
       },
-      variables: {
-        skip: state.page * 8,
-        collection: collection,
-      },
-    })
+    }
+  )
 
   useEffect(() => {
-    fetchPosts !== null ? fetch() : fetchCollector()
-  }, [fetchVariables, fetchPosts])
-
-  const [updatePost, { loading: waitingForUpdate }] =
-    useMutation<UpdatePostInput>(UPDATE_POST_MUTATION, {
-      onCompleted() {
-        refetch()
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    })
+    resetPage()
+    setPage(0)
+  }, [fetchPosts])
 
   useEffect(() => {
-    if (authenticated) fetch()
-  }, [authenticated])
+    if (fetchPosts !== null) {
+      const variables = {
+        isPublished: fetchPosts === null ? true : fetchPosts,
+        skip: page * 8,
+        accountId: account.id,
+      }
+      if (called) refetch(variables)
+      else fetch({ variables })
+      return
+    }
+
+    const variables = {
+      skip: page * 8,
+      collection,
+    }
+    if (coCalled) refetchCollection(variables)
+    else fetchCollection({ variables })
+  }, [page, account])
 
   return (
-    <AS3Layout className="w-70 mt-3">
+    <AS3Layout className="my-3">
       <FilterComponent />
 
-      <div className="d-flex justify-content-center mb-3">
-        <AS3Button
-          text
-          loading={fetchPosts === null ? coLoading : loading}
-          disabled={loading}
-          icon={mdiSync}
-          onClick={() => (fetchPosts !== null ? fetch() : fetchCollector())}
-        />
-      </div>
-
-      {state.data?.posts?.items?.map(post => (
+      {posts.map(post => (
         <AS3PostCard
           key={post.id}
           preview
@@ -101,6 +140,18 @@ export default function ManagementPage() {
           afterEdit={data => updatePost({ variables: { input: data } })}
         />
       ))}
+
+      {hasNextPage && (
+        <div className="text-center">
+          <AS3Button
+            loading={loading || fetchingCollection || waitingForUpdate}
+            text
+            onClick={() => setPage(page + 1)}
+          >
+            Load more...
+          </AS3Button>
+        </div>
+      )}
     </AS3Layout>
   )
 }
