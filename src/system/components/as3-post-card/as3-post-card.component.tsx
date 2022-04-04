@@ -64,7 +64,7 @@ export function AS3PostCard({
   const { isCollected, addPostId, deletePostId, collection } = useCollector()
   const collected = useMemo(() => isCollected(id), [collection])
 
-  const { account } = useAuth()
+  const { account, authenticated } = useAuth()
   const navigate = useNavigate()
   const isMine = useMemo(() => creatorAccount?.id === account.id, [account])
   const [state, setState] = useState({
@@ -187,20 +187,22 @@ export function AS3PostCard({
               {commentsCount} Comments
             </AS3Button>
 
-            <AS3Button
-              className="action"
-              text
-              size="sm"
-              icon={collected ? mdiBookmark : mdiBookmarkOutline}
-              onClick={() => (collected ? deletePostId(id) : addPostId(id))}
-            >
-              Collect
-            </AS3Button>
+            {authenticated && (
+              <AS3Button
+                className="action"
+                text
+                size="sm"
+                icon={collected ? mdiBookmark : mdiBookmarkOutline}
+                onClick={() => (collected ? deletePostId(id) : addPostId(id))}
+              >
+                Collect
+              </AS3Button>
+            )}
           </Card.Footer>
         </Card.Body>
       </div>
 
-      {!preview && (
+      {!preview && authenticated && (
         <Card.Body className="px-1 py-0">
           <ReplyInputComponent />
         </Card.Body>

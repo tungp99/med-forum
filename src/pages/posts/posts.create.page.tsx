@@ -23,7 +23,7 @@ export default function PostsCreatePage() {
   const { handleSubmit, setValue, control } = useForm<CreatePostInput>({
     defaultValues: { title: '', markdownContent: '', isPublished: false },
   })
-  const [createPost, { loading }] = useMutation<CreatePost>(
+  const [createPost, { loading, error }] = useMutation<CreatePost>(
     CREATE_POST_MUTATION,
     {
       onCompleted() {
@@ -50,6 +50,11 @@ export default function PostsCreatePage() {
             className="mb-3"
             value={value}
             onChange={onChange}
+            errors={
+              error?.graphQLErrors[0].extensions.propertyName === 'Title'
+                ? [error.message]
+                : undefined
+            }
           />
         )}
       />
@@ -61,7 +66,14 @@ export default function PostsCreatePage() {
           <AS3Editor
             className="mb-3"
             value={value}
-            onChange={onChange} />
+            onChange={onChange}
+            errors={
+              error?.graphQLErrors[0].extensions.propertyName ===
+              'MarkdownContent'
+                ? [error.message]
+                : undefined
+            }
+          />
         )}
       />
 

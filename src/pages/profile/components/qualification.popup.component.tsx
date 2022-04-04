@@ -12,7 +12,9 @@ type qualificationPopupProps = {
   onSave: (data: QualificationInput) => void
 }
 export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
-  const { isQualificationPopupOpen } = useSelector(store => store.profilePage)
+  const { isQualificationPopupOpen, error } = useSelector(
+    store => store.profilePage
+  )
   const dispatch = useDispatch()
 
   const formValues = useMemo<QualificationInput>(
@@ -64,6 +66,11 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
                   label="Qualification"
                   onChange={onChange}
                   value={value}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName === 'Title'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -77,7 +84,14 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
                 <AS3Input
                   label="Issued by"
                   onChange={onChange}
-                  value={value} />
+                  value={value}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'IssuedBy'
+                      ? [error.message]
+                      : undefined
+                  }
+                />
               )}
             />
           </Col>
@@ -94,6 +108,12 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
                   label="Issued on"
                   onChange={onChange}
                   value={value ?? ''}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Issued on'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -111,6 +131,12 @@ export function QualificationPopup({ data, onSave }: qualificationPopupProps) {
                   label="Expire"
                   onChange={onChange}
                   value={value ?? ''}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'ExpireAt'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />

@@ -5,6 +5,7 @@ import {
   Dispatch,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
@@ -123,37 +124,31 @@ export function useAuth() {
   } = useContext(AuthContext)
   const dispatch = useDispatch()
 
-  const [sendRegister, { loading: registering }] = useMutation<Register>(
-    REGISTRATION_MUTATION,
-    {
+  const [sendRegister, { loading: registering, error: regErrs }] =
+    useMutation<Register>(REGISTRATION_MUTATION, {
       onCompleted({ register: response }) {
         setAccessToken(response.accessToken)
         setRefreshToken(response.refreshToken)
         dispatch({ type: 'CLOSE_REGISTER_POPUP' })
       },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+    })
+  const registrationErrors = useMemo(() => regErrs, [regErrs])
 
-  const [sendLogin, { loading: logginIn }] = useMutation<Login>(
-    LOGIN_MUTATION,
-    {
+  const [sendLogin, { loading: logginIn, error: log_error }] =
+    useMutation<Login>(LOGIN_MUTATION, {
       onCompleted({ login: response }) {
         setAccessToken(response.accessToken)
         setRefreshToken(response.refreshToken)
         dispatch({ type: 'CLOSE_LOGIN_POPUP' })
       },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
-    }
-  )
+    })
+  const loginErrors = useMemo(() => log_error, [log_error])
 
   const [triggerLogout] = useMutation(TRIGGER_LOGOUT_MUTATION)
 
   return {
+    register_error: registrationErrors,
+    login_error: loginErrors,
     loading: registering || logginIn,
     authenticated,
     account,

@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client'
 import { StoreAction } from 'system/store'
 import { Profession, Qualification } from 'system/types'
 
@@ -12,6 +13,7 @@ type Store = {
     accountId: string
   }
   isQualificationPopupOpen: boolean
+  error?: ApolloError
 }
 
 const initialState: Store = {
@@ -31,6 +33,7 @@ const initialState: Store = {
   isSecurityPopupOpen: false,
   isDeleteProfessionPopupOpen: false,
   isQualificationPopupOpen: false,
+  error: undefined,
 }
 
 export const profilePageStore = (
@@ -41,8 +44,9 @@ export const profilePageStore = (
     | 'OPEN_DELETE_PROFESSION_POPUP'
     | 'CLOSE_DELETE_PROFESSION_POPUP'
     | 'OPEN_QUALIFICATION_POPUP'
-    | 'CLOSE_QUALIFICATION_POPUP',
-    { data: Profession | Qualification; title: string } | string
+    | 'CLOSE_QUALIFICATION_POPUP'
+    | 'FETCH_ERROR',
+    { data: Profession | Qualification; title: string } | string | ApolloError
   >
 ): Store => {
   switch (action.type) {
@@ -82,6 +86,11 @@ export const profilePageStore = (
       return {
         ...state,
         isQualificationPopupOpen: false,
+      }
+    case 'FETCH_ERROR':
+      return {
+        ...state,
+        error: action.payload as ApolloError,
       }
 
     default:

@@ -17,7 +17,7 @@ export function ProfessionPopupComponent({
   data,
   onSave,
 }: ProfessionPopupComponentProps) {
-  const { isProfessionPopupOpen, title } = useSelector(
+  const { isProfessionPopupOpen, title, error } = useSelector(
     store => store.profilePage
   )
   const dispatch = useDispatch()
@@ -70,6 +70,12 @@ export function ProfessionPopupComponent({
                   label={title === 'Experience' ? 'Organization' : 'School'}
                   onChange={onChange}
                   value={value}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Organization'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -83,6 +89,12 @@ export function ProfessionPopupComponent({
                   label={title === 'Experience' ? 'Position' : 'Department'}
                   onChange={onChange}
                   value={value}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Position'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -99,6 +111,11 @@ export function ProfessionPopupComponent({
                   label="From"
                   onChange={onChange}
                   value={value ?? ''}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName === 'Start'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -116,6 +133,11 @@ export function ProfessionPopupComponent({
                   disabled={watch('isWorking')}
                   onChange={onChange}
                   value={value ?? ''}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName === 'End'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />

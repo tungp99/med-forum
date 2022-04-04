@@ -499,7 +499,7 @@ type UpdateAvatarPayload {
 }
 
 input UpdateAvatarInput {
-  accountId: String!
+  accountId: String
   file: Upload!
 }
 

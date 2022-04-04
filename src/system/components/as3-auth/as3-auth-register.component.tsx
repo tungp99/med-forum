@@ -10,7 +10,7 @@ import { RegisterInput } from 'system/generated/gql.types'
 export function AS3AuthRegister() {
   const state = useSelector(store => store.auth)
   const dispatch = useDispatch()
-  const { register } = useAuth()
+  const { register, register_error: error } = useAuth()
   const { handleSubmit, control } = useForm<RegisterInput>({
     defaultValues: {
       email: '',
@@ -62,6 +62,12 @@ export function AS3AuthRegister() {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Profile.FirstName'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -75,6 +81,12 @@ export function AS3AuthRegister() {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Profile.LastName'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -89,6 +101,11 @@ export function AS3AuthRegister() {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName === 'Email'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -103,6 +120,12 @@ export function AS3AuthRegister() {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Password'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -117,6 +140,12 @@ export function AS3AuthRegister() {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'ConfirmationPassword'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />

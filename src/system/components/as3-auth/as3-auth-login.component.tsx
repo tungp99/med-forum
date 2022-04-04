@@ -11,7 +11,7 @@ export function AS3AuthLogin() {
   const state = useSelector(store => store.auth)
 
   const dispatch = useDispatch()
-  const { login } = useAuth()
+  const { login, login_error: error } = useAuth()
   const { handleSubmit, control } = useForm<LoginInput>({
     defaultValues: { email: '', password: '' },
   })
@@ -52,6 +52,11 @@ export function AS3AuthLogin() {
                   size="lg"
                   value={value ?? ''}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName === 'Email'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -66,10 +71,20 @@ export function AS3AuthLogin() {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Password'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
 
+            {error?.graphQLErrors[0].extensions.code ===
+              'AS3_AUTHENTICATION' && (
+              <span className="text-danger">Invalid credential ;)</span>
+            )}
             <AS3Button
               variant="primary"
               size="lg"

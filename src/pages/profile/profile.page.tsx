@@ -43,8 +43,8 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
   const [fetchAccount, { data, loading }] = useLazyQuery<GetAccount>(
     GET_ACCOUNT_QUERY,
     {
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
+      onError(error) {
+        dispatch({ type: 'FETCH_ERROR', payload: error })
       },
     }
   )
@@ -60,8 +60,8 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
         dispatch({ type: 'CLOSE_QUALIFICATION_POPUP' })
         fetchAccount(fetchAccountVariables)
       },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
+      onError(error) {
+        dispatch({ type: 'FETCH_ERROR', payload: error })
       },
     }
   )

@@ -1246,7 +1246,7 @@ export interface UpdateAccountInput {
 }
 
 export interface UpdateAvatarInput {
-  accountId: string;
+  accountId?: string | null;
   file: any;
 }
 

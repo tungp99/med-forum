@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { mdiClose } from '@mdi/js'
 
-import { Toast, useDispatch, useSelector } from 'system/store'
+import { useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { AS3Button, AS3Spacer, AS3Input } from 'system/components'
 import { CREATE_ACCOUNT_MUTATION } from '../gql'
@@ -15,14 +15,15 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
   const state = useSelector(store => store.managementPage)
   const dispatch = useDispatch()
   const {} = useAuth()
-  const [CreateAccount] = useMutation<CreateAccount>(CREATE_ACCOUNT_MUTATION, {
-    onCompleted() {
-      props.onCreated()
-    },
-    onError({ name, message }) {
-      Toast.error({ title: name, content: message })
-    },
-  })
+  const [CreateAccount, { error }] = useMutation<CreateAccount>(
+    CREATE_ACCOUNT_MUTATION,
+    {
+      onCompleted() {
+        props.onCreated()
+        dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })
+      },
+    }
+  )
   const { handleSubmit, control } = useForm<CreateAccountInput>({
     defaultValues: {
       username: '',
@@ -73,6 +74,12 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
                   size="lg"
                   value={value ?? ''}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Username'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -86,6 +93,12 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Profile.FirstName'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -99,6 +112,12 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Profile.LastName'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -113,6 +132,11 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName === 'Email'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -127,6 +151,12 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
                   size="lg"
                   value={value}
                   onChange={onChange}
+                  errors={
+                    error?.graphQLErrors[0].extensions.propertyName ===
+                    'Password'
+                      ? [error.message]
+                      : undefined
+                  }
                 />
               )}
             />
@@ -135,8 +165,6 @@ export function CreateUserPopupComponent(props: CreateUserPopupComponentProps) {
               variant="primary"
               size="lg"
               onClick={handleSubmit(data => {
-                dispatch({ type: 'CLOSE_CREATE_USER_POPUP' })
-
                 CreateAccount({
                   variables: {
                     input: data,
