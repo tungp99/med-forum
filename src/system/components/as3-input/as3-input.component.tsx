@@ -105,7 +105,7 @@ export function AS3Input({
       {errors &&
         errors.map((item, i) => (
           <Form.Text
-            className="text-danger"
+            className="text-danger d-block"
             key={i}>
             {item}
           </Form.Text>

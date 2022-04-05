@@ -1151,6 +1151,28 @@ export interface UpdateCommentRateVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: UpdateComment
+// ====================================================
+
+export interface UpdateComment_updateComment {
+  __typename: "UpdateEntityPayload";
+  isSuccess: boolean;
+}
+
+export interface UpdateComment {
+  updateComment: UpdateComment_updateComment;
+}
+
+export interface UpdateCommentVariables {
+  input: UpdateCommentInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
@@ -1217,8 +1239,8 @@ export interface QualificationInput {
   accountId?: string | null;
   title: string;
   issuedBy: string;
-  issuedAt: any;
-  expireAt: any;
+  issuedAt?: any | null;
+  expireAt?: any | null;
 }
 
 export interface RatePostInput {
@@ -1248,6 +1270,11 @@ export interface UpdateAccountInput {
 export interface UpdateAvatarInput {
   accountId?: string | null;
   file: any;
+}
+
+export interface UpdateCommentInput {
+  id: string;
+  markdownContent: string;
 }
 
 export interface UpdatePostInput {

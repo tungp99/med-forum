@@ -93,9 +93,10 @@ export default function AdminManagePostsPage() {
       onCompleted() {
         resetPage()
         setPage(0)
+        dispatch({ type: 'FETCH_ERROR', payload: undefined })
       },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
+      onError(error) {
+        dispatch({ type: 'FETCH_ERROR', payload: error })
       },
     })
 

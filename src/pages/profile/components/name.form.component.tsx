@@ -29,7 +29,7 @@ type NameFormComponentProps = {
 
 export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
   const {} = useAuth()
-  const [save, { loading }] = useMutation<UpdateProfileContact>(
+  const [save, { loading, error }] = useMutation<UpdateProfileContact>(
     UPDATE_PROFILE_CONTACT_MUTATION,
     {
       onCompleted({ updateAccount: response }) {
@@ -40,9 +40,6 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
           })
           onSave()
         }
-      },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
       },
     }
   )
@@ -59,7 +56,7 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
         lastName: profile.lastName,
         phoneNumber: profile.phoneNumber,
         birthDate: profile.birthDate
-          ? DateTime.fromISO(profile.birthDate).toISO()
+          ? DateTime.fromISO(profile.birthDate).toISODate()
           : null,
         countryCode: profile.countryCode,
       },
@@ -108,6 +105,11 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
               size="lg"
               value={value ?? ''}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName === 'Username'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
@@ -121,6 +123,11 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
               size="lg"
               value={value}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName === 'FirstName'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
@@ -134,34 +141,33 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
               size="lg"
               value={value}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName === 'LastName'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
 
-        {!data.profile.birthDate ? (
-          <Controller
-            control={control}
-            name="profile.birthDate"
-            render={({ field: { onChange, value } }) => {
-              console.log(value)
-              return (
-                <AS3Input
-                  type="date"
-                  label="Birthday"
-                  size="lg"
-                  value={value ?? ''}
-                  onChange={onChange}
-                />
-              )
-            }}
-          />
-        ) : (
-          <AS3Input
-            type="date"
-            label="Birthday"
-            size="lg"
-            readOnly />
-        )}
+        <Controller
+          control={control}
+          name="profile.birthDate"
+          render={({ field: { onChange, value } }) => (
+            <AS3Input
+              type="date"
+              label="Birthday"
+              size="lg"
+              value={value ?? ''}
+              onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName === 'BirthDay'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
+            />
+          )}
+        />
 
         <Controller
           control={control}
@@ -173,6 +179,12 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
               size="lg"
               value={value}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName ===
+                'PhoneNumber'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
@@ -192,6 +204,12 @@ export function NameFormComponent({ data, onSave }: NameFormComponentProps) {
                   value,
                 })),
               ]}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName ===
+                'Profile.CountryCode'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />

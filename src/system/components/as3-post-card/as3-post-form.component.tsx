@@ -5,6 +5,7 @@ import { Card, Stack } from 'react-bootstrap'
 import { Post } from 'system/types'
 import { AS3Button, AS3Editor, AS3Input, AS3Spacer } from 'system/components'
 import { CreatePostInput, UpdatePostInput } from 'system/generated/gql.types'
+import { useSelector } from 'system/store'
 
 type AS3PostFormProps = {
   data: Post
@@ -15,6 +16,8 @@ export function AS3PostForm({
   data: { id, title, markdownContent, createdAt, creatorAccount, isPublished },
   onSave,
 }: AS3PostFormProps) {
+  const { error } = useSelector(store => store.profilePage)
+
   const { handleSubmit, setValue, control } = useForm<
     CreatePostInput | UpdatePostInput
   >({
@@ -80,6 +83,11 @@ export function AS3PostForm({
                 className="mb-3"
                 value={value}
                 onChange={onChange}
+                errors={
+                  error?.graphQLErrors[0].extensions.propertyName === 'Title'
+                    ? [error.message]
+                    : undefined
+                }
               />
             )}
           />
@@ -94,6 +102,12 @@ export function AS3PostForm({
               minHeight={300}
               value={value}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName ===
+                'MarkdownContent'
+                  ? [error.message]
+                  : undefined
+              }
             />
           )}
         />

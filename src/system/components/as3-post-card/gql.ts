@@ -79,3 +79,10 @@ export const UPDATE_COMMENT_RATE_MUTATION = gql`
     }
   }
 `
+export const UPDATE_COMMENT_MUTATION = gql`
+  mutation UpdateComment($input: UpdateCommentInput!) {
+    updateComment(input: $input) {
+      isSuccess
+    }
+  }
+`

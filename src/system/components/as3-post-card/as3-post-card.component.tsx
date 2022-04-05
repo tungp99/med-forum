@@ -26,7 +26,7 @@ import {
 
 import './as3-post-card.style.scss'
 import { useMutation } from '@apollo/client'
-import { Toast } from 'system/store'
+import { Toast, useDispatch } from 'system/store'
 import { UPDATE_POST_RATE_MUTATION } from './gql'
 import { AS3Link } from '../as3-link/as3-link.component'
 import { useCollector } from 'system/plugins'
@@ -63,6 +63,7 @@ export function AS3PostCard({
 
   const { isCollected, addPostId, deletePostId, collection } = useCollector()
   const collected = useMemo(() => isCollected(id), [collection])
+  const dispatch = useDispatch()
 
   const { account, authenticated } = useAuth()
   const navigate = useNavigate()
@@ -88,7 +89,9 @@ export function AS3PostCard({
     <AS3PostForm
       data={data}
       onSave={data => {
-        setState({ ...state, editing: false })
+        if (data.title !== '' && data.markdownContent !== '')
+          setState({ ...state, editing: false })
+        else setState({ ...state, editing: true })
         afterEdit && afterEdit(data)
       }}
     />
@@ -161,7 +164,10 @@ export function AS3PostCard({
                   text
                   size="sm"
                   icon={mdiPencilOutline}
-                  onClick={() => setState({ ...state, editing: true })}
+                  onClick={() => {
+                    dispatch({ type: 'FETCH_ERROR', payload: undefined })
+                    setState({ ...state, editing: true })
+                  }}
                 />
               )}
             </Stack>

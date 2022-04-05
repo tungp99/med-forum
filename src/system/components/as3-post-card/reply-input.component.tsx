@@ -1,7 +1,6 @@
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { Toast, useDispatch, useSelector } from 'system/store'
-import { useAuth } from 'system/auth'
 
 import { AS3Input } from 'system/components'
 import { CreateComment, CreateCommentInput } from 'system/generated/gql.types'
@@ -16,7 +15,6 @@ export function ReplyInputComponent({
 }: ReplyInputComponentProps) {
   const { id: postId } = useSelector(store => store.post)
   const dispatch = useDispatch()
-  const {} = useAuth()
 
   const { control, handleSubmit } = useForm<CreateCommentInput>({
     defaultValues: {
@@ -46,8 +44,10 @@ export function ReplyInputComponent({
           onChange={onChange}
           onKeyUp={e => {
             if (e.key === 'Enter') {
-              handleSubmit(data =>
-                create({ variables: { input: { ...data, postId } } })
+              handleSubmit(
+                data =>
+                  data.markdownContent &&
+                  create({ variables: { input: { ...data, postId } } })
               )()
               return
             }

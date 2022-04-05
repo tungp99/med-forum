@@ -488,8 +488,8 @@ input QualificationInput {
   accountId: String
   title: String!
   issuedBy: String!
-  issuedAt: DateTime!
-  expireAt: DateTime!
+  issuedAt: DateTime
+  expireAt: DateTime
 }
 
 type UpdateAvatarPayload {

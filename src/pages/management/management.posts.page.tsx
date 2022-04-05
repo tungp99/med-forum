@@ -94,6 +94,7 @@ export default function ManagementPage() {
         if (response.isSuccess) {
           resetPage()
           setPage(0)
+          dispatch({ type: 'FETCH_ERROR', payload: undefined })
         }
       },
       onError({ name, message }) {

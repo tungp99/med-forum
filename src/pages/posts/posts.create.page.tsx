@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/client'
 import { Card, Stack } from 'react-bootstrap'
 import { mdiChevronDoubleLeft } from '@mdi/js'
 
-import { Toast } from 'system/store'
 import { useAuth } from 'system/auth'
 import {
   AS3Button,
@@ -16,8 +15,10 @@ import {
 } from 'system/components'
 import { CREATE_POST_MUTATION } from './gql'
 import { CreatePost, CreatePostInput } from 'system/generated/gql.types'
+import { useDispatch } from 'system/store'
 
 export default function PostsCreatePage() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const {} = useAuth()
   const { handleSubmit, setValue, control } = useForm<CreatePostInput>({
@@ -29,8 +30,8 @@ export default function PostsCreatePage() {
       onCompleted() {
         navigate('/manage')
       },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
+      onError(error) {
+        dispatch({ type: 'FETCH_ERROR', payload: error })
       },
     }
   )

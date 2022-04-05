@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { Container, Row, Col } from 'react-bootstrap'
 
-import { Toast, useDispatch, useSelector } from 'system/store'
+import { useDispatch, useSelector } from 'system/store'
 import { useAuth } from 'system/auth'
 import { ProfessionCardComponent } from './components/profession.card.component'
 import { OverviewCardComponent } from './components/overview.card.component'
@@ -71,8 +71,8 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
       dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
       response.affectedRecords && fetchAccount(fetchAccountVariables)
     },
-    onError({ name, message }) {
-      Toast.error({ title: name, content: message })
+    onError(error) {
+      dispatch({ type: 'FETCH_ERROR', payload: error })
     },
   })
 
@@ -81,8 +81,8 @@ export default function ProfilePage({ editable }: ProfilePageProps) {
       dispatch({ type: 'CLOSE_PROFESSION_POPUP' })
       response.affectedRecords && fetchAccount(fetchAccountVariables)
     },
-    onError({ name, message }) {
-      Toast.error({ title: name, content: message })
+    onError(error) {
+      dispatch({ type: 'FETCH_ERROR', payload: error })
     },
   })
   return (

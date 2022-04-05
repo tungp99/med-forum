@@ -3,7 +3,6 @@ import { useMutation } from '@apollo/client'
 import { Card, Stack } from 'react-bootstrap'
 
 import { Toast } from 'system/store'
-import { useAuth } from 'system/auth'
 import { AS3Button, AS3Input, AS3Spacer } from 'system/components'
 import { CHANGE_PASSWORD_MUTATION } from '../gql'
 import { ChangePassword, ChangePasswordInput } from 'system/generated/gql.types'
@@ -16,8 +15,7 @@ export function SecurityFormComponent() {
       newPassword: '',
     },
   })
-  const {} = useAuth()
-  const [changePassword] = useMutation<ChangePassword>(
+  const [changePassword, { error }] = useMutation<ChangePassword>(
     CHANGE_PASSWORD_MUTATION,
     {
       onCompleted({ changePassword: response }) {
@@ -26,11 +24,9 @@ export function SecurityFormComponent() {
           reset()
         } else Toast.error({ title: '', content: 'Cannot update password ;)' })
       },
-      onError({ name, message }) {
-        Toast.error({ title: name, content: message })
-      },
     }
   )
+
   return (
     <Card>
       <Card.Body>
@@ -44,6 +40,12 @@ export function SecurityFormComponent() {
               label="Current Password"
               value={value}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName ===
+                'CurrentPassword'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
@@ -56,6 +58,12 @@ export function SecurityFormComponent() {
               label="New Password"
               onChange={onChange}
               value={value}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName ===
+                'NewPassword'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
@@ -68,6 +76,12 @@ export function SecurityFormComponent() {
               label="Confirm New Password"
               value={value}
               onChange={onChange}
+              errors={
+                error?.graphQLErrors[0].extensions.propertyName ===
+                'ConfirmNewPassword'
+                  ? error?.graphQLErrors.map(s => s.message)
+                  : undefined
+              }
             />
           )}
         />
