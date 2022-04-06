@@ -7,7 +7,11 @@ import App from './system/App'
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <div
+        id="background"
+        style={{ height: window.innerHeight }}>
+        <App />
+      </div>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

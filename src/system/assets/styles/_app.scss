@@ -17,7 +17,9 @@ body {
   @include no-focus-shadow;
 }
 
-#root {
-  background-image: url(https://wallpaperaccess.com/full/2103034.jpg);
-  background-size: contain;
+#background {
+  background-image: url(https://media.istockphoto.com/vectors/digital-sequence-code-structure-with-glow-science-concept-and-nano-vector-id1254842513?k=20&m=1254842513&s=612x612&w=0&h=1es9r0TDVJFfiD25yII_MnmBkhFudaee253s5k-73is=);
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow-y: auto;
 }

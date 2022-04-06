@@ -30,9 +30,7 @@ export default function PostPage() {
     { data: data_profile, refetch: refetchAccount, called },
   ] = useLazyQuery<GetAccount>(GET_ACCOUNT_QUERY, {
     onError({ name, message }) {
-      message !==
-        'The current user is not authorized to access this resource.' &&
-        Toast.error({ title: name, content: message })
+      Toast.error({ title: name, content: message })
     },
   })
 

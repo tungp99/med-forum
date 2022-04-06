@@ -54,7 +54,7 @@ export function AS3Navbar() {
           <AS3Input
             className="as3-navbar-search"
             prefixIcon={mdiMagnify}
-            placeholder="Search AS3"
+            placeholder="Search AS3 (Decorator)"
           />
 
           <Stack

@@ -37,7 +37,9 @@ export function PicksComponent() {
           <Stack
             direction="horizontal"
             gap={2}>
-            <AS3Chip size="sm">chip chip</AS3Chip>
+            <AS3Chip size="sm">Decorator</AS3Chip>
+            <AS3Chip size="sm">Decorator</AS3Chip>
+            <AS3Chip size="sm">Decorator</AS3Chip>
           </Stack>
         </Card.Body>
       </Card>
