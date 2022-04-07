@@ -205,7 +205,7 @@ export function OverviewCardComponent({
 
               {qualifications.length > 0 && (
                 <Card.Subtitle className="mb-2 d-flex align-items-center fw-bold">
-                  {`Achived ${qualifications[0].title} issued by ${qualifications[0].issuedBy}`}
+                  {`Achieved ${qualifications[0].title} issued by ${qualifications[0].issuedBy}`}
                 </Card.Subtitle>
               )}
             </>
