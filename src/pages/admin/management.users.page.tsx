@@ -136,7 +136,7 @@ export default function AdminManageUsersPage() {
           align="start"
           items={[
             {
-              text: 'All',
+              element: 'All',
               separate: true,
               onClick: () => {
                 setData([])
@@ -144,7 +144,7 @@ export default function AdminManageUsersPage() {
               },
             },
             {
-              text: 'Public',
+              element: 'Public',
               separate: true,
               onClick: () => {
                 setData([])
@@ -152,7 +152,7 @@ export default function AdminManageUsersPage() {
               },
             },
             {
-              text: 'Private',
+              element: 'Private',
               separate: true,
               onClick: () => {
                 setData([])

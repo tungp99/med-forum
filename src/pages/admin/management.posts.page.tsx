@@ -116,12 +116,12 @@ export default function AdminManagePostsPage() {
           align="start"
           items={[
             {
-              text: 'Published',
+              element: 'Published',
               separate: true,
               onClick: () => dispatch({ type: 'SET_POSTS_FILTER_PUBLISHED' }),
             },
             {
-              text: 'Drafts',
+              element: 'Drafts',
               separate: true,
               onClick: () => dispatch({ type: 'SET_POSTS_FILTER_DRAFTS' }),
             },

@@ -123,7 +123,7 @@ export function OverviewCardComponent({
               width={isProfile ? 128 : 64}
               height={isProfile ? 128 : 64}
             >
-              {editable && (
+              {(editable && (
                 <AS3Button
                   icon={mdiCamera}
                   iconSize={1.2}
@@ -133,7 +133,8 @@ export function OverviewCardComponent({
                     avatarInputRef.current?.click()
                   }}
                 />
-              )}
+              )) ||
+                undefined}
             </AS3Avatar>
           </div>
 

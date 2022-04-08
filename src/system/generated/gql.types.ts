@@ -970,6 +970,57 @@ export interface AccountCreated {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetS_Accounts
+// ====================================================
+
+export interface GetS_Accounts_accounts_items_profile_experience {
+  __typename: "Profession";
+  position: string;
+  isWorking: boolean;
+}
+
+export interface GetS_Accounts_accounts_items_profile_education {
+  __typename: "Profession";
+  isWorking: boolean;
+}
+
+export interface GetS_Accounts_accounts_items_profile {
+  __typename: "Profile";
+  firstName: string;
+  lastName: string;
+  avatarUrl: string | null;
+  country: string;
+  experience: GetS_Accounts_accounts_items_profile_experience[];
+  education: GetS_Accounts_accounts_items_profile_education[];
+}
+
+export interface GetS_Accounts_accounts_items {
+  __typename: "Account";
+  id: string;
+  username: string | null;
+  profile: GetS_Accounts_accounts_items_profile;
+  writtenPostsCount: number;
+}
+
+export interface GetS_Accounts_accounts {
+  __typename: "AccountCollectionSegment";
+  items: GetS_Accounts_accounts_items[] | null;
+}
+
+export interface GetS_Accounts {
+  accounts: GetS_Accounts_accounts | null;
+}
+
+export interface GetS_AccountsVariables {
+  search: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetComments
 // ====================================================
 

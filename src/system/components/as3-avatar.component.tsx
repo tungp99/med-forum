@@ -1,7 +1,12 @@
-import { ImageProps } from 'react-bootstrap'
 import './as3-avatar.style.scss'
 
-type AS3AvatarProps = ImageProps
+type AS3AvatarProps = {
+  className?: string
+  width?: number
+  height?: number
+  src?: string | null
+  children?: JSX.Element
+}
 
 export function AS3Avatar(props: AS3AvatarProps) {
   const classList = ['as3-avatar', 'mb-0']

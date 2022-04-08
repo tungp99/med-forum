@@ -123,17 +123,17 @@ export default function ManageUsersPage() {
           align="start"
           items={[
             {
-              text: 'All',
+              element: 'All',
               separate: true,
               onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_ALL' }),
             },
             {
-              text: 'Public',
+              element: 'Public',
               separate: true,
               onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_PUBLIC' }),
             },
             {
-              text: 'Private',
+              element: 'Private',
               separate: true,
               onClick: () => dispatch({ type: 'SET_ACCOUNT_FILTER_PRIVATE' }),
             },

@@ -28,41 +28,58 @@ type AS3DropdownProps = DropdownProps & {
   suffixIcon?: string
   align?: AlignType
   className?: string
+  home?: boolean
+  controlled?: boolean
 
   items: {
     prefixIcon?: string
-    text: string
+    element: JSX.Element | string
     onClick?: MouseEventHandler<HTMLElement>
     separate?: boolean
   }[]
 }
 
-export function AS3Dropdown(props: AS3DropdownProps) {
+export function AS3Dropdown({
+  className,
+  show,
+  controlled,
+  prefixIcon,
+  suffixIcon,
+  align,
+  variant,
+  children,
+  items,
+}: AS3DropdownProps) {
+  const classList = ['as3-dropdown']
+  className && classList.push(className)
+
   return (
-    <Dropdown className={`as3-dropdown ${props.className}`}>
-      <Dropdown.Toggle
-        className="px-0 rounded-0"
-        variant={props.variant ?? 'default'}
-      >
-        {props.prefixIcon && (
-          <Icon
+    <Dropdown
+      className={classList.join(' ')}
+      show={show}>
+      {!controlled ? (
+        <Dropdown.Toggle
+          className={'px-0 rounded-0'}
+          variant={variant ?? 'default'}
+        >
+          {prefixIcon && <Icon
             className="me-1"
-            path={props.prefixIcon}
-            size={0.8} />
-        )}
-        {props.children}
-        {props.suffixIcon && (
-          <Icon
+            path={prefixIcon}
+            size={0.8} />}
+          {children}
+          {suffixIcon && <Icon
             className="ms-1"
-            path={props.suffixIcon}
-            size={0.8} />
-        )}
-      </Dropdown.Toggle>
+            path={suffixIcon}
+            size={0.8} />}
+        </Dropdown.Toggle>
+      ) : (
+        children
+      )}
 
       <Dropdown.Menu
-        className="py-0"
-        align={props.align ?? 'end'}>
-        {props.items.map((itemProps, i) => {
+        className="py-0 w-100"
+        align={align ?? 'end'}>
+        {items.map((itemProps, i) => {
           const $element = (
             <Dropdown.Item
               key={i}
@@ -74,7 +91,7 @@ export function AS3Dropdown(props: AS3DropdownProps) {
                   path={itemProps.prefixIcon}
                   size={1} />
               )}
-              {itemProps.text}
+              {itemProps.element}
             </Dropdown.Item>
           )
 

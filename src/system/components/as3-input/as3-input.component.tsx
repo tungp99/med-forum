@@ -7,6 +7,7 @@ import {
 import Icon from '@mdi/react'
 
 import './as3-input.style.scss'
+import { mdiLoading } from '@mdi/js'
 
 type AS3InputProps = FormControlProps & {
   type?:
@@ -31,6 +32,7 @@ type AS3InputProps = FormControlProps & {
 
   width?: number
 
+  loading?: boolean
   prefixIcon?: string
   suffixIcon?: string
 
@@ -38,12 +40,14 @@ type AS3InputProps = FormControlProps & {
 }
 
 export function AS3Input({
+  id,
   className,
   type,
   label,
   placeholder,
   value,
   size,
+  loading,
   prefixIcon,
   suffixIcon,
   disabled,
@@ -52,16 +56,25 @@ export function AS3Input({
   errors,
   onChange,
   onKeyUp,
+  onFocus,
+  onBlur,
 }: AS3InputProps) {
   const classList = ['as3-input']
   className && classList.push(className)
 
   return (
     <Form.Group
+      id={id}
       className={classList.join(' ')}
-      style={{ width: width }}>
+      style={{ width: width }}
+    >
       <InputGroup size={size}>
-        {prefixIcon && (
+        {loading && <Icon
+          path={mdiLoading}
+          size={1}
+          spin />}
+
+        {prefixIcon && !loading && (
           <InputGroup.Text className="pe-0 as3-input-icon-prefix">
             <Icon
               path={prefixIcon}
@@ -79,6 +92,8 @@ export function AS3Input({
               value={value}
               onChange={onChange}
               onKeyUp={onKeyUp}
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           </FloatingLabel>
         ) : (
@@ -90,6 +105,8 @@ export function AS3Input({
             value={value}
             onChange={onChange}
             onKeyUp={onKeyUp}
+            onFocus={onFocus}
+            onBlur={onBlur}
           />
         )}
 

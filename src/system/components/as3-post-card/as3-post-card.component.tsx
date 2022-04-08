@@ -173,7 +173,12 @@ export function AS3PostCard({
             </Stack>
           </Card.Subtitle>
 
-          <Card.Title className="px-2 pt-2 pb-0">{title}</Card.Title>
+          <Card.Title
+            className="px-2 pt-2 pb-0"
+            onClick={() => navigate(`/posts/${id}`)}
+          >
+            {title}
+          </Card.Title>
 
           {!preview && (
             <AS3Editor

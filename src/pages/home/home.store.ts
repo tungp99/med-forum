@@ -49,6 +49,7 @@ export const homePageStore = (
         posts: [],
         filter_type: action.payload as string,
       }
+
     default:
       return state
   }
