@@ -1,0 +1,89 @@
+@startuml 'ER Diagram'
+entity Accounts {
+  *Id: text
+  --
+  *Email: text
+  Username: text
+  *PasswordHash: text
+  RefreshToken: text
+  RefreshTokenExpiration: DateTime
+  *Profile: Profile
+  *IsGod: bool <<default=false>>
+}
+
+entity Profile {
+  *IsPublic: bool <<default=true>>
+  AvatarUrl: string
+  *FirstName: string
+  *LastName: string
+  *CountryCode: string <<default=VN>>
+  PhoneNumber: string
+  BirthDate: Date
+  *Experience: Experience[] <<default=[]>>
+  *Education: Education[] <<default=[]>>
+  *Qualifications: Qualification[] <<default=[]>>
+}
+
+entity Education {
+  *Organization: string
+  Start: DateTime
+  End: DateTime
+  *Position: string
+  *IsWorking: bool
+}
+
+entity Experience {
+  *Organization: string
+  Start: DateTime
+  End: DateTime
+  *Position: string
+  *IsWorking: bool
+}
+
+entity Qualification {
+  *Title: string
+  *IssuedBy: string
+  *IssuedAt: DateTime
+  *ExpireAt: DateTime
+}
+
+Accounts ||-|| Profile
+Profile ||--o{ Education
+Profile ||--o{ Experience
+Profile ||--o{ Qualification
+
+entity Posts {
+  *Id: string
+  --
+  *Title: string
+  *MarkdownContent: string
+  *IsPublished: bool <<default=false>>
+  *Score: int <<default=false>>
+  --
+  *CreatorAccountId: string
+  *Rating: Rating
+}
+
+entity Comments {
+  *Id: string
+  --
+  *MarkdownContent: string
+  *Score: int
+  --
+  *PostId: string
+  *CreatorAccountId: string
+  ReplyToCommentId: string
+  *Rating: Rating
+}
+
+entity Rating {
+  UpvoterAccountIndexes	:string[] <<default=[]>>
+  DownvoterAccountIndexes	:string[] <<default=[]>>
+}
+
+Posts }o----|| Accounts
+Posts ||--|| Rating
+Comments }o----|| Accounts
+Comments ||--|| Rating
+
+@enduml

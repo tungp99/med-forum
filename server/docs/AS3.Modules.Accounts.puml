@@ -1,0 +1,148 @@
+@startuml AS3.Modules.Accounts
+left to right direction
+
+namespace AS3 {
+  namespace Modules {
+    namespace Accounts {
+      namespace Models {
+        class Account {
+          +string COLLECTION_NAME
+          +string Email
+          +string? Username
+          +string PasswordHash
+          +string RefreshToken
+          +DateTime RefreshTokenExpiration
+          +Profile Profile
+          +bool IsGod
+
+          +IExecutable<Post> GetWrittenPosts()
+          +int GetWrittenPostsCount)
+          +IExecutable<Comment> GetWrittenComments()
+          +int GetWrittenCommentsCount()
+        }
+
+        class CreateAccountInput {
+          +string Email
+          +string? Username
+          +string Password
+          +ProfileInput Profile
+        }
+
+        class UpdateAccountInput {
+          +string Id
+          +string? Username
+          +ProfileInput Profile
+        }
+
+        class Profile {
+          +bool IsPublic
+          +string? AvatarUrl
+          +string FirstName
+          +string LastName
+          +string CountryCode
+          +string PhoneNumber
+          +DateTime? BirthDate
+          +ICollection<Profession> Experience
+          +ICollection<Profession> Education
+          +ICollection<Qualification> Qualifications
+
+          +string GetCountry(Profile)
+        }
+
+        class ProfileInput {
+          +bool IsPublic
+          +string FirstName
+          +string LastName
+          +string? CountryCode
+          +string PhoneNumber
+          +DateTime? BirthDate
+        }
+
+        class Profession {
+          +string Organization
+          +DateTime? Start
+          +DateTime? End
+          +string Position
+          +bool IsWorking
+        }
+
+        class ProfessionInput {
+          +string? AccountId
+          +string Organization
+          +DateTime? Start
+          +DateTime? End
+          +string Position
+          +bool IsWorking
+        }
+
+        class Qualification {
+          +string Title
+          +string IssuedBy
+          +DateTime IssuedAt
+          +DateTime ExpireAt
+        }
+
+        class QualificationInput {
+          +string? AccountId
+          +string Title
+          +string IssuedBy
+          +DateTime IssuedAt
+          +DateTime ExpireAt
+        }
+
+        class UpdateAvatarInput {
+          +string? AccountId
+          +IFile File
+        }
+
+        class UpdateAvatarPayload {
+          +string? AvatarUrl
+        }
+      }
+
+      namespace Validators {
+        class Rules {
+          -IMongoCollection<Account> Collection
+          +Rules(IMongoCollection<Account>)
+          --
+          -string _email
+          +string HaveUniqueEmailErrorMsg
+          +bool HaveUniqueEmail(string)
+          --
+          -string _username
+          +string HaveUniqueUsernameErrorMsg
+          +bool HaveUniqueUsername(UpdateAccountInput)
+        }
+
+        class CreateAccountInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class UpdateAccountInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class ProfileInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class UpdateAvatarInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+      }
+
+      class Mutations {
+        +Account CreateAccount(CreateAccountInput)
+        +UpdateEntityPayload UpdateAccount(UpdateAccountInput)
+        +DeleteEntityPayload DeleteAccount(string)
+        +UpdateEntityPayload AddExperience(ProfessionInput)
+        +UpdateEntityPayload RemoveExperience(ProfessionInput)
+        +UpdateEntityPayload AddEducation(ProfessionInput)
+        +UpdateEntityPayload RemoveEducation(ProfessionInput)
+        +UpdateEntityPayload AddQualification(QualificationInput)
+        +UpdateEntityPayload RemoveQualification(QualificationInput)
+        +Task<UpdateAvatarPayload> UpdateAvatar(UpdateAvatarInput)
+      }
+
+      class Queries {
+        +IExecutable<Account> GetAccount(string)
+        +IExecutable<Account> GetAccounts()
+      }
+
+      class Schema implements IAS3Module {
+        +IRequestExecutorBuilder Configure(IRequestExecutorBuilder)
+      }
+    }
+  }
+}
+
+@enduml

@@ -1,0 +1,17 @@
+# directories
+**/bin/
+**/obj/
+**/out/
+
+# files
+Dockerfile
+.dockerignore
+.gitignore
+appsettings.Development.json
+omnisharp.json
+docs/
+**/*.trx
+**/*.md
+**/*.ps1
+**/*.cmd
+**/*.sh

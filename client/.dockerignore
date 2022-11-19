@@ -1,0 +1,13 @@
+Dockerfile
+.dockerignore
+.gitignore
+.prettier*
+.editorconfig
+.eslintrc
+.env
+apollo.config.js
+yarn.lock
+README.md
+
+build
+node_modules

@@ -1,0 +1,21 @@
+@startuml AS3.System.MongoDB
+
+namespace AS3 {
+  namespace System {
+
+    namespace MongoDB {
+      abstract class BaseEntity {
+        +string Id
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+      }
+
+      class DatabaseConfiguration {
+        +string ConnectionString
+        +string Name
+      }
+    }
+  }
+}
+
+@enduml

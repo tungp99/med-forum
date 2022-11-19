@@ -1,0 +1,53 @@
+@import '~bootstrap/scss/_functions';
+@import '~bootstrap/scss/_mixins';
+
+// $enable-shadows: false;
+$enable-caret: false;
+$enable-negative-margins: false;
+$enable-important-utilities: false;
+
+// $transition: all 0.1s ease-in-out;
+
+// typography
+$fw-medium: 500;
+// $font-size-base: 0.875rem;
+
+// effects
+$input-box-shadow: none;
+$input-focus-box-shadow: none;
+$input-btn-focus-box-shadow: none;
+
+$btn-font-weight: 500;
+$btn-box-shadow: none;
+$btn-focus-box-shadow: none;
+$btn-active-box-shadow: none;
+$btn-close-focus-shadow: none;
+
+$border-radius-pill: 50rem;
+$btn-border-radius: $border-radius-pill;
+$btn-border-radius-lg: $border-radius-pill;
+$btn-border-radius-sm: $border-radius-pill;
+
+// spacing
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+) !default;
+
+// $btn-padding-y: map-get($spacers, 2);
+// $card-spacer-x: map-get($spacers, 2);
+// $card-spacer-y: map-get($spacers, 1);
+$navbar-padding-y: map-get($spacers, 0);
+
+// colors
+$light: #f6f7f8;
+
+// reimport so it will recompile
+@import '~bootstrap/scss/_variables';
+
+@debug $btn-active-box-shadow;

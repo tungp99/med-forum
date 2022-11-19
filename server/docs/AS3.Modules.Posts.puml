@@ -1,0 +1,71 @@
+@startuml AS3.Modules.Posts
+left to right direction
+
+namespace AS3 {
+  namespace Modules {
+    namespace Posts {
+      namespace Models {
+        class Post {
+          +string COLLECTION_NAME
+          +string Title
+          +string MarkdownContent
+          +bool IsPublished
+          +int Score
+          +string CreatorAccountId
+          +Rating Rating
+          +IExecutable<Account> GetCreatorAccount()
+          +IExecutable<Comment> GetComments()
+          +int GetCommentsCount()
+        }
+
+        class CreatePostInput {
+          +string Title
+          +string MarkdownContent
+          +bool IsPublished
+        }
+
+        class UpdatePostInput {
+          +string Id
+          +string Title
+          +string MarkdownContent
+          +bool IsPublished
+        }
+
+        class RatePostInput {
+          +string PostId
+          +Rating.Quality Quality
+        }
+
+        class RatePostPayload {
+          +string PostId
+          +Rating.Quality Quality
+        }
+      }
+
+      namespace Validators {
+        class CreatePostInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class UpdatePostInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class RatePostInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+      }
+
+      class Mutations {
+        +Post CreatePost(CreatePostInput)
+        +UpdateEntityPayload UpdatePost(UpdatePostInput)
+        +DeleteEntityPayload DeletePost(string)
+        +RatePostPayload RatePost(RatePostInput)
+      }
+
+      class Queries {
+        +IExecutable<Post> GetPosts(string)
+        +IExecutable<Post> GetPost(string)
+      }
+
+      class Schema implements IAS3Module {
+        +IRequestExecutorBuilder Configure(IRequestExecutorBuilder)
+      }
+    }
+  }
+}
+
+
+@enduml

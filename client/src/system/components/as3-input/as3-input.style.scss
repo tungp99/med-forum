@@ -1,0 +1,25 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-input {
+  margin-bottom: map-get($spacers, 3);
+
+  .form-label {
+    margin-bottom: map-get($spacers, 1);
+  }
+
+  .form-floating {
+    width: 100%;
+  }
+
+  .input-group-text {
+    &.as3-input-icon-prefix {
+      background-color: transparent;
+      border-right: none;
+    }
+
+    &.as3-input-icon-suffix {
+      background-color: transparent;
+      border-left: none;
+    }
+  }
+}

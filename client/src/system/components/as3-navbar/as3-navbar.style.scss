@@ -1,0 +1,51 @@
+@import '/src/system/assets/styles/mixins';
+@import '/src/system/assets/styles/variables';
+
+.as3-navbar {
+  background-color: $white;
+  border-bottom: thin solid rgba(206, 205, 205, 0.637);
+
+  .as3-navbar-search {
+    flex-grow: 1;
+    margin: 0px auto;
+    max-width: 690px;
+  }
+
+  .as3-input {
+    background-color: $light;
+    border-radius: $input-border-radius;
+    margin: 0px auto;
+
+    .form-control {
+      @include no-focus-border;
+      background-color: transparent;
+      border: none;
+    }
+
+    .input-group-text {
+      background-color: transparent;
+      border: none;
+    }
+
+    &:focus-within {
+      background-color: $white;
+      border: $input-border-width solid $input-border-color;
+    }
+  }
+}
+
+.supremeIcon {
+  color: rgb(27, 186, 197);
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  cursor: pointer;
+}
+
+.BaoContainer {
+  display: grid;
+  grid-template-columns: 1fr 11fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.BaoAvatar {
+  grid-row-end: span 3;
+}

@@ -1,0 +1,103 @@
+@startuml AS3.Modules.Authentication
+left to right direction
+
+namespace AS3 {
+  namespace Modules {
+    namespace Authentication {
+      namespace Models {
+        class AuthConfiguration {
+          +string Key
+          +string Issuer
+          +string Audience
+        }
+
+        class Identity {
+          +string Id
+          +bool HasFullAccess
+        }
+
+        class LoginInput {
+          +string? Email
+          +string? Username
+          +string Password
+        }
+
+        class LoginPayload {
+          +string AccessToken
+          +string RefreshToken
+        }
+
+        class RegisterInput {
+          +string Email
+          +string? Username
+          +string Password
+          +string ConfirmationPassword
+          +ProfileInput Profile
+        }
+
+        class RefreshTokenInput {
+          +string AccessToken
+          +string RefreshToken
+        }
+
+        class RefreshTokenPayload {
+          +bool IsSuccess
+          +string AccessToken
+          +string RefreshToken
+        }
+
+        class ChangePasswordInput {
+          +string CurrentPassword
+          +string NewPassword
+          +string ConfirmNewPassword
+        }
+      }
+
+      namespace Validators {
+        class ChangePasswordInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class LoginInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class RegisterInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+      }
+
+      class AuthService {
+        -AuthConfiguration Config
+        +AuthService(AuthConfiguration)
+        +string EncryptPassword(string)
+        +string GenerateAccessToken(Account)
+        +string GenerateRefreshToken()
+        +ClaimsPrincipal? GetClaimsFromExpiredToken(string)
+      }
+
+      class Constants {
+        +string PERMISSIONS_CLAIM
+        +string FULL_ACCESS
+      }
+
+      class Mutations {
+        +LoginPayload Register()
+        +LoginPayload Login()
+        +LoginPayload AdminLogin()
+        +RefreshTokenPayload RefreshAccessToken()
+        +UpdateEntityPayload ChangePassword()
+      }
+
+      class Queries {
+        +IExecutable<Account> GetMe()
+      }
+
+      class Subscriptions {
+        {static} -int ONLINE_COUNT
+        +int AuthenticationStatistics()
+        +int AccountCreated()
+      }
+
+
+      class Schema implements IAS3Module {
+        +IRequestExecutorBuilder Configure(IRequestExecutorBuilder)
+      }
+    }
+  }
+}
+
+
+@enduml

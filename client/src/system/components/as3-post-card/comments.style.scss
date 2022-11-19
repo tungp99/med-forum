@@ -1,0 +1,46 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-post-card-extension {
+  .card-text {
+    position: relative;
+  }
+
+  .markdown-content {
+    display: flex;
+    flex-direction: row;
+    padding-top: map-get($spacers, 2);
+    padding-bottom: map-get($spacers, 2);
+    padding-left: map-get($spacers, 4);
+    margin-bottom: 0;
+
+    &-line {
+      $topspace: 36px;
+      position: absolute;
+      top: $topspace;
+      left: map-get($spacers, 2);
+      width: 1px;
+      height: calc(100% - $topspace);
+      background-color: $gray-500;
+    }
+  }
+
+  .actions {
+    padding-left: map-get($spacers, 4);
+    padding-right: map-get($spacers, 4);
+
+    .as3-link {
+      color: $body-color;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+.BaoMark {
+  visibility: hidden;
+}
+.Bao:hover {
+  .BaoMark {
+    visibility: visible;
+  }
+}

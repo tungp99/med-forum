@@ -1,0 +1,595 @@
+"""
+The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`.
+"""
+directive @defer(
+  """
+  If this argument label has a value other than null, it will be passed on to the result of this defer directive. This label is intended to give client applications a way to identify to which fragment a deferred result belongs to.
+  """
+  label: String
+
+  """Deferred when true."""
+  if: Boolean
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`.
+"""
+directive @stream(
+  """
+  If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to.
+  """
+  label: String
+
+  """The initial elements that shall be send down to the consumer."""
+  initialCount: Int! = 0
+
+  """Streamed when true."""
+  if: Boolean
+) on FIELD
+
+directive @authorize(
+  """
+  The name of the authorization policy that determines access to the annotated resource.
+  """
+  policy: String
+
+  """Roles that are allowed to access the annotated resource."""
+  roles: [String!]
+
+  """
+  Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field.
+  """
+  apply: ApplyPolicy! = BEFORE_RESOLVER
+) on SCHEMA | OBJECT | FIELD_DEFINITION
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+type Query {
+  me: Account
+  account(id: String!): Account
+  accounts(skip: Int, take: Int, where: AccountFilterInput, order: [AccountSortInput!]): AccountCollectionSegment
+  posts(skip: Int, take: Int, accountId: String, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
+  post(id: String!): Post
+  comments(skip: Int, take: Int, postId: String!, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  replies(skip: Int, take: Int, commentId: String!, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+}
+
+type Mutation {
+  register(input: RegisterInput!): LoginPayload!
+  login(input: LoginInput!): LoginPayload!
+  adminLogin(input: AdminLoginInput!): AdminLoginPayload!
+  refreshAccessToken(input: RefreshTokenInput!): RefreshTokenPayload!
+  changePassword(input: ChangePasswordInput!): UpdateEntityPayload!
+  triggerLogout: Boolean!
+  createAccount(input: CreateAccountInput!): Account!
+  updateAccount(input: UpdateAccountInput!): UpdateEntityPayload!
+  deleteAccount(id: String!): DeleteEntityPayload!
+  addExperience(input: ProfessionInput!): UpdateEntityPayload!
+  removeExperience(input: ProfessionInput!): UpdateEntityPayload!
+  addEducation(input: ProfessionInput!): UpdateEntityPayload!
+  removeEducation(input: ProfessionInput!): UpdateEntityPayload!
+  addQualification(input: QualificationInput!): UpdateEntityPayload!
+  removeQualification(input: QualificationInput!): UpdateEntityPayload!
+  updateAvatar(input: UpdateAvatarInput!): UpdateAvatarPayload!
+  createPost(input: CreatePostInput!): Post!
+  updatePost(input: UpdatePostInput!): UpdateEntityPayload!
+  deletePost(id: String!): DeleteEntityPayload!
+  ratePost(input: RatePostInput!): RatePostPayload!
+  createComment(input: CreateCommentInput!): Comment!
+  updateComment(input: UpdateCommentInput!): UpdateEntityPayload!
+  deleteComment(id: String!): DeleteEntityPayload!
+  rateComment(input: RateCommentInput!): RateCommentPayload!
+}
+
+type Subscription {
+  authenticationStatistics: Int!
+  accountCreated: Int!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+}
+
+type AuthenticationError implements Error {
+  message: String!
+}
+
+input AccountFilterInput {
+  and: [AccountFilterInput!]
+  or: [AccountFilterInput!]
+  email: StringOperationFilterInput
+  username: StringOperationFilterInput
+  refreshToken: StringOperationFilterInput
+  refreshTokenExpiration: ComparableDateTimeOperationFilterInput
+  profile: ProfileFilterInput
+  isGod: BooleanOperationFilterInput
+  id: StringOperationFilterInput
+  createdAt: ComparableDateTimeOperationFilterInput
+  updatedAt: ComparableDateTimeOperationFilterInput
+}
+
+input AccountSortInput {
+  email: SortEnumType
+  username: SortEnumType
+  refreshToken: SortEnumType
+  refreshTokenExpiration: SortEnumType
+  profile: ProfileSortInput
+  isGod: SortEnumType
+  id: SortEnumType
+  createdAt: SortEnumType
+  updatedAt: SortEnumType
+}
+
+type AccountCollectionSegment {
+  items: [Account!]
+
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+}
+
+input PostFilterInput {
+  and: [PostFilterInput!]
+  or: [PostFilterInput!]
+  title: StringOperationFilterInput
+  markdownContent: StringOperationFilterInput
+  isPublished: BooleanOperationFilterInput
+  score: ComparableInt32OperationFilterInput
+  id: StringOperationFilterInput
+  createdAt: ComparableDateTimeOperationFilterInput
+  updatedAt: ComparableDateTimeOperationFilterInput
+}
+
+input PostSortInput {
+  title: SortEnumType
+  markdownContent: SortEnumType
+  isPublished: SortEnumType
+  score: SortEnumType
+  id: SortEnumType
+  createdAt: SortEnumType
+  updatedAt: SortEnumType
+}
+
+type PostCollectionSegment {
+  items: [Post!]
+
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+}
+
+input CommentFilterInput {
+  and: [CommentFilterInput!]
+  or: [CommentFilterInput!]
+  markdownContent: StringOperationFilterInput
+  score: ComparableInt32OperationFilterInput
+  id: StringOperationFilterInput
+  createdAt: ComparableDateTimeOperationFilterInput
+  updatedAt: ComparableDateTimeOperationFilterInput
+}
+
+input CommentSortInput {
+  markdownContent: SortEnumType
+  score: SortEnumType
+  id: SortEnumType
+  createdAt: SortEnumType
+  updatedAt: SortEnumType
+}
+
+type CommentCollectionSegment {
+  items: [Comment!]
+
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+}
+
+interface Error {
+  message: String!
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input ComparableDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime!]
+  nin: [DateTime!]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ProfileFilterInput {
+  and: [ProfileFilterInput!]
+  or: [ProfileFilterInput!]
+  isPublic: BooleanOperationFilterInput
+  avatarUrl: StringOperationFilterInput
+  firstName: StringOperationFilterInput
+  lastName: StringOperationFilterInput
+  countryCode: StringOperationFilterInput
+  phoneNumber: StringOperationFilterInput
+  birthDate: ComparableNullableOfDateTimeOperationFilterInput
+  experience: ListFilterInputTypeOfProfessionFilterInput
+  education: ListFilterInputTypeOfProfessionFilterInput
+  qualifications: ListFilterInputTypeOfQualificationFilterInput
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+input ProfileSortInput {
+  isPublic: SortEnumType
+  avatarUrl: SortEnumType
+  firstName: SortEnumType
+  lastName: SortEnumType
+  countryCode: SortEnumType
+  phoneNumber: SortEnumType
+  birthDate: SortEnumType
+}
+
+type Account {
+  writtenPosts(skip: Int, take: Int, where: PostFilterInput, order: [PostSortInput!]): PostCollectionSegment
+  writtenPostsCount: Int!
+  writtenComments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  writtenCommentsCount: Int!
+  email: String!
+  username: String
+  refreshToken: String!
+  refreshTokenExpiration: DateTime!
+  profile: Profile!
+  isGod: Boolean!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Information about the offset pagination."""
+type CollectionSegmentInfo {
+  """
+  Indicates whether more items exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Indicates whether more items exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+}
+
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+type Post {
+  creatorAccount: Account
+  comments(skip: Int, take: Int, where: CommentFilterInput, order: [CommentSortInput!]): CommentCollectionSegment
+  commentsCount: Int!
+  title: String!
+  markdownContent: String!
+  isPublished: Boolean!
+  score: Int!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Comment {
+  post: Post
+  creatorAccount: Account
+  repliesCount: Int!
+  markdownContent: String!
+  score: Int!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ComparableNullableOfDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ListFilterInputTypeOfProfessionFilterInput {
+  all: ProfessionFilterInput
+  none: ProfessionFilterInput
+  some: ProfessionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfQualificationFilterInput {
+  all: QualificationFilterInput
+  none: QualificationFilterInput
+  some: QualificationFilterInput
+  any: Boolean
+}
+
+input ProfessionFilterInput {
+  and: [ProfessionFilterInput!]
+  or: [ProfessionFilterInput!]
+  organization: StringOperationFilterInput
+  start: ComparableNullableOfDateTimeOperationFilterInput
+  end: ComparableNullableOfDateTimeOperationFilterInput
+  position: StringOperationFilterInput
+  isWorking: BooleanOperationFilterInput
+}
+
+input QualificationFilterInput {
+  and: [QualificationFilterInput!]
+  or: [QualificationFilterInput!]
+  title: StringOperationFilterInput
+  issuedBy: StringOperationFilterInput
+  issuedAt: ComparableDateTimeOperationFilterInput
+  expireAt: ComparableDateTimeOperationFilterInput
+}
+
+input CreateAccountInput {
+  email: String!
+  username: String
+  password: String!
+  profile: ProfileInput!
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+  confirmNewPassword: String!
+}
+
+type UpdateEntityPayload {
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input RefreshTokenInput {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RefreshTokenPayload {
+  isSuccess: Boolean!
+  accessToken: String!
+  refreshToken: String!
+}
+
+input LoginInput {
+  email: String
+  username: String
+  password: String!
+}
+
+input RegisterInput {
+  email: String!
+  username: String
+  password: String!
+  confirmationPassword: String!
+  profile: ProfileInput!
+}
+
+type LoginPayload {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Profile {
+  country: String!
+  isPublic: Boolean!
+  avatarUrl: String
+  firstName: String!
+  lastName: String!
+  countryCode: String!
+  phoneNumber: String!
+  birthDate: DateTime
+  experience: [Profession!]!
+  education: [Profession!]!
+  qualifications: [Qualification!]!
+}
+
+input UpdateAccountInput {
+  id: String!
+  username: String
+  profile: ProfileInput!
+}
+
+type DeleteEntityPayload {
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input ProfessionInput {
+  accountId: String
+  organization: String!
+  start: DateTime
+  end: DateTime
+  position: String!
+  isWorking: Boolean!
+}
+
+input QualificationInput {
+  accountId: String
+  title: String!
+  issuedBy: String!
+  issuedAt: DateTime
+  expireAt: DateTime
+}
+
+type UpdateAvatarPayload {
+  avatarUrl: String
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input UpdateAvatarInput {
+  accountId: String
+  file: Upload!
+}
+
+"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+scalar DateTime
+
+input CreatePostInput {
+  title: String!
+  markdownContent: String!
+  isPublished: Boolean!
+}
+
+input UpdatePostInput {
+  id: String!
+  title: String!
+  markdownContent: String!
+  isPublished: Boolean!
+}
+
+type RatePostPayload {
+  postId: String!
+  quality: Quality!
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input RatePostInput {
+  postId: String!
+  quality: Quality!
+}
+
+input CreateCommentInput {
+  markdownContent: String!
+  postId: String!
+  replyToCommentId: String
+}
+
+input UpdateCommentInput {
+  id: String!
+  markdownContent: String!
+}
+
+type RateCommentPayload {
+  commentId: String!
+  quality: Quality!
+  isSuccess: Boolean!
+  affectedRecords: Int!
+}
+
+input RateCommentInput {
+  commentId: String!
+  quality: Quality!
+}
+
+enum Quality {
+  GOOD
+  BAD
+}
+
+type Qualification {
+  title: String!
+  issuedBy: String!
+  issuedAt: DateTime!
+  expireAt: DateTime!
+}
+
+type Profession {
+  organization: String!
+  start: DateTime
+  end: DateTime
+  position: String!
+  isWorking: Boolean!
+}
+
+input ProfileInput {
+  isPublic: Boolean!
+  firstName: String!
+  lastName: String!
+  countryCode: String
+  phoneNumber: String!
+  birthDate: DateTime
+}
+
+input AdminLoginInput {
+  input: LoginInput!
+}
+
+union AdminLoginError = AuthenticationError
+
+type AdminLoginPayload {
+  loginPayload: LoginPayload
+  errors: [AdminLoginError!]
+}

@@ -1,0 +1,78 @@
+@startuml AS3.Modules.Comments
+left to right direction
+
+namespace AS3 {
+  namespace Modules {
+    namespace Comments {
+      namespace Models {
+        class Comment {
+          +string COLLECTION_NAME
+          +string MarkdownContent
+          +int Score
+          +string PostId
+          +string CreatorAccountId
+          +string? ReplyToCommentId
+          +Rating Rating
+          +IExecutable<Post> GetPost()
+          +IExecutable<Account> GetCreatorAccount()
+          +int GetRepliesCount()
+        }
+
+        class CreateCommentInput {
+          +string MarkdownContent
+          +string PostId
+          +string? ReplyToCommentId
+        }
+
+        class UpdateCommentInput {
+          +string Id
+          +string MarkdownContent
+        }
+
+        class RateCommentInput {
+          +string CommentId
+          +Rating.Quality Quality
+        }
+
+        class RateCommentPayload {
+          +string CommentId
+          +Rating.Quality Quality
+        }
+      }
+
+      namespace Validators {
+        class Rules{
+          -IMongoCollection<Comment> Collection
+          +Rules(IMongoCollection<Comment>)
+          --
+          -string _parentId
+          +string HaveParentCommentErrorMsg
+          +bool HaveParentComment(string)
+        }
+
+        class CreateCommentInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class UpdateCommentInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class RateCommentInputValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+      }
+
+      class Mutations {
+        +Comment CreateComment(CreateCommentInput)
+        +UpdateEntityPayload UpdateComment(UpdateCommentInput)
+        +DeleteEntityPayload DeleteComment(string)
+        +RateCommentPayload RateComment(RateCommentInput)
+      }
+
+      class Queries {
+        +IExecutable<Comment> GetComments(string)
+        +IExecutable<Comment> GetReplies(string)
+      }
+
+      class Schema implements IAS3Module {
+        +IRequestExecutorBuilder Configure(IRequestExecutorBuilder)
+      }
+    }
+  }
+}
+
+
+@enduml

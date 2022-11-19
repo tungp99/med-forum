@@ -1,0 +1,33 @@
+@import '/src/system/assets/styles/variables';
+
+.as3-auth-popup {
+  .modal-content {
+    padding-bottom: map-get($spacers, 4);
+  }
+
+  &-body {
+    .as3-input,
+    .title {
+      margin-bottom: map-get($spacers, 3);
+    }
+
+    .as3-button {
+      width: 100%;
+    }
+
+    .title {
+      text-align: center;
+    }
+
+    .extension {
+      margin-top: map-get($spacers, 2);
+      font-size: $font-size-sm;
+      text-align: right;
+
+      &-link {
+        font-weight: $fw-medium;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

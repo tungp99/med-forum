@@ -1,0 +1,63 @@
+@startuml AS3.System.GraphQL
+left to right direction
+
+namespace AS3 {
+  namespace System {
+    namespace GraphQL {
+      namespace Authentication {
+        class IdentityGlobalStateAttribute extends GlobalStateAttribute
+
+        class IdentityRequestInterceptor extends DefaultHttpRequestInterceptor {
+          +ValueTask OnCreateAsync()
+        }
+      }
+
+      namespace Models {
+        class UpdateEntityPayload {
+          +bool IsSuccess
+          +int AffectedRecords
+        }
+
+        class DeleteEntityPayload {
+          +bool IsSuccess
+          +int AffectedRecords
+        }
+
+        enum Quality {
+          GOOD
+          BAD
+        }
+
+        class Rating {
+          +ICollection<string> UpvoterAccountIndexes
+          +ICollection<string> DownvoterAccountIndexes
+        }
+      }
+
+      namespace Validators {
+        class AS3Rules {
+          +string HUMAN_NAME_REGEX
+        }
+
+        class KeyExistenceValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class OptionalPasswordValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+        class PasswordValidator extends AbstractValidator implements IExplicitUsageOnlyValidator
+      }
+
+      class ErrorFilter implements IErrorFilter {
+        +IError OnError(IError)
+      }
+
+      class HttpSerializer extends DefaultHttpResultSerializer {
+        +HttpStatusCode GetStatusCode(IExecutionResult)
+      }
+
+      interface IAS3Module {
+        IRequestExecutorBuilder Configure(IRequestExecutorBuilder
+      }
+    }
+  }
+}
+
+
+@enduml

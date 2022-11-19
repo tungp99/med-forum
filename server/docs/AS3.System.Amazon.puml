@@ -1,0 +1,21 @@
+@startuml AS3.System.Amazon
+namespace AS3 {
+  namespace System {
+    namespace Amazon {
+      class AmzS3Config {
+        +string BucketName
+        +string AccessKeyId
+        +string AccessKeySecret
+      }
+
+      class AmzS3Service {
+        -AmzS3Config Config
+        -AmazonS3Client Client
+        +Task UploadFile(string, Stream)
+      }
+    }
+  }
+}
+
+
+@enduml

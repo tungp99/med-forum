@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
+
+@import './mixins';
+@import './variables';
+
+@import 'react-markdown-editor-lite/lib/index.css';
+@import '~bootstrap/scss/bootstrap';
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background-color: rgb(219, 222, 226);
+}
+
+.form-control,
+.form-select,
+.btn {
+  @include no-focus-shadow;
+}
+
+#background {
+  background-image: url(https://media.istockphoto.com/vectors/digital-sequence-code-structure-with-glow-science-concept-and-nano-vector-id1254842513?k=20&m=1254842513&s=612x612&w=0&h=1es9r0TDVJFfiD25yII_MnmBkhFudaee253s5k-73is=);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  overflow-y: auto;
+}

@@ -1,0 +1,13 @@
+@import '~bootstrap/scss/_mixins';
+
+@mixin no-focus-shadow {
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+@mixin no-focus-border {
+  &:focus {
+    border: none;
+  }
+}

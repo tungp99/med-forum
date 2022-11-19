@@ -1,0 +1,39 @@
+@startuml AS3
+
+namespace AS3 {
+  namespace Modules {
+    namespace Accounts {
+    }
+
+    namespace Authentication {
+    }
+
+    namespace Posts {
+    }
+
+    namespace Comments {
+    }
+  }
+
+  namespace System {
+    class ServiceExtension {
+      {static} +IServiceCollection AddAS3Authentication(AuthConfiguration)
+      {static} +IServiceCollection AddAS3MongoDB(DatabaseConfiguration)
+      {static} +IServiceCollection AddFluentValidation()
+      {static} +IServiceCollection AddAS3GraphQL()
+      {static} +IRequestExecutorBuilder AddGraphQLModule()
+    }
+
+    namespace Amazon {
+    }
+
+    namespace GraphQL {
+    }
+
+    namespace MongoDB {
+    }
+  }
+}
+
+
+@enduml

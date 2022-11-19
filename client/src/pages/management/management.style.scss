@@ -1,0 +1,75 @@
+.filter__container {
+  display: grid;
+  grid-template-columns: 2fr 15fr 2fr;
+}
+
+.sort__btn {
+  background-color: #dbdee2;
+  border: none;
+  align-self: flex-end;
+}
+
+.vip__container {
+  display: grid;
+  grid-template-columns: 2fr 15fr 2fr;
+  background-image: linear-gradient(to top left, #ffae00d8, #ffcd03d8);
+  cursor: pointer;
+}
+
+.__container {
+  display: grid;
+  grid-template-columns: 2fr 15fr 2fr;
+  background-image: linear-gradient(to top left, #979797de, #dddddade);
+  cursor: pointer;
+}
+
+.__container:hover {
+  background-image: linear-gradient(to top left, #979797, #ddddda);
+}
+
+.vip__container:hover {
+  background-image: linear-gradient(to top left, #ffaf03, #ffcd03);
+}
+
+.__container,
+.vip__container {
+  .as3-button {
+    visibility: hidden;
+  }
+
+  &:hover {
+    .as3-button {
+      visibility: visible;
+    }
+  }
+}
+
+.posts {
+  padding-top: 1.1rem;
+  text-align: center;
+  font-weight: bold;
+
+  &__number {
+    margin: 0;
+  }
+}
+
+.isPublic {
+  margin-right: 1.5rem;
+  text-align: start;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Times New Roman', Times, serif;
+  padding-left: 1rem;
+}
+
+.info__container {
+  padding: 0.4rem 0 0.4rem 1rem;
+  border-left: thin solid rgb(218, 212, 212);
+  // font-size: 1.1rem;
+}
+
+.createUser__btn {
+  border: thin solid transparent;
+  background-color: transparent;
+}
